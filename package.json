@@ -1,0 +1,44 @@
+{
+  "name": "highmark-cli",
+  "author": "James Smith",
+  "version": "0.0.1",
+  "license": "MIT, Anti-996",
+  "homepage": "https://github.com/djalbat/highmark-cli",
+  "description": "Extensible, styleable Markdown.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/djalbat/highmark-cli"
+  },
+  "dependencies": {
+    "argumentative": "^2.0.15",
+    "mkdirp": "^0.5.1",
+    "necessary": "^11.1.4",
+    "occam-dom": "^3.0.212",
+    "occam-lexers": "^16.0.61",
+    "occam-parsers": "^16.0.110"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.50",
+    "esbuild": "^0.9.2",
+    "express": "^4.17.1",
+    "lively-cli": "^2.0.34",
+    "watchful-cli": "^1.7.19"
+  },
+  "scripts": {
+    "clean": "rm -rf ./lib",
+    "watchful": "watchful -m --transpiler=swc --source-directory=./src --lib-directory=./lib --pause=100",
+    "batch": "npm run watchful batch --",
+    "batch-debug": "npm run watchful batch -- --debug",
+    "incremental": "npm run watchful incremental --",
+    "incremental-debug": "npm run watchful incremental -- --debug",
+    "build": "npm run clean && npm run batch",
+    "build-debug": "npm run clean && npm run batch-debug",
+    "watch": "npm run clean && npm run batch && npm run incremental",
+    "watch-debug": "npm run clean && npm run batch-debug && npm run incremental-debug"
+  },
+  "browser": "./lib/browser",
+  "main": "./lib/main",
+  "bin": {
+    "highmark": "./highmark.js"
+  }
+}
