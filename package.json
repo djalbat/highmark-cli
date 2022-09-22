@@ -1,7 +1,7 @@
 {
   "name": "highmark-cli",
   "author": "James Smith",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/highmark-cli",
   "description": "Extensible, styleable Markdown.",
@@ -15,7 +15,7 @@
     "necessary": "^11.1.4",
     "occam-dom": "^3.0.212",
     "occam-lexers": "^16.0.61",
-    "occam-parsers": "^16.0.113"
+    "occam-parsers": "^16.0.116"
   },
   "devDependencies": {
     "@swc/core": "^1.2.50",
