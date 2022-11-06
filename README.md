@@ -1,4 +1,4 @@
-# Highmark Open-CLI
+# Highmark-CLI
 
 Extensible, styleable Markdown.
 
