@@ -11,10 +11,10 @@ Commands:
   
 Options:
 
-  --version|-v                               Show the version
-
   --help|-h                                  Show this help
   
+  --version|-v                               Show the version
+
 Further information:
 
 Please see the readme file on GitHub:

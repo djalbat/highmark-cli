@@ -36,9 +36,9 @@ Commands:
   
 Options:
 
-  --version|-v                               Show the version
-
   --help|-h                                  Show this help
+
+  --version|-v                               Show the version
 ```
 
 ## Contact
