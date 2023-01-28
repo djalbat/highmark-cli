@@ -21,8 +21,8 @@ function actions(command, argument, options) {
   }
 
   switch (command) {
-    case HELP_COMMAND : help(); break;
-    case VERSION_COMMAND : version(); break;
+    case HELP_COMMAND: help(); break;
+    case VERSION_COMMAND: version(); break;
 
     default :
       argument = command;  ///
