@@ -43,4 +43,5 @@ Options:
 
 ## Contact
 
-* james.smith@openmathematics.org
+* james.smith@djalbat.com
+
