@@ -1,13 +1,15 @@
 "use strict";
 
-const { OPEN_CLI } = require("../constants"),
-      { getPackageVersion } = require("../utilities/packageJSON");
+const { packageUtilities } = require("necessary");
 
-function version() {
-  const packageVersion = getPackageVersion(),
-        version = packageVersion; ///
+const { HIGHMARK_CLI } = require("../constants");
 
-  console.log(`${OPEN_CLI} version ${version}`);
+const { getVersion } = packageUtilities;
+
+function versionAction() {
+  const version = getVersion(); ///
+
+  console.log(`${HIGHMARK_CLI} version ${version}`);
 }
 
-module.exports = version;
+module.exports = versionAction;

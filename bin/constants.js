@@ -1,7 +1,7 @@
 "use strict";
 
-const PACKAGE_JSON = "package.json";
+const HIGHMARK_CLI = "Highmark-CLI";
 
 module.exports = {
-  PACKAGE_JSON
+  HIGHMARK_CLI
 };
