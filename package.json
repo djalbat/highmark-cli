@@ -1,7 +1,7 @@
 {
   "name": "highmark-cli",
   "author": "James Smith",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/highmark-cli",
   "description": "Extensible, styleable Markdown.",
@@ -10,7 +10,7 @@
     "url": "https://github.com/djalbat/highmark-cli"
   },
   "dependencies": {
-    "argumentative": "^2.0.21",
+    "argumentative": "^2.0.25",
     "mkdirp": "^0.5.1",
     "necessary": "^13.1.4",
     "occam-dom": "^3.1.91",
@@ -21,8 +21,8 @@
     "@swc/core": "^1.2.50",
     "esbuild": "^0.9.2",
     "express": "^4.17.1",
-    "lively-cli": "^2.0.51",
-    "watchful-cli": "^1.7.43"
+    "lively-cli": "^2.0.52",
+    "watchful-cli": "^1.7.44"
   },
   "scripts": {
     "clean": "rm -rf ./lib",
