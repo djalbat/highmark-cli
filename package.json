@@ -11,32 +11,9 @@
   },
   "dependencies": {
     "argumentative": "^2.0.25",
-    "mkdirp": "^0.5.1",
-    "necessary": "^13.1.4",
-    "occam-dom": "^3.1.91",
-    "occam-lexers": "^19.0.67",
-    "occam-parsers": "^19.0.88"
+    "necessary": "^13.1.4"
   },
-  "devDependencies": {
-    "@swc/core": "^1.2.50",
-    "esbuild": "^0.9.2",
-    "express": "^4.17.1",
-    "lively-cli": "^2.0.52",
-    "watchful-cli": "^1.7.44"
-  },
-  "scripts": {
-    "clean": "rm -rf ./lib",
-    "watchful": "watchful -m --transpiler=swc --source-directory=./src --lib-directory=./lib --pause=100",
-    "batch": "npm run watchful batch --",
-    "batch-debug": "npm run watchful batch -- --debug",
-    "incremental": "npm run watchful incremental --",
-    "incremental-debug": "npm run watchful incremental -- --debug",
-    "build": "npm run clean && npm run batch",
-    "build-debug": "npm run clean && npm run batch-debug",
-    "watch": "npm run clean && npm run batch && npm run incremental",
-    "watch-debug": "npm run clean && npm run batch-debug && npm run incremental-debug"
-  },
-  "main": "./lib/index",
+  "scripts": {},
   "bin": {
     "highmark": "./highmark.js"
   }
