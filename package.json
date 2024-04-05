@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "argumentative": "^2.0.28",
+    "highmark-markdown": "^0.0.112",
+    "highmark-markdown-style": "^0.0.152",
     "necessary": "^13.4.2"
   },
   "scripts": {},

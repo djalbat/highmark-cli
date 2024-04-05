@@ -1,6 +1,6 @@
 "use strict";
 
-function help() {
+function helpAction() {
   console.log(`Usage: 
   
   highmark [<command>] [<argument>]          
@@ -23,4 +23,4 @@ Please see the readme file on GitHub:
 `);
 }
 
-module.exports = help;
+module.exports = helpAction;
