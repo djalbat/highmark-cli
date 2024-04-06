@@ -12,10 +12,8 @@ function importer(filePath, indent, context) {
     const tokens = tokensFromContent(content),
           node = nodeFromTokens(tokens);
 
-    let { indent } = context;
-
     if (node !== null) {
-      html = node.asHTML({
+      html = node.asHTML(indent, {  ///
         tokens,
         importer
       });

@@ -2,6 +2,7 @@
 
 const importer = require("../importer");
 
+const { DOUBLE_SPACE } = require("../constants");
 const { nodeFromTokens, tokensFromContent } = require("../utilities/markdown");
 
 function inputFileHTMLOperation(proceed, abort, context) {
@@ -16,7 +17,8 @@ function inputFileHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  const html = node.asHTML({ ///
+  const indent = DOUBLE_SPACE,  ///
+        html = node.asHTML(indent, { ///
           tokens,
           importer
         }),
