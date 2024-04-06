@@ -2,7 +2,7 @@
 
 const { pathUtilities, arrayUtilities } = require("necessary");
 
-const { DEFAULT } = require("../constants");
+const { DEFAULT_DIVISION_IDENTIFIER } = require("../constants");
 
 const { second } = arrayUtilities,
       { isPathName, bottommostNameFromPath } = pathUtilities;
@@ -18,7 +18,7 @@ function divisionIdentifierFromFilePath(filePath) {
         matches = name.match(/^([^.]+)\..+$/),
         secondMatch = second(matches);
 
-  if (secondMatch !== DEFAULT) {
+  if (secondMatch !== DEFAULT_DIVISION_IDENTIFIER) {
     divisionIdentifier = secondMatch; ///
   }
 

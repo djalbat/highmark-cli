@@ -1,27 +1,30 @@
 "use strict";
 
-const { cssUtilities } = require("highmark-markdown-style"),
-      { filePathUtilities } = require("occam-entities");
+const { filePathUtilities } = require("occam-entities"),
+      { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown-style")
 
-const { PERIOD, EMPTY_STRING } = require("../constants"),
-      { readFile, readDirectory } = require("../utilities/fileSystem"),
-      { divisionIdentifierFromFilePath } = require("../utilities/division");
+const { readFile, readDirectory } = require("../utilities/fileSystem"),
+      { divisionIdentifierFromFilePath } = require("../utilities/division"),
+      { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
       { divisionCSSFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesToCSS(proceed, abort, context) {
-  let css = EMPTY_STRING;
+  const selectorString = DEFAULT_SELECTOR_STRING,
+        markdownStyle = defaultMarkdownStyle, ///
+        directoryPath = PERIOD, ///
+        divisionCSS = divisionCSSFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
 
-  const directoryPath = PERIOD; ///
+  let css = divisionCSS; ///
 
   readDirectory(directoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
 
     if (filePathMarkdownStyleFilePath) {
       const markdownStyleFilePath = filePath, ///
-            markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
             selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
+            markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
             divisionCSS = divisionCSSFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, css);  ///
 
       css = `${css}${divisionCSS}`;
