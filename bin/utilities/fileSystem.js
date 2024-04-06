@@ -1,11 +1,12 @@
 "use strict";
 
-const { fileSystemUtilities } = require("necessary");
+const { pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { isEntryNameHiddenName } = require("../utilities/name"),
       { UNABLE_TO_READ_FILE_MESSAGE, UNABLE_TO_READ_DIRECTORY_MESSAGE } = require("../messages");
 
-const { isEntryFile, readFile: readFileAsync, readDirectory: readDirectoryAsync  } = fileSystemUtilities;
+const { concatenatePaths } = pathUtilities,
+      { isEntryFile, readFile: readFileAsync, readDirectory: readDirectoryAsync  } = fileSystemUtilities;
 
 function readFile(filePath) {
   let content = null;
@@ -37,7 +38,7 @@ function readDirectory(directoryPath, callback) {
       const entryNameHiddenName = isEntryNameHiddenName(entryName);
 
       if (!entryNameHiddenName) {
-        const entryPath = `${directoryPath}/${entryName}`, ///
+        const entryPath = concatenatePaths(directoryPath, entryName), ///
               entryFile = isEntryFile(entryPath);
 
         if (entryFile) {

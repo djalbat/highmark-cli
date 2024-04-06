@@ -4,27 +4,52 @@ const { cssUtilities } = require("highmark-markdown-style"),
       { filePathUtilities } = require("occam-entities");
 
 const { PERIOD } = require("../constants"),
-      { readFile, readDirectory } = require("../utilities/fileSystem");
+      { readFile, readDirectory } = require("../utilities/fileSystem"),
+      { divisionIdentifierFromFilePath } = require("../utilities/division");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
-      { cssFromMarkdownStyleAndSelectorsList } = cssUtilities;
+      { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesToCSS(proceed, abort, context) {
+  let css = null;
+
   const directoryPath = PERIOD; ///
 
   readDirectory(directoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
 
     if (filePathMarkdownStyleFilePath) {
-      const content = readFile(filePath),
-            markdownStyle = content,  ///
+      const markdownStyleFilePath = filePath, ///
+            markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
+            selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath);
 
-
-      debugger
+      css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, css);  ///
     }
+  });
+
+  Object.assign(context, {
+    css
   });
 
   proceed();
 }
 
 module.exports = markdownStylesToCSS;
+
+function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
+  const filePath = markdownStyleFilePath, ///
+        content = readFile(filePath),
+        markdownStyle = content;  ///
+
+  return markdownStyle;
+}
+
+function selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath) {
+  const filePath = markdownStyleFilePath,  ///
+        divisionIdentifier = divisionIdentifierFromFilePath(filePath),
+        selectorString = (divisionIdentifier !== null) ?
+                          `div#${divisionIdentifier}` :
+                            `div`;
+
+  return selectorString;
+}
