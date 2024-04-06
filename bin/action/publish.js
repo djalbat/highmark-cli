@@ -1,7 +1,7 @@
 "use strict";
 
 const readInputFileOperation = require("../operation/readInputFile"),
-      inputFileContentToHTMLOperation = require("../operation/inputFileContentToHTML");
+      inputFileToHTMLOperation = require("../operation/inputFileToHTML");
 
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
@@ -9,7 +9,7 @@ const { executeOperations } = require("../utilities/operation"),
 function publishAction(inputFilePath, outputFilePath) {
   const operations = [
           readInputFileOperation,
-          inputFileContentToHTMLOperation
+          inputFileToHTMLOperation
         ],
         context = {
           inputFilePath,

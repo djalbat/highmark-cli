@@ -7,9 +7,14 @@ const { UNABLE_TO_PARSE_INPUT_FILE_MESSAGE } = require("../messages");
 const markdownLexer = MarkdownLexer.fromNothing(),
       markdownParser = MarkdownParser.fromNothing();
 
-function nodeFromContent(content) {
-  const tokens = markdownLexer.tokenise(content),
-        node = markdownParser.parse(tokens);
+function tokensFromContent(content) {
+  const tokens = markdownLexer.tokenise(content);
+
+  return tokens;
+}
+
+function nodeFromTokens(tokens) {
+  const node = markdownParser.parse(tokens);
 
   if (node === null) {
     const message = UNABLE_TO_PARSE_INPUT_FILE_MESSAGE;
@@ -21,5 +26,6 @@ function nodeFromContent(content) {
 }
 
 module.exports = {
-  nodeFromContent
+  tokensFromContent,
+  nodeFromTokens
 };
