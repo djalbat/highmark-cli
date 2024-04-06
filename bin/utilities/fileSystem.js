@@ -3,10 +3,13 @@
 const { pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { isEntryNameHiddenName } = require("../utilities/name"),
-      { UNABLE_TO_READ_FILE_MESSAGE, UNABLE_TO_READ_DIRECTORY_MESSAGE } = require("../messages");
+      { UNABLE_TO_READ_FILE_MESSAGE, UNABLE_TO_WRITE_FILE_MESSAGE, UNABLE_TO_READ_DIRECTORY_MESSAGE } = require("../messages");
 
 const { concatenatePaths } = pathUtilities,
-      { isEntryFile, readFile: readFileAsync, readDirectory: readDirectoryAsync  } = fileSystemUtilities;
+      { isEntryFile,
+        readFile: readFileAsync,
+        writeFile: writeFileAsync,
+        readDirectory: readDirectoryAsync } = fileSystemUtilities;
 
 function readFile(filePath) {
   let content = null;
@@ -30,6 +33,24 @@ function readFile(filePath) {
   return content;
 }
 
+function writeFile(filePath, content) {
+  try {
+    writeFileAsync(filePath, content);
+
+    console.log(`Write file '${filePath}'.`);
+  } catch (error) {
+    let message;
+
+    message = UNABLE_TO_WRITE_FILE_MESSAGE;
+
+    console.log(message);
+
+    ({ message } = error);
+
+    console.log(message);
+  }
+}
+
 function readDirectory(directoryPath, callback) {
   try {
     const entryNames = readDirectoryAsync(directoryPath);
@@ -48,7 +69,7 @@ function readDirectory(directoryPath, callback) {
         } else {
           const directoryPath = entryPath;  ///
 
-          readDirectory(directoryPath);
+          readDirectory(directoryPath, callback);
         }
       }
     });
@@ -67,5 +88,6 @@ function readDirectory(directoryPath, callback) {
 
 module.exports = {
   readFile,
+  writeFile,
   readDirectory
 };

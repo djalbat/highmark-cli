@@ -1,21 +1,21 @@
 "use strict";
 
-const markdownHTMLOperation = require("../operation/markdownHTML"),
+const htmlOperation = require("../operation/html"),
+      markdownHTMLOperation = require("../operation/markdownHTML"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
 
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
 function publishAction(inputFilePath, outputFilePath) {
-  const markdownFilePath = inputFilePath, ///
-        htmlFilePath = outputFilePath,  ///
-        operations = [
+  const operations = [
+          markdownStylesCSSOperation,
           markdownHTMLOperation,
-          markdownStylesCSSOperation
+          htmlOperation
         ],
         context = {
-          htmlFilePath,
-          markdownFilePath
+          inputFilePath,
+          outputFilePath
         };
 
   executeOperations(operations, (completed) => {
