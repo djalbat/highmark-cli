@@ -13,7 +13,8 @@
     "argumentative": "^2.0.28",
     "highmark-markdown": "^0.0.120",
     "highmark-markdown-style": "^0.0.164",
-    "necessary": "^13.4.2"
+    "necessary": "^13.4.2",
+    "occam-entities": "^1.0.83"
   },
   "scripts": {},
   "bin": {

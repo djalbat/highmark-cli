@@ -1,19 +1,21 @@
 "use strict";
 
-const readInputFileOperation = require("../operation/readInputFile"),
-      inputFileToHTMLOperation = require("../operation/inputFileToHTML");
+const markdownToHTMLOperation = require("../operation/markdownToHTML"),
+      markdownStylesToCSSOperation = require("../operation/markdownStylesToCSS");
 
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
 function publishAction(inputFilePath, outputFilePath) {
-  const operations = [
-          readInputFileOperation,
-          inputFileToHTMLOperation
+  const markdownFilePath = inputFilePath, ///
+        htmlFilePath = outputFilePath,  ///
+        operations = [
+          markdownToHTMLOperation,
+          markdownStylesToCSSOperation
         ],
         context = {
-          inputFilePath,
-          outputFilePath
+          htmlFilePath,
+          markdownFilePath
         };
 
   executeOperations(operations, (completed) => {

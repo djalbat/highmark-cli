@@ -1,9 +1,9 @@
 "use strict";
 
-const { readFile } = require("./utilities/file");
+const { readFile } = require("./utilities/fileSystem");
 const { nodeFromTokens, tokensFromContent } = require("./utilities/markdown");
 
-function importer(filePath, indent, context) {
+function importer(filePath, indent) {
   let html = null;
 
   const content = readFile(filePath);
