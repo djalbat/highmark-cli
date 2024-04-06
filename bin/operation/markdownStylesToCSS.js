@@ -3,15 +3,15 @@
 const { cssUtilities } = require("highmark-markdown-style"),
       { filePathUtilities } = require("occam-entities");
 
-const { PERIOD } = require("../constants"),
+const { PERIOD, EMPTY_STRING } = require("../constants"),
       { readFile, readDirectory } = require("../utilities/fileSystem"),
       { divisionIdentifierFromFilePath } = require("../utilities/division");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
-      { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
+      { divisionCSSFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesToCSS(proceed, abort, context) {
-  let css = null;
+  let css = EMPTY_STRING;
 
   const directoryPath = PERIOD; ///
 
@@ -21,9 +21,10 @@ function markdownStylesToCSS(proceed, abort, context) {
     if (filePathMarkdownStyleFilePath) {
       const markdownStyleFilePath = filePath, ///
             markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-            selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath);
+            selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
+            divisionCSS = divisionCSSFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, css);  ///
 
-      css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, css);  ///
+      css = `${css}${divisionCSS}`;
     }
   });
 

@@ -1,13 +1,15 @@
 "use strict";
 
-const PERIOD = ".";
-const DEFAULT = "default";
-const DOUBLE_SPACE = "  ";
-const HIGHMARK_CLI = "Highmark-CLI";
+const PERIOD = ".",
+      DEFAULT = "default",
+      EMPTY_STRING = "",
+      DOUBLE_SPACE = "  ",
+      HIGHMARK_CLI = "Highmark-CLI";
 
 module.exports = {
   PERIOD,
   DEFAULT,
+  EMPTY_STRING,
   DOUBLE_SPACE,
   HIGHMARK_CLI
 };
