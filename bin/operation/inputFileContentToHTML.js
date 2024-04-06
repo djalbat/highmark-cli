@@ -1,28 +1,27 @@
 "use strict";
 
-const { MarkdownLexer, MarkdownParser } = require("highmark-markdown");
+const importer = require("../importer");
 
-const { UNABLE_TO_PARSE_INPUT_FILE_MESSAGE } = require("../messages");
-
-const markdownLexer = MarkdownLexer.fromNothing(),
-      markdownParser = MarkdownParser.fromNothing();
+const { nodeFromContent } = require("../utilities/markdown");
 
 function inputFileContentToHTMLOperation(proceed, abort, context) {
   const { inputFileContent } = context,
-        content = inputFileContent,
-        tokens = markdownLexer.tokenise(content),
-        node = markdownParser.parse(tokens);
+        content = inputFileContent, ///
+        node = nodeFromContent(content);
 
   if (node === null) {
-    const message = UNABLE_TO_PARSE_INPUT_FILE_MESSAGE;
-
-    console.log(message);
-
     abort();
 
     return;
   }
 
+  const html = node.asHTML({ ///
+    importer
+  });
+
+  Object.assign(context, {
+    html
+  });
 
   proceed();
 }
