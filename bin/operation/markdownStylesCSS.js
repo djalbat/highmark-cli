@@ -8,15 +8,15 @@ const { readFile, readDirectory } = require("../utilities/fileSystem"),
       { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
-      { divisionCSSFromMarkdownStyleAndSelectorString } = cssUtilities;
+      { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
 
-function markdownStylesToCSS(proceed, abort, context) {
+function markdownStylesCSSOperation(proceed, abort, context) {
   const selectorString = DEFAULT_SELECTOR_STRING,
         markdownStyle = defaultMarkdownStyle, ///
         directoryPath = PERIOD, ///
-        divisionCSS = divisionCSSFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
+        css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
 
-  let css = divisionCSS; ///
+  let markdownStylesCSS = css; ///
 
   readDirectory(directoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
@@ -25,20 +25,20 @@ function markdownStylesToCSS(proceed, abort, context) {
       const markdownStyleFilePath = filePath, ///
             selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
             markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-            divisionCSS = divisionCSSFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, css);  ///
+            css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
 
-      css = `${css}${divisionCSS}`;
+      markdownStylesCSS = `${markdownStylesCSS}${css}`;
     }
   });
 
   Object.assign(context, {
-    css
+    markdownStylesCSS
   });
 
   proceed();
 }
 
-module.exports = markdownStylesToCSS;
+module.exports = markdownStylesCSSOperation;
 
 function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath, ///

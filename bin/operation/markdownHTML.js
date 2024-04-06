@@ -5,7 +5,7 @@ const importer = require("../importer");
 const { DOUBLE_SPACE } = require("../constants"),
       { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
-function markdownToHTML(proceed, abort, context) {
+function markdownHTMLOperation(proceed, abort, context) {
   const { markdownFilePath } = context,
         filePath = markdownFilePath, ///
         indent = DOUBLE_SPACE,
@@ -21,11 +21,13 @@ function markdownToHTML(proceed, abort, context) {
     return;
   }
 
+  const markdownHTML = html;  ///
+
   Object.assign(context, {
-    html
+    markdownHTML
   });
 
   proceed();
 }
 
-module.exports = markdownToHTML;
+module.exports = markdownHTMLOperation;
