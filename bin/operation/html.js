@@ -2,18 +2,20 @@
 
 const { writeFile } = require("../utilities/fileSystem");
 
+const { EMPTY_STRING } = require("../constants");
+
 function htmlOperation(proceed, abort, context) {
-  const { links, title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
+  const { title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
+        titleHTML = titleHTMLFromTitle(title),
         filePath = outputFilePath,  ///
         content = `<!DOCTYPE html>
 <html>
   <head>
-    <title>${title}</title>
+  
+    ${titleHTML}
     
     <meta charset="utf-8" />
 
-    ${links}
-    
     <style>
 
       *,
@@ -46,3 +48,11 @@ ${markdownHTML}
 }
 
 module.exports = htmlOperation;
+
+function titleHTMLFromTitle(title) {
+  const titleHTML = (title === null) ?
+                      EMPTY_STRING :
+                        `<title>${title}</title>`;
+
+  return titleHTML;
+}

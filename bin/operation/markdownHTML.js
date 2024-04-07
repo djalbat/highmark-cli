@@ -9,11 +9,14 @@ function markdownHTMLOperation(proceed, abort, context) {
   const { inputFilePath } = context,
         filePath = inputFilePath, ///
         indent = DOUBLE_SPACE,
-        title = null,
-        html = importer(filePath, indent, { ///
-          title,
-          importer
-        });
+        title = null;
+
+  Object.assign(context, {
+    title,
+    importer
+  });
+
+  const html = importer(filePath, indent, context);
 
   if (html === null) {
     const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;

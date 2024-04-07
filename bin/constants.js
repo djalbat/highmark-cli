@@ -1,6 +1,7 @@
 "use strict";
 
 const PERIOD = ".",
+      EMPTY_STRING = "",
       DOUBLE_SPACE = "  ",
       HIGHMARK_CLI = "Highmark-CLI",
       DEFAULT_SELECTOR_STRING = "div",
@@ -8,6 +9,7 @@ const PERIOD = ".",
 
 module.exports = {
   PERIOD,
+  EMPTY_STRING,
   DOUBLE_SPACE,
   HIGHMARK_CLI,
   DEFAULT_SELECTOR_STRING,

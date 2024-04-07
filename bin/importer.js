@@ -15,7 +15,7 @@ function importer(filePath, indent, context) {
           node = nodeFromTokens(tokens);
 
     if (node !== null) {
-      context = Object.assign({}, context, {
+      Object.assign(context, {
         tokens,
         divisionIdentifier
       });
