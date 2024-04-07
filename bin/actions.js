@@ -4,7 +4,7 @@ const helpAction = require("./action/help"),
       versionAction = require("./action/version"),
       publishAction = require("./action/publish");
 
-const { DEFAULT_INPUT_FILE_PATH } = require("./defaults"),
+const { DEFAULT_INPUT_FILE_PATH, DEFAULT_OUTPUT_FILE_PATH } = require("./defaults"),
       { HELP_OPTION, VERSION_OPTION } = require("./options"),
       { HELP_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands");
 
@@ -13,7 +13,7 @@ function actions(command, argument, options) {
         helpOptionPresent = options.hasOwnProperty(HELP_OPTION),
         versionOptionPresent = options.hasOwnProperty(VERSION_OPTION),
         { inputFilePath = DEFAULT_INPUT_FILE_PATH,
-          outputFilePath = null } = options;
+          outputFilePath = DEFAULT_OUTPUT_FILE_PATH } = options;
 
   if (false) {
     ///

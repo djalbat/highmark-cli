@@ -2,7 +2,6 @@
 
 const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
       SUCCESSFUL_PUBLISH_MESSAGE = "Published successfully.",
-      NO_OUTPUT_FILE_PATH_MESSAGE = "No output file path has been specified.",
       UNABLE_TO_READ_FILE_MESSAGE = "Unable to read the file.",
       UNABLE_TO_WRITE_FILE_MESSAGE = "Unable to write the file.",
       UNABLE_TO_READ_DIRECTORY_MESSAGE = "Unable to read the directory.",
@@ -13,7 +12,6 @@ const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
 module.exports = {
   FAILED_PUBLISH_MESSAGE,
   SUCCESSFUL_PUBLISH_MESSAGE,
-  NO_OUTPUT_FILE_PATH_MESSAGE,
   UNABLE_TO_READ_FILE_MESSAGE,
   UNABLE_TO_WRITE_FILE_MESSAGE,
   UNABLE_TO_READ_DIRECTORY_MESSAGE,

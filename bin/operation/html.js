@@ -1,27 +1,31 @@
 "use strict";
 
-const { writeFile } = require("../utilities/fileSystem"),
-      { NO_OUTPUT_FILE_PATH_MESSAGE } = require("../messages");
+const { writeFile } = require("../utilities/fileSystem");
 
 function htmlOperation(proceed, abort, context) {
-  const { outputFilePath } = context;
-
-  if (outputFilePath === null) {
-    const message = NO_OUTPUT_FILE_PATH_MESSAGE;
-
-    console.log(message);
-
-    abort();
-
-    return;
-  }
-
-  const { markdownHTML, markdownStylesCSS } = context,
+  const { links, title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
         filePath = outputFilePath,  ///
         content = `<!DOCTYPE html>
 <html>
   <head>
-    <title>The Foundations of Symbolic Reasoning</title>
+    <title>${title}</title>
+    
+    <meta charset="utf-8" />
+
+    ${links}
+    
+    <style>
+
+      *,
+      *::after,
+      *::before {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    
+    </style>
     <style>
 
 ${markdownStylesCSS}
