@@ -7,8 +7,8 @@ const { DEFAULT_DIVISION_IDENTIFIER } = require("../constants");
 const { second } = arrayUtilities,
       { isPathName, bottommostNameFromPath } = pathUtilities;
 
-function divisionIdentifierFromFilePath(filePath) {
-  let divisionIdentifier = null;
+function divisionClassNameFromFilePath(filePath) {
+  let divisionClassName = null;
 
   const path = filePath,
         pathName = isPathName(path),
@@ -19,12 +19,12 @@ function divisionIdentifierFromFilePath(filePath) {
         secondMatch = second(matches);
 
   if (secondMatch !== DEFAULT_DIVISION_IDENTIFIER) {
-    divisionIdentifier = secondMatch; ///
+    divisionClassName = secondMatch; ///
   }
 
-  return divisionIdentifier;
+  return divisionClassName;
 }
 
 module.exports = {
-  divisionIdentifierFromFilePath
+  divisionClassNameFromFilePath
 }

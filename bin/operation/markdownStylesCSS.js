@@ -4,7 +4,7 @@ const { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown-style")
 
 const { readFile, readDirectory } = require("../utilities/fileSystem"),
-      { divisionIdentifierFromFilePath } = require("../utilities/division"),
+      { divisionClassNameFromFilePath } = require("../utilities/division"),
       { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
@@ -50,9 +50,9 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
 
 function selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath,  ///
-        divisionIdentifier = divisionIdentifierFromFilePath(filePath),
-        selectorString = (divisionIdentifier !== null) ?
-                          `div#${divisionIdentifier}` :
+        divisionClassName = divisionClassNameFromFilePath(filePath),
+        selectorString = (divisionClassName !== null) ?
+                          `div.${divisionClassName}` :
                             `div`;
 
   return selectorString;

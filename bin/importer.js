@@ -1,7 +1,7 @@
 "use strict";
 
 const { readFile } = require("./utilities/fileSystem"),
-      { divisionIdentifierFromFilePath } = require("./utilities/division"),
+      { divisionClassNameFromFilePath } = require("./utilities/division"),
       { nodeFromTokens, tokensFromContent } = require("./utilities/markdown");
 
 function importer(filePath, indent, context) {
@@ -10,14 +10,14 @@ function importer(filePath, indent, context) {
   const content = readFile(filePath);
 
   if (content !== null) {
-    const divisionIdentifier = divisionIdentifierFromFilePath(filePath),
+    const divisionClassName = divisionClassNameFromFilePath(filePath),
           tokens = tokensFromContent(content),
           node = nodeFromTokens(tokens);
 
     if (node !== null) {
       Object.assign(context, {
         tokens,
-        divisionIdentifier
+        divisionClassName
       });
 
       html = node.asHTML(indent, context);
