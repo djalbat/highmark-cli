@@ -5,15 +5,17 @@ const { filePathUtilities } = require("occam-entities"),
 
 const { readFile, readDirectory } = require("../utilities/fileSystem"),
       { divisionClassNameFromFilePath } = require("../utilities/division"),
-      { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants");
+      { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants"),
+      { isFilePathFileName, directoryPathFromFilePath } = require("../utilities/name");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
       { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
-  const selectorString = DEFAULT_SELECTOR_STRING,
+  const { inputFilePath } = context,
+        directoryPath = directoryPathFromInputFilePath(inputFilePath),
         markdownStyle = defaultMarkdownStyle, ///
-        directoryPath = PERIOD, ///
+        selectorString = DEFAULT_SELECTOR_STRING,
         css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
 
   let markdownStylesCSS = css; ///
@@ -39,6 +41,16 @@ function markdownStylesCSSOperation(proceed, abort, context) {
 }
 
 module.exports = markdownStylesCSSOperation;
+
+function directoryPathFromInputFilePath(inputFilePath) {
+  const filePath = inputFilePath, ///
+        filePathFileName = isFilePathFileName(filePath),
+        directoryPath = (filePathFileName) ?
+                          PERIOD : ///
+                            directoryPathFromFilePath(filePath);
+
+  return directoryPath;
+}
 
 function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath, ///

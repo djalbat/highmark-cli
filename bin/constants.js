@@ -1,6 +1,7 @@
 "use strict";
 
-const PERIOD = ".",
+const FONT = "font",
+      PERIOD = ".",
       EMPTY_STRING = "",
       DOUBLE_SPACE = "  ",
       HIGHMARK_CLI = "Highmark-CLI",
@@ -8,6 +9,7 @@ const PERIOD = ".",
       DEFAULT_DIVISION_IDENTIFIER = "default";
 
 module.exports = {
+  FONT,
   PERIOD,
   EMPTY_STRING,
   DOUBLE_SPACE,

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "argumentative": "^2.0.28",
+    "highmark-fonts": "^1.0.28",
     "highmark-markdown": "^0.0.152",
     "highmark-markdown-style": "^0.0.188",
     "necessary": "^13.4.2",

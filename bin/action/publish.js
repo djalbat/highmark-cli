@@ -1,19 +1,22 @@
 "use strict";
 
 const htmlOperation = require("../operation/html"),
+      copyFontsOperation = require("../operation/copyFonts"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
 
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
-function publishAction(inputFilePath, outputFilePath) {
+function publishAction(copyFonts, inputFilePath, outputFilePath) {
   const operations = [
+          copyFontsOperation,
           markdownStylesCSSOperation,
           markdownHTMLOperation,
           htmlOperation
         ],
         context = {
+          copyFonts,
           inputFilePath,
           outputFilePath
         };

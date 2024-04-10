@@ -5,6 +5,7 @@ const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
       UNABLE_TO_READ_FILE_MESSAGE = "Unable to read the file.",
       UNABLE_TO_WRITE_FILE_MESSAGE = "Unable to write the file.",
       UNABLE_TO_READ_DIRECTORY_MESSAGE = "Unable to read the directory.",
+      UNABLE_TO_CREATE_DIRECTORY_MESSAGE = "Unable to create the directory.",
       UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE = "Unable to parse the markdown file.",
       UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE = "Unable to convert Markdown to HTML.",
       UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE = "Unable to convert Markdown styles to CSS.";
@@ -15,6 +16,7 @@ module.exports = {
   UNABLE_TO_READ_FILE_MESSAGE,
   UNABLE_TO_WRITE_FILE_MESSAGE,
   UNABLE_TO_READ_DIRECTORY_MESSAGE,
+  UNABLE_TO_CREATE_DIRECTORY_MESSAGE,
   UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE,
   UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE,
   UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE

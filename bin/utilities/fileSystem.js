@@ -3,13 +3,18 @@
 const { pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { isEntryNameHiddenName } = require("../utilities/name"),
-      { UNABLE_TO_READ_FILE_MESSAGE, UNABLE_TO_WRITE_FILE_MESSAGE, UNABLE_TO_READ_DIRECTORY_MESSAGE } = require("../messages");
+      { UNABLE_TO_READ_FILE_MESSAGE,
+        UNABLE_TO_WRITE_FILE_MESSAGE,
+        UNABLE_TO_READ_DIRECTORY_MESSAGE,
+        UNABLE_TO_CREATE_DIRECTORY_MESSAGE } = require("../messages");
 
 const { concatenatePaths } = pathUtilities,
       { isEntryFile,
+        checkEntryExists,
         readFile: readFileAsync,
         writeFile: writeFileAsync,
-        readDirectory: readDirectoryAsync } = fileSystemUtilities;
+        readDirectory: readDirectoryAsync,
+        createDirectory: createDirectoryAsync } = fileSystemUtilities;
 
 function readFile(filePath) {
   let content = null;
@@ -51,7 +56,7 @@ function writeFile(filePath, content) {
   }
 }
 
-function readDirectory(directoryPath, callback) {
+function readDirectory(directoryPath, callback, recursive = true) {
   try {
     const entryNames = readDirectoryAsync(directoryPath);
 
@@ -67,9 +72,11 @@ function readDirectory(directoryPath, callback) {
 
           callback(filePath);
         } else {
-          const directoryPath = entryPath;  ///
+          if (recursive) {
+            const directoryPath = entryPath;  ///
 
-          readDirectory(directoryPath, callback);
+            readDirectory(directoryPath, callback, recursive);
+          }
         }
       }
     });
@@ -86,8 +93,34 @@ function readDirectory(directoryPath, callback) {
   }
 }
 
+function createDirectory(directoryPath) {
+  const entryPath = directoryPath,  ///
+        entryExists = checkEntryExists(entryPath);
+
+  if (entryExists) {
+    return;
+  }
+
+  try {
+    createDirectoryAsync(directoryPath);
+
+    console.log(`Create directory '${directoryPath}'.`);
+  } catch (error) {
+    let message;
+
+    message = UNABLE_TO_CREATE_DIRECTORY_MESSAGE;
+
+    console.log(message);
+
+    ({ message } = error);
+
+    console.log(message);
+  }
+}
+
 module.exports = {
   readFile,
   writeFile,
-  readDirectory
+  readDirectory,
+  createDirectory
 };
