@@ -4,7 +4,7 @@ const necessary = require("necessary");
 
 const { parseArgv } = require("argumentative");
 
-const main = require("./bin/main"),
+const actions = require("./bin/actions"),
       abbreviations = require("./bin/abbreviations");
 
 const { argv } = process,
@@ -17,4 +17,4 @@ const { commands, options } = parseArgv(argv, abbreviations),
       command = firstCommand || null, ///
       argument = secondCommand || null; ///
 
-main(command, argument, options);
+actions(command, argument, options);
