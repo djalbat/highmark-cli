@@ -1,11 +1,12 @@
 "use strict";
 
 const helpAction = require("./action/help"),
+      serverAction = require("./action/server"),
       versionAction = require("./action/version"),
       publishAction = require("./action/publish");
 
-const { HELP_OPTION, VERSION_OPTION } = require("./options"),
-      { HELP_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
+const { HELP_OPTION, SERVER_OPTION, VERSION_OPTION } = require("./options"),
+      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_SERVER,
         DEFAULT_COPY_FONTS,
@@ -15,6 +16,7 @@ const { HELP_OPTION, VERSION_OPTION } = require("./options"),
 function main(command, argument, options) {
   const commandMissing = (command === null),
         helpOptionPresent = options.hasOwnProperty(HELP_OPTION),
+        serverOptionPresent = options.hasOwnProperty(SERVER_OPTION),
         versionOptionPresent = options.hasOwnProperty(VERSION_OPTION),
         { port = DEFAULT_PORT,
           server = DEFAULT_SERVER,
@@ -26,12 +28,19 @@ function main(command, argument, options) {
     ///
   } else if (versionOptionPresent) {
     command = VERSION_COMMAND;
-  } else if (commandMissing || helpOptionPresent) {
-    command = HELP_COMMAND;
+  } else if (commandMissing) {
+    if (false) {
+      ///
+    } else if (helpOptionPresent) {
+      command = HELP_COMMAND;
+    } else if (serverOptionPresent) {
+      command = SERVER_COMMAND;
+    }
   }
 
   switch (command) {
     case HELP_COMMAND: helpAction(); break;
+    case SERVER_COMMAND: serverAction(port, server, outputFilePath); break;
     case VERSION_COMMAND: versionAction(); break;
     case PUBLISH_COMMAND: publishAction(port, server, copyFonts, inputFilePath, outputFilePath); break;
 

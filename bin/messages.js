@@ -1,6 +1,8 @@
 "use strict";
 
-const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
+const FAILED_SERVER_MESSAGE = "Failed to serve.",
+      FAILED_PUBLISH_MESSAGE = "Failed to publish.",
+      SUCCESSFUL_SERVER_MESSAGE = "Served successfully.",
       SUCCESSFUL_PUBLISH_MESSAGE = "Published successfully.",
       UNABLE_TO_COPY_FILE_MESSAGE = "Unable to copy the file.",
       UNABLE_TO_READ_FILE_MESSAGE = "Unable to read the file.",
@@ -13,7 +15,9 @@ const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
       UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE = "Unable to convert Markdown styles to CSS.";
 
 module.exports = {
+  FAILED_SERVER_MESSAGE,
   FAILED_PUBLISH_MESSAGE,
+  SUCCESSFUL_SERVER_MESSAGE,
   SUCCESSFUL_PUBLISH_MESSAGE,
   UNABLE_TO_COPY_FILE_MESSAGE,
   UNABLE_TO_READ_FILE_MESSAGE,
