@@ -3,7 +3,8 @@
 const { pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { isEntryNameHiddenName } = require("../utilities/path"),
-      { UNABLE_TO_READ_FILE_MESSAGE,
+      { UNABLE_TO_COPY_FILE_MESSAGE,
+        UNABLE_TO_READ_FILE_MESSAGE,
         UNABLE_TO_WRITE_FILE_MESSAGE,
         UNABLE_TO_READ_DIRECTORY_MESSAGE,
         UNABLE_TO_CREATE_DIRECTORY_MESSAGE } = require("../messages");
@@ -11,10 +12,33 @@ const { isEntryNameHiddenName } = require("../utilities/path"),
 const { concatenatePaths } = pathUtilities,
       { isEntryFile,
         checkEntryExists,
+        copyFile: copyFileAsync,
         readFile: readFileAsync,
         writeFile: writeFileAsync,
         readDirectory: readDirectoryAsync,
         createDirectory: createDirectoryAsync } = fileSystemUtilities;
+
+function copyFile(sourceFilePath, targetFilePath) {
+  let content = null;
+
+  try {
+    content = copyFileAsync(sourceFilePath, targetFilePath);
+
+    console.log(`Copy file '${sourceFilePath}' to '${targetFilePath}'.`);
+  } catch (error) {
+    let message;
+
+    message = UNABLE_TO_COPY_FILE_MESSAGE;
+
+    console.log(message);
+
+    ({ message } = error);
+
+    console.log(message);
+  }
+
+  return content;
+}
 
 function readFile(filePath) {
   let content = null;
@@ -119,6 +143,7 @@ function createDirectory(directoryPath) {
 }
 
 module.exports = {
+  copyFile,
   readFile,
   writeFile,
   readDirectory,

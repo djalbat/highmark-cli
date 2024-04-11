@@ -4,8 +4,8 @@ const { pathUtilities } = require("necessary"),
       { getFontDirectoryPath } = require("highmark-fonts");
 
 const { FONT } = require("../constants"),
-      { fileNameFromFilePath, directoryPathFromFilePath } = require("../utilities/path"),
-      { readFile, writeFile, readDirectory, createDirectory } = require("../utilities/fileSystem");
+      { copyFile, readDirectory, createDirectory } = require("../utilities/fileSystem"),
+      { fileNameFromFilePath, directoryPathFromFilePath } = require("../utilities/path");
 
 const { concatenatePaths } = pathUtilities;
 
@@ -29,16 +29,15 @@ function copyFontsOperation(proceed, abort, context) {
 
   fontDirectoryPath = getFontDirectoryPath();
 
-  const recursive = false;
+  const recursive = false,
+        targetDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
 
   readDirectory(fontDirectoryPath, (filePath) => {
-    const content = readFile(filePath),
-          fileName = fileNameFromFilePath(filePath),
-          directoryPath = concatenatePaths(outputDirectoryPath, FONT);
+    const fileName = fileNameFromFilePath(filePath),
+          sourceFilePath = filePath,  ///
+          targetFilePath = concatenatePaths(targetDirectoryPath, fileName); ///
 
-    filePath = concatenatePaths(directoryPath, fileName); ///
-
-    writeFile(filePath, content);
+    copyFile(sourceFilePath, targetFilePath);
   }, recursive);
 
   proceed();

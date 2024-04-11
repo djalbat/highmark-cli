@@ -2,6 +2,7 @@
 
 const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
       SUCCESSFUL_PUBLISH_MESSAGE = "Published successfully.",
+      UNABLE_TO_COPY_FILE_MESSAGE = "Unable to copy the file.",
       UNABLE_TO_READ_FILE_MESSAGE = "Unable to read the file.",
       UNABLE_TO_WRITE_FILE_MESSAGE = "Unable to write the file.",
       UNABLE_TO_START_SERVER_MESSAGE = "Unable to start the server",
@@ -14,6 +15,7 @@ const FAILED_PUBLISH_MESSAGE = "Failed to publish.",
 module.exports = {
   FAILED_PUBLISH_MESSAGE,
   SUCCESSFUL_PUBLISH_MESSAGE,
+  UNABLE_TO_COPY_FILE_MESSAGE,
   UNABLE_TO_READ_FILE_MESSAGE,
   UNABLE_TO_WRITE_FILE_MESSAGE,
   UNABLE_TO_START_SERVER_MESSAGE,
