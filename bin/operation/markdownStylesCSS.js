@@ -4,23 +4,21 @@ const { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown-style")
 
 const { readFile, readDirectory } = require("../utilities/fileSystem"),
-      { divisionClassNameFromFilePath } = require("../utilities/division"),
-      { PERIOD, DEFAULT_SELECTOR_STRING } = require("../constants"),
-      { isFilePathFileName, directoryPathFromFilePath } = require("../utilities/name");
+      { DEFAULT_SELECTOR_STRING } = require("../constants"),
+      { directoryPathFromFilePath } = require("../utilities/path"),
+      { divisionClassNameFromFilePath } = require("../utilities/division");
 
 const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
       { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
   const { inputFilePath } = context,
-        directoryPath = directoryPathFromInputFilePath(inputFilePath),
-        markdownStyle = defaultMarkdownStyle, ///
-        selectorString = DEFAULT_SELECTOR_STRING,
-        css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
+        defaultCSS = cssFromMarkdownStyleAndSelectorString(defaultMarkdownStyle, DEFAULT_SELECTOR_STRING),
+        inputDirectoryPath = directoryPathFromFilePath(inputFilePath);
 
-  let markdownStylesCSS = css; ///
+  let markdownStylesCSS = defaultCSS; ///
 
-  readDirectory(directoryPath, (filePath) => {
+  readDirectory(inputDirectoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
 
     if (filePathMarkdownStyleFilePath) {
@@ -41,16 +39,6 @@ function markdownStylesCSSOperation(proceed, abort, context) {
 }
 
 module.exports = markdownStylesCSSOperation;
-
-function directoryPathFromInputFilePath(inputFilePath) {
-  const filePath = inputFilePath, ///
-        filePathFileName = isFilePathFileName(filePath),
-        directoryPath = (filePathFileName) ?
-                          PERIOD : ///
-                            directoryPathFromFilePath(filePath);
-
-  return directoryPath;
-}
 
 function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath, ///

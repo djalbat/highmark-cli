@@ -1,6 +1,7 @@
 "use strict";
 
 const htmlOperation = require("../operation/html"),
+      serverOperation = require("../operation/server"),
       copyFontsOperation = require("../operation/copyFonts"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
@@ -8,14 +9,17 @@ const htmlOperation = require("../operation/html"),
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
-function publishAction(copyFonts, inputFilePath, outputFilePath) {
+function publishAction(port, server, copyFonts, inputFilePath, outputFilePath) {
   const operations = [
-          copyFontsOperation,
           markdownStylesCSSOperation,
           markdownHTMLOperation,
-          htmlOperation
+          copyFontsOperation,
+          htmlOperation,
+          serverOperation
         ],
         context = {
+          port,
+          server,
           copyFonts,
           inputFilePath,
           outputFilePath
@@ -28,8 +32,6 @@ function publishAction(copyFonts, inputFilePath, outputFilePath) {
                         FAILED_PUBLISH_MESSAGE;
 
     console.log(message);
-
-    process.exit();
   }, context);
 }
 

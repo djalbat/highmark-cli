@@ -3,10 +3,11 @@
 const { pathUtilities } = require("necessary"),
       { getFontDirectoryPath } = require("highmark-fonts");
 
-const { FONT, PERIOD } = require("../constants"),
-      { concatenatePaths } = pathUtilities,
-      { readFile, writeFile, readDirectory, createDirectory } = require("../utilities/fileSystem"),
-      { isFilePathFileName, fileNameFromFilePath, directoryPathFromFilePath } = require("../utilities/name");
+const { FONT } = require("../constants"),
+      { fileNameFromFilePath, directoryPathFromFilePath } = require("../utilities/path"),
+      { readFile, writeFile, readDirectory, createDirectory } = require("../utilities/fileSystem");
+
+const { concatenatePaths } = pathUtilities;
 
 function copyFontsOperation(proceed, abort, context) {
   const { copyFonts } = context;
@@ -17,25 +18,20 @@ function copyFontsOperation(proceed, abort, context) {
     return;
   }
 
-  let directoryPath,
-      fontDirectoryPath;
+  let fontDirectoryPath;
 
   const { outputFilePath } = context,
-        outputDirectoryPath = outputDirectoryPathFromOutputFilePath(outputFilePath);
+        outputDirectoryPath = directoryPathFromFilePath(outputFilePath);
 
   fontDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
 
-  directoryPath = fontDirectoryPath;  ///
-
-  createDirectory(directoryPath);
+  createDirectory(fontDirectoryPath);
 
   fontDirectoryPath = getFontDirectoryPath();
 
-  directoryPath = fontDirectoryPath; ///
-
   const recursive = false;
 
-  readDirectory(directoryPath, (filePath) => {
+  readDirectory(fontDirectoryPath, (filePath) => {
     const content = readFile(filePath),
           fileName = fileNameFromFilePath(filePath),
           directoryPath = concatenatePaths(outputDirectoryPath, FONT);
@@ -49,12 +45,3 @@ function copyFontsOperation(proceed, abort, context) {
 }
 
 module.exports = copyFontsOperation;
-
-function outputDirectoryPathFromOutputFilePath(outputFilePath) {
-  const outputFilePathOutputFilename = isFilePathFileName(outputFilePath),
-        outputDirectoryPath = (outputFilePathOutputFilename) ?
-                                PERIOD : ///
-                                  directoryPathFromFilePath(outputFilePath);
-
-  return outputDirectoryPath;
-}

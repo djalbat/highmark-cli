@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "argumentative": "^2.0.28",
+    "express": "^4.19.2",
     "highmark-fonts": "^1.0.28",
     "highmark-markdown": "^0.0.152",
     "highmark-markdown-style": "^0.0.188",
+    "lively-cli": "^2.0.55",
     "necessary": "^13.4.2",
     "occam-entities": "^1.0.83"
   },

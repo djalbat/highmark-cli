@@ -2,6 +2,8 @@
 
 const { pathUtilities } = require("necessary");
 
+const { PERIOD } = require("../constants");
+
 const { isPathName, bottommostNameFromPath, pathWithoutBottommostNameFromPath } = pathUtilities;
 
 function isFilePathFileName(filePath) {
@@ -27,9 +29,18 @@ function isEntryNameHiddenName(entryName) {
 }
 
 function directoryPathFromFilePath(filePath) {
+  let directoryPath;
+
   const path = filePath,  ///
-        pathWithoutBottommostName = pathWithoutBottommostNameFromPath(path),
-        directoryPath = pathWithoutBottommostName;  ///
+        pathName = isPathName(path);
+
+  if (pathName) {
+    directoryPath = PERIOD;
+  } else {
+    const pathWithoutBottommostName = pathWithoutBottommostNameFromPath(path);
+
+    directoryPath = pathWithoutBottommostName;  ///
+  }
 
   return directoryPath;
 }

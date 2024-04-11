@@ -2,7 +2,7 @@
 
 const { pathUtilities, fileSystemUtilities } = require("necessary");
 
-const { isEntryNameHiddenName } = require("../utilities/name"),
+const { isEntryNameHiddenName } = require("../utilities/path"),
       { UNABLE_TO_READ_FILE_MESSAGE,
         UNABLE_TO_WRITE_FILE_MESSAGE,
         UNABLE_TO_READ_DIRECTORY_MESSAGE,

@@ -1,6 +1,7 @@
 "use strict";
 
 const FONT = "font",
+      ERROR = "error",
       PERIOD = ".",
       EMPTY_STRING = "",
       DOUBLE_SPACE = "  ",
@@ -10,6 +11,7 @@ const FONT = "font",
 
 module.exports = {
   FONT,
+  ERROR,
   PERIOD,
   EMPTY_STRING,
   DOUBLE_SPACE,

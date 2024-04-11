@@ -1,8 +1,9 @@
 "use strict";
 
-const { writeFile } = require("../utilities/fileSystem");
+const { computerModernStyle } = require("highmark-fonts");
 
-const { EMPTY_STRING } = require("../constants");
+const { writeFile } = require("../utilities/fileSystem"),
+      { EMPTY_STRING } = require("../constants");
 
 function htmlOperation(proceed, abort, context) {
   const { title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
@@ -47,6 +48,11 @@ function htmlOperation(proceed, abort, context) {
         padding: 0;
         box-sizing: border-box;
       }
+    
+    </style>
+    <style>
+    
+${computerModernStyle}    
     
     </style>
     <style>
