@@ -5,13 +5,14 @@ const helpAction = require("./action/help"),
       versionAction = require("./action/version"),
       publishAction = require("./action/publish");
 
-const { HELP_OPTION, SERVER_OPTION, VERSION_OPTION } = require("./options"),
-      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
+const { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
+      { HELP_OPTION, SERVER_OPTION, VERSION_OPTION, TEMPLATE_FILE_PATH_OPTION } = require("./options"),
       { DEFAULT_PORT,
         DEFAULT_SERVER,
         DEFAULT_COPY_FONTS,
         DEFAULT_INPUT_FILE_PATH,
-        DEFAULT_OUTPUT_FILE_PATH } = require("./defaults");
+        DEFAULT_OUTPUT_FILE_PATH,
+        DEFAULT_TEMPLATE_FILE_PATH } = require("./defaults");
 
 function main(command, argument, options) {
   const commandMissing = (command === null),
@@ -22,7 +23,8 @@ function main(command, argument, options) {
           server = DEFAULT_SERVER,
           copyFonts = DEFAULT_COPY_FONTS,
           inputFilePath = DEFAULT_INPUT_FILE_PATH,
-          outputFilePath = DEFAULT_OUTPUT_FILE_PATH } = options;
+          outputFilePath = DEFAULT_OUTPUT_FILE_PATH,
+          templateFilePath = DEFAULT_TEMPLATE_FILE_PATH } = options;
 
   if (false) {
     ///
@@ -42,10 +44,10 @@ function main(command, argument, options) {
     case HELP_COMMAND: helpAction(); break;
     case SERVER_COMMAND: serverAction(port, server, outputFilePath); break;
     case VERSION_COMMAND: versionAction(); break;
-    case PUBLISH_COMMAND: publishAction(port, server, copyFonts, inputFilePath, outputFilePath); break;
+    case PUBLISH_COMMAND: publishAction(port, server, copyFonts, inputFilePath, outputFilePath, templateFilePath); break;
 
     default :
-      publishAction(port, server, copyFonts, inputFilePath, outputFilePath);
+      publishAction(port, server, copyFonts, inputFilePath, outputFilePath, templateFilePath);
 
       break;
   }

@@ -6,7 +6,8 @@ const HELP_OPTION = "help",
       VERSION_OPTION = "version",
       COPY_FONTS_OPTION = "copy-fonts",
       INPUT_FILE_PATH_OPTION = "input-file-path",
-      OUTPUT_FILE_PATH_OPTION = "output-file-path";
+      OUTPUT_FILE_PATH_OPTION = "output-file-path",
+      TEMPLATE_FILE_PATH_OPTION = "template-file-path";
 
 module.exports = {
   HELP_OPTION,
@@ -15,5 +16,6 @@ module.exports = {
   VERSION_OPTION,
   COPY_FONTS_OPTION,
   INPUT_FILE_PATH_OPTION,
-  OUTPUT_FILE_PATH_OPTION
+  OUTPUT_FILE_PATH_OPTION,
+  TEMPLATE_FILE_PATH_OPTION
 };
