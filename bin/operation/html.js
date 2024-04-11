@@ -1,13 +1,19 @@
 "use strict";
 
-const { computerModernStyle: computerModernStyleCSS } = require("highmark-fonts");
+const { pathUtilities, packageUtilities } = require("necessary"),
+      { computerModernStyle: computerModernStyleCSS } = require("highmark-fonts");
 
-const { EMPTY_STRING } = require("../constants"),
-      { writeFile, parseTemplateFile } = require("../utilities/fileSystem");
+const { directoryPathFromFilePath } = require("../utilities/path"),
+      { writeFile, parseTemplateFile } = require("../utilities/fileSystem"),
+      { EMPTY_STRING, TEMPLATE_FILE_PATH } = require("../constants");
+
+const { getPackagePath } = packageUtilities,
+      { concatenatePaths } = pathUtilities;
 
 function htmlOperation(proceed, abort, context) {
-  const { title, markdownHTML, outputFilePath, markdownStylesCSS, templateFilePath } = context,
+  const { title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
         titleHTML = titleHTMLFromTitle(title),
+        templateFilePath = getTemplateFilePath(context),
         args = {
           titleHTML,
           markdownHTML,
@@ -22,6 +28,25 @@ function htmlOperation(proceed, abort, context) {
 }
 
 module.exports = htmlOperation;
+
+function getTemplateFilePath(context) {
+  let templateFilePath;
+
+  ({templateFilePath} = context);
+
+  if (templateFilePath === null) {
+    const packagePath = getPackagePath();
+
+    templateFilePath = concatenatePaths(packagePath, TEMPLATE_FILE_PATH);
+  } else {
+    const { inputFilePath } = context,
+      inputDirectoryPath = directoryPathFromFilePath(inputFilePath);
+
+    templateFilePath = concatenatePaths(inputDirectoryPath, templateFilePath);  ///
+  }
+
+  return templateFilePath;
+}
 
 function titleHTMLFromTitle(title) {
   const titleHTML = (title === null) ?

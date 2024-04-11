@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
 
     ${titleHTML}
 
@@ -49,10 +49,27 @@
         ${markdownStylesCSS}
 
     </style>
-</head>
-<body>
+  </head>
+  <body>
 
 ${markdownHTML}
 
-</body>
+    <script>
+
+      var xmlHttpRequest = new XMLHttpRequest();
+
+      xmlHttpRequest.onreadystatechange = function() {
+        if (xmlHttpRequest.readyState == 4) {
+          if (xmlHttpRequest.status == 200) {
+            location.reload();
+          }
+        }
+      };
+
+      xmlHttpRequest.open("GET", "/live-reload");
+
+      xmlHttpRequest.send();
+
+    </script>
+  </body>
 </html>

@@ -6,6 +6,7 @@ const FONT = "font",
       EMPTY_STRING = "",
       DOUBLE_SPACE = "  ",
       HIGHMARK_CLI = "Highmark-CLI",
+      TEMPLATE_FILE_PATH = "template/default.html",
       DEFAULT_SELECTOR_STRING = "div",
       DEFAULT_DIVISION_IDENTIFIER = "default";
 
@@ -16,6 +17,7 @@ module.exports = {
   EMPTY_STRING,
   DOUBLE_SPACE,
   HIGHMARK_CLI,
+  TEMPLATE_FILE_PATH,
   DEFAULT_SELECTOR_STRING,
   DEFAULT_DIVISION_IDENTIFIER
 };
