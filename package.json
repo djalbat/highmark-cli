@@ -1,7 +1,7 @@
 {
   "name": "highmark-cli",
   "author": "James Smith",
-  "version": "0.0.94",
+  "version": "0.0.95",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/highmark-cli",
   "description": "Extensible, styleable Markdown.",
@@ -12,12 +12,12 @@
   "dependencies": {
     "argumentative": "^2.0.28",
     "express": "^4.19.2",
-    "highmark-fonts": "^1.0.28",
-    "highmark-markdown": "^0.0.152",
-    "highmark-markdown-style": "^0.0.188",
+    "highmark-fonts": "^1.0.30",
+    "highmark-markdown": "^0.0.153",
+    "highmark-markdown-style": "^0.0.189",
     "lively-cli": "^2.0.55",
-    "necessary": "^13.4.2",
-    "occam-entities": "^1.0.83"
+    "necessary": "^13.5.5",
+    "occam-entities": "^1.0.84"
   },
   "scripts": {},
   "bin": {
