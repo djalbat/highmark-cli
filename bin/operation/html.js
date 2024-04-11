@@ -29,6 +29,14 @@ function htmlOperation(proceed, abort, context) {
 
 module.exports = htmlOperation;
 
+function titleHTMLFromTitle(title) {
+  const titleHTML = (title === null) ?
+                      EMPTY_STRING :
+                        `<title>${title}</title>`;
+
+  return titleHTML;
+}
+
 function getTemplateFilePath(context) {
   let templateFilePath;
 
@@ -40,18 +48,10 @@ function getTemplateFilePath(context) {
     templateFilePath = concatenatePaths(packagePath, TEMPLATE_FILE_PATH);
   } else {
     const { inputFilePath } = context,
-      inputDirectoryPath = directoryPathFromFilePath(inputFilePath);
+          inputDirectoryPath = directoryPathFromFilePath(inputFilePath);
 
     templateFilePath = concatenatePaths(inputDirectoryPath, templateFilePath);  ///
   }
 
   return templateFilePath;
-}
-
-function titleHTMLFromTitle(title) {
-  const titleHTML = (title === null) ?
-                      EMPTY_STRING :
-                        `<title>${title}</title>`;
-
-  return titleHTML;
 }

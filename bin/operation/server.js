@@ -18,12 +18,13 @@ function serverOperation(proceed, abort, context) {
     return;
   }
 
-  server = express(); ///
-
   const { port, outputFilePath } = context,
         outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
-        liveReloadHandler = createLiveReloadHandler(outputFilePath),
-        staticRouter = express.static(outputDirectoryPath);
+        watchPattern = `./${outputFilePath}`,
+        staticRouter = express.static(outputDirectoryPath),
+        liveReloadHandler = createLiveReloadHandler(watchPattern);
+
+  server = express(); ///
 
   server.use(staticRouter);
 
