@@ -45,8 +45,6 @@ function main(command, argument, options) {
     case PUBLISH_COMMAND: publishAction(port, server, copyFonts, inputFilePath, outputFilePath); break;
 
     default :
-      argument = command;  ///
-
       publishAction(port, server, copyFonts, inputFilePath, outputFilePath);
 
       break;
