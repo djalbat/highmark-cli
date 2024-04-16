@@ -4,9 +4,7 @@ const { readFile } = require("./utilities/fileSystem"),
       { divisionClassNameFromFilePath } = require("./utilities/division"),
       { nodeFromTokens, tokensFromContent } = require("./utilities/markdown");
 
-function importer(filePath, indent, context) {
-  let html = null;
-
+function importer(filePath, context) {
   const content = readFile(filePath);
 
   if (content !== null) {
@@ -15,16 +13,18 @@ function importer(filePath, indent, context) {
           node = nodeFromTokens(tokens);
 
     if (node !== null) {
-      Object.assign(context, {
-        tokens,
-        divisionClassName
-      });
+      const importedNode = node,  ///
+            importedTokens = tokens,  ///
+            divisionMarkdownNode = node;  ///
 
-      html = node.asHTML(indent, context);
+      divisionMarkdownNode.setDivisionClassName(divisionClassName);
+
+      Object.assign(context, {
+        importedNode,
+        importedTokens
+      });
     }
   }
-
-  return html;
 }
 
 module.exports = importer;

@@ -2,23 +2,21 @@
 
 const importer = require("../importer");
 
-const { DOUBLE_SPACE } = require("../constants"),
-      { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
+const { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
 function markdownHTMLOperation(proceed, abort, context) {
   const { inputFilePath } = context,
-        filePath = inputFilePath, ///
-        indent = DOUBLE_SPACE,
-        title = null;
+        filePath = inputFilePath; ///
 
   Object.assign(context, {
-    title,
     importer
   });
 
-  const html = importer(filePath, indent, context);
+  importer(filePath, context);
 
-  if (html === null) {
+  const { importedNode = null, importedTokens = null } = context;
+
+  if (importedNode === null) {
     const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
 
     console.log(message);
@@ -28,7 +26,26 @@ function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  const markdownHTML = html;  ///
+  delete context.importedNode;
+  delete context.importedTokens;
+
+  const node = importedNode,  ///
+        tokens = importedTokens,  ///
+        parentNode = null,
+        divisionMarkdownNode = node;  ///
+
+  Object.assign(context, {
+    tokens
+  });
+
+  divisionMarkdownNode.resolveImports(parentNode, context);
+
+  divisionMarkdownNode.createContents(context);
+
+  divisionMarkdownNode.createFootnotes(context);
+
+  const html = divisionMarkdownNode.asHTML(context),
+        markdownHTML = html;  ///
 
   Object.assign(context, {
     markdownHTML
