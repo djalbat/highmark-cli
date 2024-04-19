@@ -2,21 +2,17 @@
 
 const importer = require("../importer");
 
-const { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
+const { readFile } = require("../utilities/fileSystem"),
+      { classNameFromFilePath } = require("../utilities/division"),
+      { nodeFromTokens, tokensFromContent } = require("../utilities/markdown"),
+      { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
 function markdownHTMLOperation(proceed, abort, context) {
   const { inputFilePath } = context,
-        filePath = inputFilePath; ///
+        filePath = inputFilePath, ///
+        content = readFile(filePath);
 
-  Object.assign(context, {
-    importer
-  });
-
-  importer(filePath, context);
-
-  const { importedNode = null, importedTokens = null } = context;
-
-  if (importedNode === null) {
+  if (content === null) {
     const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
 
     console.log(message);
@@ -26,17 +22,30 @@ function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  delete context.importedNode;
-  delete context.importedTokens;
+  const className = classNameFromFilePath(filePath),
+        tokens = tokensFromContent(content),
+        node = nodeFromTokens(tokens);
 
-  const node = importedNode,  ///
-        tokens = importedTokens,  ///
-        parentNode = null,
-        divisionMarkdownNode = node;  ///
+  if (node === null) {
+    const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
+
+    console.log(message);
+
+    abort();
+
+    return;
+  }
 
   Object.assign(context, {
-    tokens
+    tokens,
+    importer
   });
+
+  const parentNode = null,
+        divisionClassName = className,  ///
+        divisionMarkdownNode = node;  ///
+
+  divisionMarkdownNode.setDivisionClassName(divisionClassName);
 
   divisionMarkdownNode.resolveImports(parentNode, context);
 

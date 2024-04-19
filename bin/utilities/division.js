@@ -8,19 +8,16 @@ const { second } = arrayUtilities,
       { isPathName, bottommostNameFromPath } = pathUtilities;
 
 function classNameFromFilePath(filePath) {
-  let className = null;
-
   const path = filePath,
         pathName = isPathName(path),
         name = pathName ?
                  path :
                    bottommostNameFromPath(path),
         matches = name.match(/^([^.]+)\..+$/),
-        secondMatch = second(matches);
-
-  if (secondMatch !== DEFAULT_DIVISION_IDENTIFIER) {
-    className = secondMatch; ///
-  }
+        secondMatch = second(matches),
+        className = (secondMatch !== DEFAULT_DIVISION_IDENTIFIER) ?
+                      secondMatch : ///
+                        null;
 
   return className;
 }
