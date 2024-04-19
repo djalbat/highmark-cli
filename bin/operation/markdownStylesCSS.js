@@ -8,27 +8,37 @@ const { classNameFromFilePath } = require("../utilities/division"),
       { DEFAULT_SELECTOR_STRING } = require("../constants"),
       { directoryPathFromFilePath } = require("../utilities/path");
 
-const { isFilePathMarkdownStyleFilePath } = filePathUtilities,
-      { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
+const { cssFromMarkdownStyleAndSelectorString } = cssUtilities,
+      { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
   const { inputFilePath } = context,
-        defaultCSS = cssFromMarkdownStyleAndSelectorString(defaultMarkdownStyle, DEFAULT_SELECTOR_STRING),
-        inputDirectoryPath = directoryPathFromFilePath(inputFilePath);
-
-  let markdownStylesCSS = defaultCSS; ///
+        inputDirectoryPath = directoryPathFromFilePath(inputFilePath),
+        markdownStyleFilePaths = [];
 
   readDirectory(inputDirectoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
 
     if (filePathMarkdownStyleFilePath) {
-      const markdownStyleFilePath = filePath, ///
-            selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
-            markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-            css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
+      const markdownStyleFilePath = filePath,
+            filePathDefaultMarkdownStyleFilePath = isFilePathDefaultMarkdownStyleFilePath(filePath);
 
-      markdownStylesCSS = `${markdownStylesCSS}${css}`;
+      filePathDefaultMarkdownStyleFilePath ?
+        markdownStyleFilePaths.unshift(markdownStyleFilePath) :
+          markdownStyleFilePaths.push(markdownStyleFilePath);
     }
+  });
+
+  const defaultCSS = cssFromMarkdownStyleAndSelectorString(defaultMarkdownStyle, DEFAULT_SELECTOR_STRING);
+
+  let markdownStylesCSS = defaultCSS; ///
+
+  markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
+    const selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
+          markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
+          css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
+
+    markdownStylesCSS = `${markdownStylesCSS}${css}`;
   });
 
   Object.assign(context, {
