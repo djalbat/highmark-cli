@@ -21,7 +21,7 @@ Options:
 
   --port|-p                                  The server port, the default being 8888
 
-  --watch|-w                                 Watch for changes in the bundled client file
+  --watch|-w                                 Watch for changes to the client file and in the output directory 
 
   --server|-s                                Start a server to view the output file
 
