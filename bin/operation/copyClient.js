@@ -5,8 +5,7 @@ const { watch: watchFile } = require("lively-cli"),
 
 const { copyFile } = require("../utilities/fileSystem"),
       { CLIENT_FILE_NAME } = require("../constants"),
-      { directoryPathFromFilePath } = require("../utilities/path"),
-      { WATCHING_CLIENT_FILE_MESSAGE } = require("../messages");
+      { directoryPathFromFilePath } = require("../utilities/path");
 
 const { getPackagePath } = packageUtilities,
       { concatenatePaths } = pathUtilities;
@@ -36,11 +35,8 @@ function copyClientOperation(proceed, abort, context) {
     return;
   }
 
-  const message = WATCHING_CLIENT_FILE_MESSAGE,
-        watchPattern = sourceClientFilePath,  ///
+  const watchPattern = sourceClientFilePath,  ///
         registerHandler = watchFile(watchPattern);
-
-  console.log(message);
 
   registerHandler(copyClientFile);
 

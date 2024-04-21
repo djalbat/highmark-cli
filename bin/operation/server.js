@@ -6,8 +6,7 @@ const { createLiveReloadHandler } = require("lively-cli");
 
 const { ERROR, LIVE_RELOAD_PATH } = require("../constants"),
       { directoryPathFromFilePath } = require("../utilities/path"),
-      { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages"),
-      { WATCHING_OUTPUT_DIRECTORY_MESSAGE } = require("../messages");
+      { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
   let { server } = context;
@@ -27,11 +26,8 @@ function serverOperation(proceed, abort, context) {
   server.use(staticRouter);
 
   if (watch) {
-    const message = WATCHING_OUTPUT_DIRECTORY_MESSAGE,
-          watchPattern = outputDirectoryPath, ///
+    const watchPattern = outputDirectoryPath, ///
           liveReloadHandler = createLiveReloadHandler(watchPattern, quietly);
-
-    console.log(message);
 
     server.get(LIVE_RELOAD_PATH, liveReloadHandler);
   }
