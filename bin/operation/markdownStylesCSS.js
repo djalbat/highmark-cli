@@ -1,7 +1,7 @@
 "use strict";
 
 const { filePathUtilities } = require("occam-entities"),
-      { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown-style")
+      { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
 const { classNameFromFilePath } = require("../utilities/division"),
       { readFile, readDirectory } = require("../utilities/fileSystem"),
