@@ -1,21 +1,22 @@
 "use strict";
 
-const { pathUtilities, packageUtilities } = require("necessary"),
+const { liveReloadSnippet } = require("lively-cli"),
+      { pathUtilities, packageUtilities } = require("necessary"),
       { computerModernStyle: computerModernStyleCSS } = require("highmark-fonts");
 
 const { directoryPathFromFilePath } = require("../utilities/path"),
       { writeFile, parseTemplateFile } = require("../utilities/fileSystem"),
-      { EMPTY_STRING, TEMPLATE_FILE_PATH } = require("../constants");
+      { CLIENT_TEMPLATE_FILE_PATH, DEFAULT_TEMPLATE_FILE_PATH, EMPTY_STRING } = require("../constants");
 
 const { getPackagePath } = packageUtilities,
       { concatenatePaths } = pathUtilities;
 
 function htmlOperation(proceed, abort, context) {
-  const { title, markdownHTML, outputFilePath, markdownStylesCSS } = context,
-        titleHTML = titleHTMLFromTitle(title),
+  const { markdownHTML, outputFilePath, markdownStylesCSS } = context,
+        clientHTML = getClientHTML(context),
         templateFilePath = getTemplateFilePath(context),
         args = {
-          titleHTML,
+          clientHTML,
           markdownHTML,
           markdownStylesCSS,
           computerModernStyleCSS
@@ -29,12 +30,25 @@ function htmlOperation(proceed, abort, context) {
 
 module.exports = htmlOperation;
 
-function titleHTMLFromTitle(title) {
-  const titleHTML = (title === null) ?
-                      EMPTY_STRING :
-                        `<title>${title}</title>`;
+function getClientHTML(context) {
+  let clientHTML;
 
-  return titleHTML;
+  const { copyClient } = context;
+
+  if (copyClient) {
+    const packagePath = getPackagePath(),
+          clientTemplateFilePath = concatenatePaths(packagePath, CLIENT_TEMPLATE_FILE_PATH),
+          args = {
+            liveReloadSnippet
+          },
+          clientContent = parseTemplateFile(clientTemplateFilePath, args);
+
+    clientHTML = clientContent; ///
+  } else {
+    clientHTML = EMPTY_STRING;
+  }
+
+  return clientHTML;
 }
 
 function getTemplateFilePath(context) {
@@ -43,9 +57,10 @@ function getTemplateFilePath(context) {
   ({templateFilePath} = context);
 
   if (templateFilePath === null) {
-    const packagePath = getPackagePath();
+    const packagePath = getPackagePath(),
+          defaultTemplateFilePath = templateFilePath = concatenatePaths(packagePath, DEFAULT_TEMPLATE_FILE_PATH);
 
-    templateFilePath = concatenatePaths(packagePath, TEMPLATE_FILE_PATH);
+    templateFilePath = defaultTemplateFilePath; ///
   } else {
     const { inputFilePath } = context,
           inputDirectoryPath = directoryPathFromFilePath(inputFilePath);

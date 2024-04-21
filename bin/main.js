@@ -5,11 +5,14 @@ const helpAction = require("./action/help"),
       versionAction = require("./action/version"),
       publishAction = require("./action/publish");
 
-const { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
-      { HELP_OPTION, SERVER_OPTION, VERSION_OPTION, TEMPLATE_FILE_PATH_OPTION } = require("./options"),
+const { HELP_OPTION, SERVER_OPTION, VERSION_OPTION } = require("./options"),
+      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
+        DEFAULT_WATCH,
         DEFAULT_SERVER,
+        DEFAULT_QUIETLY,
         DEFAULT_COPY_FONTS,
+        DEFAULT_COPY_CLIENT,
         DEFAULT_INPUT_FILE_PATH,
         DEFAULT_OUTPUT_FILE_PATH,
         DEFAULT_TEMPLATE_FILE_PATH } = require("./defaults");
@@ -20,8 +23,11 @@ function main(command, argument, options) {
         serverOptionPresent = options.hasOwnProperty(SERVER_OPTION),
         versionOptionPresent = options.hasOwnProperty(VERSION_OPTION),
         { port = DEFAULT_PORT,
+          watch = DEFAULT_WATCH,
           server = DEFAULT_SERVER,
+          quietly = DEFAULT_QUIETLY,
           copyFonts = DEFAULT_COPY_FONTS,
+          copyClient = DEFAULT_COPY_CLIENT,
           inputFilePath = DEFAULT_INPUT_FILE_PATH,
           outputFilePath = DEFAULT_OUTPUT_FILE_PATH,
           templateFilePath = DEFAULT_TEMPLATE_FILE_PATH } = options;
@@ -42,12 +48,12 @@ function main(command, argument, options) {
 
   switch (command) {
     case HELP_COMMAND: helpAction(); break;
-    case SERVER_COMMAND: serverAction(port, server, outputFilePath); break;
+    case SERVER_COMMAND: serverAction(port, watch, server, quietly, outputFilePath); break;
     case VERSION_COMMAND: versionAction(); break;
-    case PUBLISH_COMMAND: publishAction(port, server, copyFonts, inputFilePath, outputFilePath, templateFilePath); break;
+    case PUBLISH_COMMAND: publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath); break;
 
     default :
-      publishAction(port, server, copyFonts, inputFilePath, outputFilePath, templateFilePath);
+      publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath);
 
       break;
   }

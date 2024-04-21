@@ -4,10 +4,10 @@ const express = require("express");
 
 const { createLiveReloadHandler } = require("lively-cli");
 
-const { ERROR } = require("../constants"),
-      { LIVE_RELOAD_PATH } = require("../paths"),
+const { ERROR, LIVE_RELOAD_PATH } = require("../constants"),
       { directoryPathFromFilePath } = require("../utilities/path"),
-      { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
+      { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages"),
+      { WATCHING_OUTPUT_DIRECTORY_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
   let { server } = context;
@@ -18,17 +18,23 @@ function serverOperation(proceed, abort, context) {
     return;
   }
 
-  const { port, outputFilePath } = context,
+  const { port, watch, quietly, outputFilePath } = context,
         outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
-        watchPattern = `./${outputFilePath}`,
-        staticRouter = express.static(outputDirectoryPath),
-        liveReloadHandler = createLiveReloadHandler(watchPattern);
+        staticRouter = express.static(outputDirectoryPath);
 
   server = express(); ///
 
   server.use(staticRouter);
 
-  server.get(LIVE_RELOAD_PATH, liveReloadHandler);
+  if (watch) {
+    const message = WATCHING_OUTPUT_DIRECTORY_MESSAGE,
+          watchPattern = outputDirectoryPath, ///
+          liveReloadHandler = createLiveReloadHandler(watchPattern, quietly);
+
+    console.log(message);
+
+    server.get(LIVE_RELOAD_PATH, liveReloadHandler);
+  }
 
   const listener = server.listen(port, () => {
     console.log(`Server listening on port ${port}...`);

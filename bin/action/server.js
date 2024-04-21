@@ -5,13 +5,15 @@ const serverOperation = require("../operation/server");
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_SERVER_MESSAGE, FAILED_SERVER_MESSAGE } = require("../messages");
 
-function serverAction(port, server, outputFilePath) {
+function serverAction(port, watch, server, quietly, outputFilePath) {
   const operations = [
           serverOperation
         ],
         context = {
           port,
+          watch,
           server,
+          quietly,
           outputFilePath
         };
 

@@ -2,8 +2,6 @@
 <html>
   <head>
 
-    ${titleHTML}
-
     <meta charset="utf-8" />
 
     <link rel="preload" href="font/cmunbbx.woff2" as="font" type="font/woff2" crossorigin />
@@ -54,22 +52,7 @@
 
 ${markdownHTML}
 
-    <script>
+${clientHTML}
 
-      var xmlHttpRequest = new XMLHttpRequest();
-
-      xmlHttpRequest.onreadystatechange = function() {
-        if (xmlHttpRequest.readyState == 4) {
-          if (xmlHttpRequest.status == 200) {
-            location.reload();
-          }
-        }
-      };
-
-      xmlHttpRequest.open("GET", "/live-reload");
-
-      xmlHttpRequest.send();
-
-    </script>
   </body>
 </html>

@@ -14,7 +14,7 @@
     "express": "^4.19.2",
     "highmark-fonts": "^1.0.36",
     "highmark-markdown": "^0.0.209",
-    "lively-cli": "^2.0.55",
+    "lively-cli": "^2.0.59",
     "necessary": "^13.6.1",
     "occam-entities": "^1.0.90"
   },
@@ -30,7 +30,7 @@
   "scripts": {
     "start": "node ./bin/main.js",
     "clean": "rm -rf ./lib",
-    "watchful": "watchful -m --transpiler=swc --bundler=esbuild --source-directory=./src --lib-directory=./lib --entry-file=viewer.js --bundle-file=./viewer.js --wait=100",
+    "watchful": "watchful -m --transpiler=swc --bundler=esbuild --source-directory=./src --lib-directory=./lib --entry-file=client.js --bundle-file=./client.js --wait=100",
     "batch": "npm run watchful batch --",
     "batch-debug": "npm run watchful batch -- --debug",
     "incremental": "npm run watchful incremental --",

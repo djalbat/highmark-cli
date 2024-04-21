@@ -16,6 +16,6 @@ const body = new Body();
 
 body.mount(
 
-  <View markdownStyleElement={markdownStyleElement} />
+  <View />
 
 );
