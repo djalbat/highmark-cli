@@ -4,8 +4,8 @@ const { watch: watchFile } = require("lively-cli"),
       { pathUtilities, packageUtilities } = require("necessary");
 
 const { copyFile } = require("../utilities/fileSystem"),
-      { CLIENT_FILE_NAME } = require("../constants"),
-      { directoryPathFromFilePath } = require("../utilities/path");
+      { directoryPathFromFilePath } = require("../utilities/path"),
+      { DEFER_DELAY, CLIENT_FILE_NAME } = require("../constants");
 
 const { getPackagePath } = packageUtilities,
       { concatenatePaths } = pathUtilities;
@@ -54,5 +54,7 @@ function copyClientOperation(proceed, abort, context) {
 module.exports = copyClientOperation;
 
 function defer(func) {
-  setTimeout(func, 0);
+  const delay = DEFER_DELAY;
+
+  setTimeout(func, delay);
 }
