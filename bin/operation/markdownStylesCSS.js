@@ -1,6 +1,7 @@
 "use strict";
 
-const { filePathUtilities } = require("occam-entities"),
+const { mediaTypeNames } = require("highmark-markdown"),
+      { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
 const { classNameFromFilePath } = require("../utilities/division"),
@@ -8,7 +9,8 @@ const { classNameFromFilePath } = require("../utilities/division"),
       { DEFAULT_SELECTOR_STRING } = require("../constants"),
       { directoryPathFromFilePath } = require("../utilities/path");
 
-const { cssFromMarkdownStyleAndSelectorString } = cssUtilities,
+const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
+      { cssFromMarkdownStyleMediaTypeNameAndSelectorString } = cssUtilities,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
@@ -29,14 +31,17 @@ function markdownStylesCSSOperation(proceed, abort, context) {
     }
   });
 
-  const defaultCSS = cssFromMarkdownStyleAndSelectorString(defaultMarkdownStyle, DEFAULT_SELECTOR_STRING);
+  const selectorString = DEFAULT_SELECTOR_STRING,
+        markdownStyle = defaultMarkdownStyle, ///
+        mediaTypeName = WEB_MEDIA_TYPE_NAME,
+        defaultCSS = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString);
 
   let markdownStylesCSS = defaultCSS; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
     const selectorString = selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-          css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
+          css = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString, markdownStylesCSS);  ///
 
     markdownStylesCSS = `${markdownStylesCSS}${css}`;
   });
