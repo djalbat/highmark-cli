@@ -8,9 +8,11 @@ const FONT = "font",
       HIGHMARK_CLI = "Highmark-CLI",
       CLIENT_FILE_NAME = "client.js",
       LIVE_RELOAD_PATH = "/live-reload",
+      LOADING_CSS_FILE_PATH = "css/loading.css",
       DEFAULT_SELECTOR_STRING = "div",
       CLIENT_TEMPLATE_FILE_PATH = "template/client.html",
       DEFAULT_TEMPLATE_FILE_PATH = "template/default.html",
+      LOADING_TEMPLATE_FILE_PATH = "template/loading.html",
       DEFAULT_DIVISION_IDENTIFIER = "default";
 
 module.exports = {
@@ -22,8 +24,10 @@ module.exports = {
   HIGHMARK_CLI,
   CLIENT_FILE_NAME,
   LIVE_RELOAD_PATH,
+  LOADING_CSS_FILE_PATH,
   DEFAULT_SELECTOR_STRING,
   CLIENT_TEMPLATE_FILE_PATH,
   DEFAULT_TEMPLATE_FILE_PATH,
+  LOADING_TEMPLATE_FILE_PATH,
   DEFAULT_DIVISION_IDENTIFIER
 };

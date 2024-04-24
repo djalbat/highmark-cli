@@ -4,9 +4,10 @@ const { liveReloadSnippet } = require("lively-cli"),
       { pathUtilities, packageUtilities } = require("necessary"),
       { computerModernStyle: computerModernStyleCSS } = require("highmark-fonts");
 
-const { directoryPathFromFilePath } = require("../utilities/path"),
+const { readFile } = require("../utilities/fileSystem"),
+      { directoryPathFromFilePath } = require("../utilities/path"),
       { writeFile, parseTemplateFile } = require("../utilities/fileSystem"),
-      { CLIENT_TEMPLATE_FILE_PATH, DEFAULT_TEMPLATE_FILE_PATH, EMPTY_STRING } = require("../constants");
+      { EMPTY_STRING, LOADING_CSS_FILE_PATH, CLIENT_TEMPLATE_FILE_PATH, DEFAULT_TEMPLATE_FILE_PATH, LOADING_TEMPLATE_FILE_PATH } = require("../constants");
 
 const { getPackagePath } = packageUtilities,
       { concatenatePaths } = pathUtilities;
@@ -14,9 +15,13 @@ const { getPackagePath } = packageUtilities,
 function htmlOperation(proceed, abort, context) {
   const { markdownHTML, outputFilePath, markdownStylesCSS } = context,
         clientHTML = getClientHTML(context),
+        loadingCSS = getLoadingCSS(context),
+        loadingHTML = getLoadingHTML(context),
         templateFilePath = getTemplateFilePath(context),
         args = {
           clientHTML,
+          loadingCSS,
+          loadingHTML,
           markdownHTML,
           markdownStylesCSS,
           computerModernStyleCSS
@@ -37,18 +42,55 @@ function getClientHTML(context) {
 
   if (copyClient) {
     const packagePath = getPackagePath(),
-          clientTemplateFilePath = concatenatePaths(packagePath, CLIENT_TEMPLATE_FILE_PATH),
+          templateFilePath = concatenatePaths(packagePath, CLIENT_TEMPLATE_FILE_PATH),
           args = {
             liveReloadSnippet
           },
-          clientContent = parseTemplateFile(clientTemplateFilePath, args);
+          content = parseTemplateFile(templateFilePath, args);
 
-    clientHTML = clientContent; ///
+    clientHTML = content; ///
   } else {
     clientHTML = EMPTY_STRING;
   }
 
   return clientHTML;
+}
+
+function getLoadingCSS(context) {
+  let loadingCSS;
+
+  const { copyClient } = context;
+
+  if (copyClient) {
+    const packagePath = getPackagePath(),
+          filePath = concatenatePaths(packagePath, LOADING_CSS_FILE_PATH),
+          content = readFile(filePath);
+
+    loadingCSS = content; ///
+  } else {
+    loadingCSS = EMPTY_STRING;
+  }
+
+  return loadingCSS;
+}
+
+function getLoadingHTML(context) {
+  let loadingHTML;
+
+  const { copyClient } = context;
+
+  if (copyClient) {
+    const packagePath = getPackagePath(),
+          templateFilePath = concatenatePaths(packagePath, LOADING_TEMPLATE_FILE_PATH),
+          args = {},
+          content = parseTemplateFile(templateFilePath, args);
+
+    loadingHTML = content; ///
+  } else {
+    loadingHTML = EMPTY_STRING;
+  }
+
+  return loadingHTML;
 }
 
 function getTemplateFilePath(context) {
