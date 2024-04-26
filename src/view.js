@@ -1,15 +1,21 @@
 "use strict";
 
-import { Element } from "easy";
-import { arrayUtilities } from "necessary";
+import { keyCodes } from "necessary";
+import { Element, window } from "easy";
 
 import LeafDiv from "./view/div/leaf";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
-import { ENABLE_SWIPES_DELAY, VIEW_CHILD_DIVS_SELECTOR } from "./constants";
+import { ENABLE_SWIPES_DELAY, MAXIMUM_CLICK_WIDTH_RATIO, VIEW_CHILD_DIVS_SELECTOR } from "./constants";
 
-const { first } = arrayUtilities;
+const { ENTER_KEY_CODE,
+        ESCAPE_KEY_CODE,
+        BACKSPACE_KEY_CODE,
+        ARROW_UP_KEY_CODE,
+        ARROW_DOWN_KEY_CODE,
+        ARROW_LEFT_KEY_CODE,
+        ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 export default class View extends Element {
   swipeRightCustomHandler = (event, element) => {
@@ -20,7 +26,7 @@ export default class View extends Element {
     }
 
     this.disableSwipes();
-    this.showPreviousLeftDiv();
+    this.showLeftLeafDiv();
     this.waitToEnableSwipes();
   }
 
@@ -32,7 +38,7 @@ export default class View extends Element {
     }
 
     this.disableSwipes();
-    this.showNextLeafDiv();
+    this.showRightLeftDiv();
     this.waitToEnableSwipes();
   }
 
@@ -40,50 +46,122 @@ export default class View extends Element {
     ///
   }
 
-  getFirstLeafDiv() {
-    const leafDivs = this.getLeafDivs(),
-          firstLeafDiv = first(leafDivs) || null;
+  clickHandler = (event, element) => {
+    const { pageX } = event,
+          width = this.getWidth(),
+          clickWidthRatio = pageX / width;
 
-    return firstLeafDiv;
+    if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
+      this.showLeftLeafDiv();
+    }
+
+    if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
+      this.showRightLeftDiv();
+    }
   }
 
-  showNextLeafDiv() {
+  keyDownHandler = (event, element) => {
+    const { keyCode } = event;
+
+    switch (keyCode) {
+      case ENTER_KEY_CODE:
+      case ARROW_RIGHT_KEY_CODE: {
+        this.showRightLeftDiv();
+
+        event.preventDefault();
+
+        break;
+      }
+
+      case BACKSPACE_KEY_CODE:
+      case ARROW_LEFT_KEY_CODE: {
+        this.showLeftLeafDiv();
+
+        event.preventDefault();
+
+        break;
+      }
+
+      case ESCAPE_KEY_CODE: {
+        ///
+
+        break;
+      }
+
+      case ARROW_UP_KEY_CODE: {
+        this.showFirstLeftDiv();
+
+        event.preventDefault();
+
+        break;
+      }
+
+      case ARROW_DOWN_KEY_CODE: {
+        this.showLastLeafDiv();
+
+        event.preventDefault();
+
+        break;
+      }
+    }
+  }
+
+  showFirstLeftDiv() {
+    const showingLeafDiv = this.findShowingLeafDiv(),
+          leafDivs = this.getLeafDivs(),
+          index = leafDivs.indexOf(showingLeafDiv),
+          nextIndex = 0,
+          previousIndex = index;  ///
+
+    this.showNextLeafDiv(nextIndex, previousIndex);
+  }
+
+  showLeftLeafDiv() {
+    const showingLeafDiv = this.findShowingLeafDiv(),
+          leafDivs = this.getLeafDivs(),
+          index = leafDivs.indexOf(showingLeafDiv),
+          nextIndex = index - 1,
+          previousIndex = index;  ///
+
+    this.showNextLeafDiv(nextIndex, previousIndex);
+  }
+
+  showRightLeftDiv() {
     const showingLeafDiv = this.findShowingLeafDiv(),
           leafDivs = this.getLeafDivs(),
           index = leafDivs.indexOf(showingLeafDiv),
           nextIndex = index + 1,
-          leafDivsLength = leafDivs.length;
+          previousIndex = index;  ///
 
-    if (nextIndex === leafDivsLength) {
-      // showingLeafDiv.wiggle();
-
-      return;
-    }
-
-    const nextLeafDiv = leafDivs[nextIndex],
-          previousLeafDiv = showingLeafDiv; ///
-
-    nextLeafDiv.show();
-    previousLeafDiv.hide();
+    this.showNextLeafDiv(nextIndex, previousIndex);
   }
 
-  showPreviousLeftDiv() {
+  showLastLeafDiv() {
     const showingLeafDiv = this.findShowingLeafDiv(),
           leafDivs = this.getLeafDivs(),
           index = leafDivs.indexOf(showingLeafDiv),
-          previousIndex = index - 1;
+          nextIndex = leafDivs.length - 1,
+          previousIndex = index;  ///
 
-    if (previousIndex === -1) {
-      // showingLeafDiv.wiggle();
+    this.showNextLeafDiv(nextIndex, previousIndex);
+  }
+
+  showNextLeafDiv(nextIndex, previousIndex) {
+    const leafDivs = this.getLeafDivs(),
+          leafDivsLength = leafDivs.length,
+          previousLeafDiv = leafDivs[previousIndex];
+
+    if ((nextIndex === -1) || (nextIndex === previousIndex) || (nextIndex === leafDivsLength)) {
+      previousLeafDiv.wiggle();
 
       return;
     }
 
-    const nextLeafDiv = showingLeafDiv, ///
-          previousLeftDiv = leafDivs[previousIndex];
+    const nextLeafDiv = leafDivs[nextIndex];
 
-    nextLeafDiv.hide();
-    previousLeftDiv.show();
+    nextLeafDiv.show();
+
+    previousLeafDiv.hide();
   }
 
   forEachLeafDiv(callback) {
@@ -103,24 +181,6 @@ export default class View extends Element {
           });
 
     return showingLeafDiv;
-  }
-
-  setInitialState() {
-    const viewChildDivDOMElementNodeList = document.querySelectorAll(VIEW_CHILD_DIVS_SELECTOR),
-          viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
-          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
-
-            <LeafDiv onCustomTap={this.tapCustomHandler}
-                     onCustomSwipeLeft={this.swipeLeftCustomHandler}
-                     onCustomSwipeRight={this.swipeRightCustomHandler} />
-
-          ),
-          swipesDisabled = false;
-
-    this.setState({
-      leafDivs,
-      swipesDisabled
-    });
   }
 
   disableSwipes() {
@@ -165,6 +225,36 @@ export default class View extends Element {
     this.updateState({
       swipesDisabled
     });
+  }
+
+  setInitialState() {
+    const viewChildDivDOMElementNodeList = document.querySelectorAll(VIEW_CHILD_DIVS_SELECTOR),
+          viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
+          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
+
+            <LeafDiv onCustomTap={this.tapCustomHandler}
+                     onCustomSwipeLeft={this.swipeLeftCustomHandler}
+                     onCustomSwipeRight={this.swipeRightCustomHandler} />
+
+          ),
+          swipesDisabled = false;
+
+    this.setState({
+      leafDivs,
+      swipesDisabled
+    });
+  }
+
+  didMount() {
+    this.onClick(this.clickHandler);
+
+    window.onKeyDown(this.keyDownHandler);
+  }
+
+  willUnmount() {
+    this.offClick(this.clickHandler);
+
+    window.offKeyDown(this.keyDownHandler);
   }
 
   initialise() {

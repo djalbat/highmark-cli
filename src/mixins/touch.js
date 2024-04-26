@@ -167,15 +167,17 @@ function moveHandler(event, element, positionFromEvent) {
         if (speed > MINIMUM_SWIPE_SPEED) {
           const absoluteDirection = velocity.getAbsoluteDirection();
 
-          if (absoluteDirection < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            const customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+          let customEventType = null;
 
-            this.callCustomHandlers(customEventType, event, element);
+          if (absoluteDirection < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
+            customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
           }
 
           if ((ONE_HUNDRED_AND_EIGHTY - absoluteDirection) < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            const customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+            customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+          }
 
+          if (customEventType !== null) {
             this.callCustomHandlers(customEventType, event, element);
           }
         }

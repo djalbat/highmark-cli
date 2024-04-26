@@ -10,4 +10,5 @@ export const MINIMUM_SWIPE_SPEED = 1.25;
 export const LOADING_DIV_SELECTOR = "body > div.loading";
 export const ONE_HUNDRED_AND_EIGHTY = 180;
 export const VIEW_CHILD_DIVS_SELECTOR = "body > div:not(.loading) div"; ///
+export const MAXIMUM_CLICK_WIDTH_RATIO = 0.3;
 export const MAXIMUM_SWIPE_ABSOLUTE_DIRECTION = 30;

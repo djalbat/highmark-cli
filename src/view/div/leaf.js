@@ -8,6 +8,10 @@ import eventMixins from "../../mixins/event";
 import touchMixins from "../../mixins/touch";
 
 class LeafDiv extends Element {
+  wiggle() {
+
+  }
+
   didMount() {
     this.enableTouch();
   }
@@ -29,6 +33,13 @@ Object.assign(LeafDiv.prototype, touchMixins);
 export default withStyle(LeafDiv)`
 
   width: 100vw;
+  position: absolute;
   min-height: 100vh;
+  
+  @keyframes wiggle {
+    0% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(-5px); }
+  }
 
 `;
