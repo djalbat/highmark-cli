@@ -4,96 +4,30 @@ import { Element, window } from "easy";
 
 import withStyle from "easy-with-style";  ///
 
-import Position from "../../position";
-import Velocity from "../../velocity";
 import eventMixins from "../../mixins/event";
+import touchMixins from "../../mixins/touch";
 
 class LeafDiv extends Element {
-  touchStartHandler = (event, element) => {
-    const touchEvent = event, ///
-          position = Position.fromTouchEvent(touchEvent),
-          startPosition = position;  ///
-
-    this.setStartPosition(startPosition);
+  customSwipeHandler = (event, element, swipeDirection) => {
+    alert(swipeDirection)
   }
 
-  mouseDownHandler = (event, element) => {
-    const mouseEvent = event, ///
-          position = Position.fromMouseEvent(mouseEvent),
-          startPosition = position;  ///
-
-    this.setStartPosition(startPosition);
-  }
-
-  touchMoveHandler = (event, element) => {
-    let startPosition = this.getStartPosition();
-
-    if (startPosition !== null) {
-      const touchEvent = event, ///
-            position = Position.fromTouchEvent(touchEvent);
-
-      if (position !== null) {
-        const positionMatchesStartPosition = position.match(startPosition);
-
-        if (positionMatchesStartPosition) {
-          const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
-                swipeDirection = velocity.getSwipeDirection();
-
-          if (swipeDirection !== 0) {
-            alert(swipeDirection)
-          }
-        }
-      }
-    }
-  }
-
-  mouseMoveHandler = (event, element) => {
-    let startPosition = this.getStartPosition();
-
-    if (startPosition !== null) {
-      const mouseEvent = event, ///
-            position = Position.fromMouseEvent(mouseEvent),
-            velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
-            swipeDirection = velocity.getSwipeDirection();
-
-      if (swipeDirection !== 0) {
-        alert(swipeDirection)
-      }
-    }
-  }
-
-  touchEndHandler = (event, element) => {
-    const startPosition = null;
-
-    this.setStartPosition(startPosition);
-  }
-
-  mouseUpHandler = (event, element) => {
-    const startPosition = null;
-
-    this.setStartPosition(startPosition);
+  customTapHandler = (event, element) => {
+    alert("tap")
   }
 
   didMount() {
-    this.onMouseDown(this.mouseDownHandler);
-    this.onMouseMove(this.mouseMoveHandler);
+    this.enableTouch();
 
-    window.onMouseUp(this.mouseUpHandler, this);
-
-    this.onTouchStart(this.touchStartHandler);
-    this.onTouchMove(this.touchMoveHandler);
-    this.onTouchEnd(this.touchEndHandler);
+    this.onCustomTap(this.customTapHandler);
+    this.onCustomSwipe(this.customSwipeHandler);
   }
 
   willUnmount() {
-    this.offMouseDown(this.mouseDownHandler);
-    this.offMouseMove(this.mouseMoveHandler);
+    this.offCustomSwipe(this.customSwipeHandler);
 
-    window.offMouseUp(this.mouseUpHandler, this);
-
-    this.offTouchStart(this.touchStartHandler);
-    this.offTouchMove(this.touchMoveHandler);
-    this.offTouchEnd(this.touchEndHandler);
+    this.offCustomTap(this.customTapHandler);
+    this.offCustomSwipe(this.customSwipeHandler);
   }
 
   getStartPosition() {
@@ -108,14 +42,6 @@ class LeafDiv extends Element {
     });
   }
 
-  initialise() {
-    const startPosition = null;
-
-    this.setState({
-      startPosition
-    });
-  }
-
   static tagName = "div";
 
   static defaultProperties = {
@@ -124,6 +50,7 @@ class LeafDiv extends Element {
 }
 
 Object.assign(LeafDiv.prototype, eventMixins);
+Object.assign(LeafDiv.prototype, touchMixins);
 
 export default withStyle(LeafDiv)`
 

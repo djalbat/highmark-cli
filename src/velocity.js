@@ -1,55 +1,44 @@
 "use strict";
 
-import { MINIMUM_SWIPE_SPEED, ONE_HUNDRED_AND_EIGHTY, MAXIMUM_SWIPE_ABSOLUTE_DIRECTION } from "./constants";
-
 export default class Velocity {
-  constructor(speed, direction) {
-    this.speed = speed;
+  constructor(time, magnitude, direction) {
+    this.time = time;
+    this.magnitude = magnitude;
     this.direction = direction;
   }
 
-  getSpeed() {
-    return this.speed;
+  getTime() {
+    return this.time;
+  }
+
+  getMagnitude() {
+    return this.magnitude;
   }
 
   getDirection() {
     return this.direction;
   }
 
-  isSwipeVelocity() {
-    let representsSwipe = false;
+  getSpeed() {
+    const speed = (this.time === 0) ?
+                    0 : ///
+                      this.magnitude / this.time;
 
-
-    return representsSwipe;
+    return speed;
   }
 
-  getSwipeDirection() {
-    let swipeDirection = 0;
+  getAbsoluteDirection() {
+    const absoluteDirection = Math.abs(this.direction);
 
-    if (this.speed > MINIMUM_SWIPE_SPEED) {
-      const absoluteDirection = Math.abs(this.direction);
-
-      if (absoluteDirection < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-        swipeDirection = +1;
-      }
-
-      if ((ONE_HUNDRED_AND_EIGHTY - absoluteDirection) < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-        swipeDirection = -1;
-      }
-    }
-
-    return swipeDirection;
+    return absoluteDirection;
   }
 
   static fromPositionAndStartPosition(position, startPosition) {
     const relativePosition = position.minus(startPosition),
+          time = relativePosition.getTime(),
           magnitude = relativePosition.getMagnitude(),
           direction = relativePosition.getDirection(),
-          time = relativePosition.getTime(),
-          speed = (time === 0) ?
-                    0 : ///
-                      magnitude / time,
-          velocity = new Velocity(speed, direction);
+          velocity = new Velocity(time, magnitude, direction);
 
     return velocity;
   }
