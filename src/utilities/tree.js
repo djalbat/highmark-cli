@@ -2,23 +2,23 @@
 
 import { arrayUtilities } from "necessary";
 
-const { extract } = arrayUtilities;
+const { filter } = arrayUtilities;
 
 export function leafNodesFromNodeList(nodeList) {
   const nodes = [ ...nodeList ];
 
-  extract(nodes, (node) => {
+  filter(nodes, (node) => {
     const { childNodes: childNodeList } = node,
           childNodes = [ ...childNodeList ],
-          nodesIncludeChildNode = childNodes.some((childNode) => {
-            const nodesIncludesChildNode = nodes.includes(childNode);
+          childNodesIncludesNodes = nodes.some((node) => {
+            const childNodesIncludesNode = childNodes.includes(node);
 
-            if (nodesIncludesChildNode) {
+            if (childNodesIncludesNode) {
               return true;
             }
           });
 
-    if (nodesIncludeChildNode) {
+    if (!childNodesIncludesNodes) {
       return true;
     }
   });

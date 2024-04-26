@@ -5,8 +5,90 @@ import { window } from "easy";
 import Position from "../position";
 import Velocity from "../velocity";
 
-import { TAP_CUSTOM_EVENT_TYPE, SWIPE_CUSTOM_EVENT_TYPE } from "../customEventTypes";
+import { TAP_CUSTOM_EVENT_TYPE, SWIPE_LEFT_CUSTOM_EVENT_TYPE, SWIPE_RIGHT_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 import { MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, ONE_HUNDRED_AND_EIGHTY, MAXIMUM_SWIPE_ABSOLUTE_DIRECTION } from "../constants";
+
+function enableTouch() {
+  const startPosition = null;
+
+  this.updateState({
+    startPosition
+  });
+
+  this.onMouseDown(this.mouseDownHandler);
+  this.onMouseMove(this.mouseMoveHandler);
+
+  window.onMouseUp(this.mouseUpHandler, this);
+
+  this.onTouchStart(this.touchStartHandler);
+  this.onTouchMove(this.touchMoveHandler);
+  this.onTouchEnd(this.touchEndHandler);
+}
+
+function disableTouch() {
+  this.offMouseDown(this.mouseDownHandler);
+  this.offMouseMove(this.mouseMoveHandler);
+
+  window.offMouseUp(this.mouseUpHandler, this);
+
+  this.offTouchStart(this.touchStartHandler);
+  this.offTouchMove(this.touchMoveHandler);
+  this.offTouchEnd(this.touchEndHandler);
+}
+
+function onCustomTap(tapCustomHandler, element) {
+  const customEventType = TAP_CUSTOM_EVENT_TYPE,
+        customHandler = tapCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomTap(tapCustomHandler, element) {
+  const customEventType = TAP_CUSTOM_EVENT_TYPE,
+        customHandler = tapCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomSwipeLeft(swipeLeftCustomHandler, element) {
+  const customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+        customHandler = swipeLeftCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomSwipeLeft(swipeLeftCustomHandler, element) {
+  const customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+        customHandler = swipeLeftCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomSwipeRight(swipeRightCustomHandler, element) {
+  const customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
+        customHandler = swipeRightCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomSwipeRight(swipeRightCustomHandler, element) {
+  const customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
+        customHandler = swipeRightCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function getStartPosition() {
+  const { startPosition } = this.getState();
+
+  return startPosition;
+}
+
+function setStartPosition(startPosition) {
+  this.updateState({
+    startPosition
+  });
+}
 
 function touchStartHandler(event, element) {
   this.startHandler(event, element, (event) => {
@@ -82,24 +164,20 @@ function moveHandler(event, element, positionFromEvent) {
         const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
               speed = velocity.getSpeed();
 
-        let swipeDirection = 0;
-
         if (speed > MINIMUM_SWIPE_SPEED) {
           const absoluteDirection = velocity.getAbsoluteDirection();
 
           if (absoluteDirection < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            swipeDirection = +1;
+            const customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+
+            this.callCustomHandlers(customEventType, event, element);
           }
 
           if ((ONE_HUNDRED_AND_EIGHTY - absoluteDirection) < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            swipeDirection = -1;
+            const customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+
+            this.callCustomHandlers(customEventType, event, element);
           }
-        }
-
-        if (swipeDirection !== 0) {
-          const customEventType = SWIPE_CUSTOM_EVENT_TYPE;
-
-          this.callCustomHandlers(customEventType, event, element, swipeDirection);
         }
       }
     }
@@ -135,63 +213,17 @@ function endHandler(event, element, positionFromEvent) {
   }
 }
 
-function enableTouch() {
-  const startPosition = null;
-
-  this.updateState({
-    startPosition
-  });
-
-  this.onMouseDown(this.mouseDownHandler);
-  this.onMouseMove(this.mouseMoveHandler);
-
-  window.onMouseUp(this.mouseUpHandler, this);
-
-  this.onTouchStart(this.touchStartHandler);
-  this.onTouchMove(this.touchMoveHandler);
-  this.onTouchEnd(this.touchEndHandler);
-}
-
-function disableTouch() {
-  this.offMouseDown(this.mouseDownHandler);
-  this.offMouseMove(this.mouseMoveHandler);
-
-  window.offMouseUp(this.mouseUpHandler, this);
-
-  this.offTouchStart(this.touchStartHandler);
-  this.offTouchMove(this.touchMoveHandler);
-  this.offTouchEnd(this.touchEndHandler);
-}
-
-function onCustomTap(tapCustomHandler, element) {
-  const customEventType = TAP_CUSTOM_EVENT_TYPE,
-        customHandler = tapCustomHandler;  ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomTap(tapCustomHandler, element) {
-  const customEventType = TAP_CUSTOM_EVENT_TYPE,
-        customHandler = tapCustomHandler;  ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
-function onCustomSwipe(swipeCustomHandler, element) {
-  const customEventType = SWIPE_CUSTOM_EVENT_TYPE,
-    customHandler = swipeCustomHandler;  ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomSwipe(swipeCustomHandler, element) {
-  const customEventType = SWIPE_CUSTOM_EVENT_TYPE,
-    customHandler = swipeCustomHandler;  ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
 const customEventMixins = {
+  enableTouch,
+  disableTouch,
+  onCustomTap,
+  offCustomTap,
+  onCustomSwipeLeft,
+  offCustomSwipeLeft,
+  onCustomSwipeRight,
+  offCustomSwipeRight,
+  getStartPosition,
+  setStartPosition,
   touchStartHandler,
   mouseDownHandler,
   touchMoveHandler,
@@ -200,13 +232,7 @@ const customEventMixins = {
   mouseUpHandler,
   startHandler,
   moveHandler,
-  endHandler,
-  enableTouch,
-  disableTouch,
-  onCustomTap,
-  offCustomTap,
-  onCustomSwipe,
-  offCustomSwipe
+  endHandler
 };
 
 export default customEventMixins;
