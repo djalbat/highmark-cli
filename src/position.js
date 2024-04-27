@@ -2,8 +2,6 @@
 
 import { arrayUtilities } from "necessary";
 
-import { PI } from "./constants";
-
 const { first } = arrayUtilities;
 
 export default class Position {
@@ -28,26 +26,6 @@ export default class Position {
 
   getIdentifier() {
     return this.identifier;
-  }
-
-  getMagnitude() {
-    const magnitude = Math.sqrt(this.top * this.top + this.left * this.left);
-
-    return magnitude;
-  }
-
-  getDirection() {
-    let direction = 0;
-
-    if (this.left === 0) {
-      direction = (this.top < 0) ?
-                   +PI / 2 :
-                     -PI / 2;
-    } else {
-      direction = Math.atan2(-this.top, this.left);
-    }
-
-    return direction;
   }
 
   minus(position) {

@@ -3,13 +3,17 @@
 import { window } from "easy";
 
 import Position from "../position";
-import Velocity from "../velocity";
+import RelativePosition from "../position/relative";
 
-import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
+import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_DRAG_RANGE, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
+         DRAG_UP_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
+         DRAG_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
+         DRAG_LEFT_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+         DRAG_RIGHT_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
 function enableTouch() {
@@ -193,39 +197,29 @@ function moveHandler(event, element, positionFromEvent) {
       const positionMatchesStartPosition = position.match(startPosition);
 
       if (positionMatchesStartPosition) {
-        const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
-              direction = velocity.getDirection(),
-              speed = velocity.getSpeed();
+        const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
+              direction = relativePosition.getDirection();
 
-        let customEventType = null,
-            projectedVelocity;
+        let customEventType = null;
 
-        if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-          customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
-
-          projectedVelocity = speed * Math.cos(direction);
+        if ((Math.abs(direction)) < MAXIMUM_DRAG_RANGE) {
+          customEventType = DRAG_RIGHT_CUSTOM_EVENT_TYPE;
         }
 
-        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-          customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
-
-          projectedVelocity = speed * Math.sin(direction);
+        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_DRAG_RANGE) {
+          customEventType = DRAG_UP_CUSTOM_EVENT_TYPE;
         }
 
-        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-          customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
-
-          projectedVelocity = speed * Math.sin(direction);
+        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_DRAG_RANGE) {
+          customEventType = DRAG_DOWN_CUSTOM_EVENT_TYPE;
         }
 
-        if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-          customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
-
-          projectedVelocity = speed * Math.cos(direction);
+        if ((PI - Math.abs(direction)) < MAXIMUM_DRAG_RANGE) {
+          customEventType = DRAG_LEFT_CUSTOM_EVENT_TYPE;
         }
 
         if (customEventType !== null) {
-          this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+          this.callCustomHandlers(customEventType, event, element);
         }
       }
     }
@@ -245,10 +239,10 @@ function endHandler(event, element, positionFromEvent) {
       const positionMatchesStartPosition = position.match(startPosition);
 
       if (positionMatchesStartPosition) {
-        const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
-              direction = velocity.getDirection(),
-              speed = velocity.getSpeed(),
-              time = velocity.getTime();
+        const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
+              direction = relativePosition.getDirection(),
+              speed = relativePosition.getSpeed(),
+              time = relativePosition.getTime();
 
         let customEventType = null,
             projectedVelocity;
