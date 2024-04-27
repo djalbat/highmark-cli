@@ -3,6 +3,9 @@
 export const { PI } = Math;
 
 export const SINGLE_SPACE = " ";
+export const WIGGLE_DELAY = 500;
+export const WIGGLE_DURATION = WIGGLE_DELAY / 1000;
+export const WIGGLE_FREQUENCY = 10;
 export const MAXIMUM_TAP_TIME = 125;
 export const VIEW_DIV_SELECTOR = "body > div:not(.loading)";  ///
 export const ENABLE_SWIPES_DELAY = 500;

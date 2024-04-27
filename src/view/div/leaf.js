@@ -7,10 +7,16 @@ import withStyle from "easy-with-style";  ///
 import eventMixins from "../../mixins/event";
 import touchMixins from "../../mixins/touch";
 
+import { WIGGLE_DELAY } from "../../constants";
+import { wiggleCount, wiggleDuration } from "../../styles";
+
 class LeafDiv extends Element {
   wiggle() {
-    this.removeClass("wiggle");
     this.addClass("wiggle");
+
+    setTimeout(() => {
+      this.removeClass("wiggle");
+    }, WIGGLE_DELAY);
   }
 
   didMount() {
@@ -38,13 +44,14 @@ export default withStyle(LeafDiv)`
   min-height: 100vh;
   
   @keyframes wiggle {
-    0% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    100% { transform: translateX(-5px); }
+    0% { transform: translateX(0); }
+    25% { transform: translateX(+3px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
   }
   
   .wiggle {
-    animation: wiggle 0.5s ease-in-out 1;
+    animation: wiggle ${wiggleDuration} ease-in-out ${wiggleCount};
   }
 
 `;
