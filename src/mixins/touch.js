@@ -291,7 +291,7 @@ function endHandler(event, element, positionFromEvent) {
   this.setStartPosition(startPosition);
 }
 
-const customEventMixins = {
+const touchMixins = {
   enableTouch,
   disableTouch,
   onCustomTap,
@@ -317,4 +317,4 @@ const customEventMixins = {
   endHandler
 };
 
-export default customEventMixins;
+export default touchMixins;

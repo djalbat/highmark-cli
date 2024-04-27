@@ -3,11 +3,21 @@
 import { PI } from "../constants";
 
 export default class RelativePosition {
-  constructor(time, speed, magnitude, direction) {
+  constructor(top, left, time, speed, magnitude, direction) {
+    this.top = top;
+    this.left = left;
     this.time = time;
     this.speed = speed;
     this.magnitude = magnitude;
     this.direction = direction;
+  }
+
+  getTop() {
+    return this.top;
+  }
+
+  getLeft() {
+    return this.left;
   }
 
   getTime() {
@@ -47,7 +57,7 @@ export default class RelativePosition {
       direction = Math.atan2(-top, left);
     }
 
-    const relativePosition = new RelativePosition(time, speed, magnitude, direction);
+    const relativePosition = new RelativePosition(top, left, time, speed, magnitude, direction);
 
     return relativePosition;
   }

@@ -19,7 +19,12 @@ export function elementFromDOMElement(domElement, Element) {
         { className: classNamesString } = temporaryDOMElement,
         classNames = classNamesString.split(SINGLE_SPACE);
 
-  const { classList } = domElement;
+  const { classList } = domElement,
+        { childNodes } = temporaryDOMElement;
+
+  childNodes.forEach((childNode) => {
+    domElement.appendChild(childNode);
+  });
 
   classNames.forEach((className) => {
     classList.add(className);

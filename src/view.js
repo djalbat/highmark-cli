@@ -6,6 +6,7 @@ import { keyCodes } from "necessary";
 import { Element, window } from "easy";
 
 import LeafDiv from "./view/div/leaf";
+import Navigation from "./view/navigatrion";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
@@ -46,29 +47,15 @@ class View extends Element {
   }
 
   swipeDownCustomHandler = (event, element) => {
-    alert("down!")
+    this.hideNavigation();
   }
 
   swipeUpCustomHandler = (event, element) => {
-    alert("up!")
+    this.showNavigation();
   }
 
   tapCustomHandler = (event, element) => {
     ///
-  }
-
-  clickHandler = (event, element) => {
-    const { pageX } = event,
-          width = this.getWidth(),
-          clickWidthRatio = pageX / width;
-
-    if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.showLeftLeafDiv();
-    }
-
-    if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.showRightLeftDiv();
-    }
   }
 
   keyDownHandler = (event, element) => {
@@ -114,6 +101,20 @@ class View extends Element {
 
         break;
       }
+    }
+  }
+
+  clickHandler = (event, element) => {
+    const { pageX } = event,
+          width = this.getWidth(),
+          clickWidthRatio = pageX / width;
+
+    if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
+      this.showLeftLeafDiv();
+    }
+
+    if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
+      this.showRightLeftDiv();
     }
   }
 
@@ -214,6 +215,22 @@ class View extends Element {
     }, delay);
   }
 
+  retrieveLeafDivs() {
+    const viewChildDivDOMElementNodeList = document.querySelectorAll(VIEW_CHILD_DIVS_SELECTOR),
+          viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
+          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
+
+            <LeafDiv onCustomTap={this.tapCustomHandler}
+                     onCustomSwipeUp={this.swipeUpCustomHandler}
+                     onCustomSwipeDown={this.swipeDownCustomHandler}
+                     onCustomSwipeLeft={this.swipeLeftCustomHandler}
+                     onCustomSwipeRight={this.swipeRightCustomHandler} />
+
+          );
+
+    return leafDivs;
+  }
+
   getLeafDivs() {
     const { leafDivs } = this.getState();
 
@@ -239,17 +256,7 @@ class View extends Element {
   }
 
   setInitialState() {
-    const viewChildDivDOMElementNodeList = document.querySelectorAll(VIEW_CHILD_DIVS_SELECTOR),
-          viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
-          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
-
-            <LeafDiv onCustomTap={this.tapCustomHandler}
-                     onCustomSwipeUp={this.swipeUpCustomHandler}
-                     onCustomSwipeDown={this.swipeDownCustomHandler}
-                     onCustomSwipeLeft={this.swipeLeftCustomHandler}
-                     onCustomSwipeRight={this.swipeRightCustomHandler} />
-
-          ),
+    const leafDivs = this.retrieveLeafDivs(),
           swipesDisabled = false;
 
     this.setState({
@@ -270,7 +277,17 @@ class View extends Element {
     window.offKeyDown(this.keyDownHandler);
   }
 
+  childElements() {
+    return (
+
+      <Navigation/>
+
+    );
+  }
+
   initialise() {
+    this.assignContext();
+
     this.setInitialState();
 
     this.forEachLeafDiv((leafDiv, index) => {

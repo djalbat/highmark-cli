@@ -35,7 +35,7 @@ export default class Position {
           top = this.top - positionTop,
           left = this.left - positionLeft,
           time = this.time - positionTime,
-          identifier = null;  ///
+          identifier = this.identifier;
 
     position = new Position(top, left, time, identifier); ///
 
@@ -70,9 +70,30 @@ export default class Position {
       const firstChangedTouch = first(changedTouches),
             changedTouch = firstChangedTouch, ///
             { pageX, pageY, identifier } = changedTouch,
-            top = pageY,
-            left = pageX,
+            top = pageY,  ///
+            left = pageX, ///
             time = getTime();
+
+      position = new Position(top, left, time, identifier);
+    }
+
+    return position;
+  }
+
+  static fromPointerEvent(pointerEvent) {
+    let position = null;
+
+    const { changedTouches } = pointerEvent,
+          changedTouchesLength = changedTouches.length
+
+    if (changedTouchesLength === 1) {
+      const firstChangedTouch = first(changedTouches),
+            changedTouch = firstChangedTouch, ///
+            { pageX, pageY, pointerId } = changedTouch,
+            top = pageY,  ///
+            left = pageX, ///
+            time = getTime(),
+            identifier = pointerId; ///
 
       position = new Position(top, left, time, identifier);
     }
