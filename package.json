@@ -19,7 +19,7 @@
     "occam-entities": "^1.0.90"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.50",
+    "@swc/core": "1.2.52",
     "easy": "^16.0.19",
     "easy-layout": "^6.0.143",
     "easy-with-style": "^3.0.343",

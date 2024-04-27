@@ -9,7 +9,8 @@ import touchMixins from "../../mixins/touch";
 
 class LeafDiv extends Element {
   wiggle() {
-
+    this.removeClass("wiggle");
+    this.addClass("wiggle");
   }
 
   didMount() {
@@ -40,6 +41,10 @@ export default withStyle(LeafDiv)`
     0% { transform: translateX(-5px); }
     50% { transform: translateX(5px); }
     100% { transform: translateX(-5px); }
+  }
+  
+  .wiggle {
+    animation: wiggle 0.5s ease-in-out 1;
   }
 
 `;
