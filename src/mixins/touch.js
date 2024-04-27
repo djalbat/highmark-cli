@@ -5,8 +5,7 @@ import { window } from "easy";
 import Position from "../position";
 import Velocity from "../velocity";
 
-import { PI, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, SWIPE_RANGE_OD_DEGREES } from "../constants";
-import { ZERO_DEGREES, PLUS_NINETY_DEGREES, MINUS_NINETY_DEGREES, ONE_HUNDRED_AND_EIGHTY_DEGREES } from "../degrees";
+import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
@@ -195,9 +194,39 @@ function moveHandler(event, element, positionFromEvent) {
 
       if (positionMatchesStartPosition) {
         const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
+              direction = velocity.getDirection(),
               speed = velocity.getSpeed();
 
+        let customEventType = null,
+            projectedVelocity;
 
+        if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+
+          projectedVelocity = speed * Math.cos(direction);
+        }
+
+        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
+
+          projectedVelocity = speed * Math.sin(direction);
+        }
+
+        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
+
+          projectedVelocity = speed * Math.sin(direction);
+        }
+
+        if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+
+          projectedVelocity = speed * Math.cos(direction);
+        }
+
+        if (customEventType !== null) {
+          this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+        }
       }
     }
   }
@@ -231,30 +260,28 @@ function endHandler(event, element, positionFromEvent) {
             projectedVelocity = speed;  ///
           }
         } else if (speed > MINIMUM_SWIPE_SPEED) {
-          const angle = PI * direction / ONE_HUNDRED_AND_EIGHTY_DEGREES;
-
-          if ((Math.abs(ZERO_DEGREES - direction)) < SWIPE_RANGE_OD_DEGREES) {
+          if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
             customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
 
-            projectedVelocity = speed * Math.cos(angle);
+            projectedVelocity = speed * Math.cos(direction);
           }
 
-          if (Math.abs(PLUS_NINETY_DEGREES - direction) < SWIPE_RANGE_OD_DEGREES) {
+          if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
             customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
 
-            projectedVelocity = speed * Math.sin(angle);
+            projectedVelocity = speed * Math.sin(direction);
           }
 
-          if (Math.abs(MINUS_NINETY_DEGREES - direction) < SWIPE_RANGE_OD_DEGREES) {
+          if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
             customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
 
-            projectedVelocity = speed * Math.sin(angle);
+            projectedVelocity = speed * Math.sin(direction);
           }
 
-          if ((ONE_HUNDRED_AND_EIGHTY_DEGREES - Math.abs(direction)) < SWIPE_RANGE_OD_DEGREES) {
+          if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
             customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
 
-            projectedVelocity = speed * Math.cos(angle);
+            projectedVelocity = speed * Math.cos(direction);
           }
         }
 

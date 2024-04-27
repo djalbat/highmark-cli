@@ -9,7 +9,7 @@ import { Body, Element } from "easy";
 import View from "./view";
 
 import { elementFromDOMElement } from "./utilities/element";
-import { LOADING_DIV_SELECTOR, VIEW_DIV_SELECTOR } from "./constants";
+import { LOADING_DIV_SELECTOR, VIEW_DIV_SELECTOR } from "./selectors";
 
 const { renderStyles } = withStyle;
 

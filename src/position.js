@@ -3,7 +3,6 @@
 import { arrayUtilities } from "necessary";
 
 import { PI } from "./constants";
-import { ONE_HUNDRED_AND_EIGHTY_DEGREES } from "./degrees";
 
 const { first } = arrayUtilities;
 
@@ -47,8 +46,6 @@ export default class Position {
     } else {
       direction = Math.atan2(-this.top, this.left);
     }
-
-    direction = direction * ONE_HUNDRED_AND_EIGHTY_DEGREES / PI;
 
     return direction;
   }

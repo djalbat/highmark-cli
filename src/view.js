@@ -9,7 +9,8 @@ import LeafDiv from "./view/div/leaf";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
-import { ENABLE_SWIPES_DELAY, MAXIMUM_CLICK_WIDTH_RATIO, VIEW_CHILD_DIVS_SELECTOR } from "./constants";
+import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
+import { ENABLE_SWIPES_DELAY, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
