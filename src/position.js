@@ -2,7 +2,8 @@
 
 import { arrayUtilities } from "necessary";
 
-import { PI, ONE_HUNDRED_AND_EIGHTY } from "./constants";
+import { PI } from "./constants";
+import { ONE_HUNDRED_AND_EIGHTY_DEGREES } from "./degrees";
 
 const { first } = arrayUtilities;
 
@@ -47,7 +48,7 @@ export default class Position {
       direction = Math.atan2(-this.top, this.left);
     }
 
-    direction = direction * ONE_HUNDRED_AND_EIGHTY / PI;
+    direction = direction * ONE_HUNDRED_AND_EIGHTY_DEGREES / PI;
 
     return direction;
   }
@@ -87,13 +88,13 @@ export default class Position {
   static fromTouchEvent(touchEvent) {
     let position = null;
 
-    const { touches } = touchEvent,
-          touchesLength = touches.length;
+    const { changedTouches } = touchEvent,
+          changedTouchesLength = changedTouches.length
 
-    if (touchesLength === 1) {
-      const firstTouch = first(touches),
-            touch = firstTouch, ///
-            { pageX, pageY, identifier } = touch,
+    if (changedTouchesLength === 1) {
+      const firstChangedTouch = first(changedTouches),
+            changedTouch = firstChangedTouch, ///
+            { pageX, pageY, identifier } = changedTouch,
             top = pageY,
             left = pageX,
             time = getTime();

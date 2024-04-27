@@ -27,12 +27,6 @@ export default class Velocity {
     return speed;
   }
 
-  getAbsoluteDirection() {
-    const absoluteDirection = Math.abs(this.direction);
-
-    return absoluteDirection;
-  }
-
   static fromPositionAndStartPosition(position, startPosition) {
     const relativePosition = position.minus(startPosition),
           time = relativePosition.getTime(),

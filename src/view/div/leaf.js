@@ -39,9 +39,10 @@ Object.assign(LeafDiv.prototype, touchMixins);
 
 export default withStyle(LeafDiv)`
 
-  width: 100vw;
+  width: 100%;
   position: absolute;
-  min-height: 100vh;
+  min-height: 100%;
+  touch-action: none;
   
   @keyframes wiggle {
     0% { transform: translateX(0); }

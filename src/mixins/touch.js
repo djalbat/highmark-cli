@@ -5,8 +5,13 @@ import { window } from "easy";
 import Position from "../position";
 import Velocity from "../velocity";
 
-import { TAP_CUSTOM_EVENT_TYPE, SWIPE_LEFT_CUSTOM_EVENT_TYPE, SWIPE_RIGHT_CUSTOM_EVENT_TYPE } from "../customEventTypes";
-import { MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, ONE_HUNDRED_AND_EIGHTY, MAXIMUM_SWIPE_ABSOLUTE_DIRECTION } from "../constants";
+import { PI, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, SWIPE_RANGE_OD_DEGREES } from "../constants";
+import { ZERO_DEGREES, PLUS_NINETY_DEGREES, MINUS_NINETY_DEGREES, ONE_HUNDRED_AND_EIGHTY_DEGREES } from "../degrees";
+import { TAP_CUSTOM_EVENT_TYPE,
+         SWIPE_UP_CUSTOM_EVENT_TYPE,
+         SWIPE_DOWN_CUSTOM_EVENT_TYPE,
+         SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+         SWIPE_RIGHT_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
 function enableTouch() {
   const startPosition = null;
@@ -46,6 +51,34 @@ function onCustomTap(tapCustomHandler, element) {
 function offCustomTap(tapCustomHandler, element) {
   const customEventType = TAP_CUSTOM_EVENT_TYPE,
         customHandler = tapCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomSwipeUp(swipeUpCustomHandler, element) {
+  const customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE,
+        customHandler = swipeUpCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomSwipeUp(swipeUpCustomHandler, element) {
+  const customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE,
+        customHandler = swipeUpCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomSwipeDown(swipeDownCustomHandler, element) {
+  const customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE,
+        customHandler = swipeDownCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomSwipeDown(swipeDownCustomHandler, element) {
+  const customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE,
+        customHandler = swipeDownCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -164,23 +197,7 @@ function moveHandler(event, element, positionFromEvent) {
         const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
               speed = velocity.getSpeed();
 
-        if (speed > MINIMUM_SWIPE_SPEED) {
-          const absoluteDirection = velocity.getAbsoluteDirection();
 
-          let customEventType = null;
-
-          if (absoluteDirection < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
-          }
-
-          if ((ONE_HUNDRED_AND_EIGHTY - absoluteDirection) < MAXIMUM_SWIPE_ABSOLUTE_DIRECTION) {
-            customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
-          }
-
-          if (customEventType !== null) {
-            this.callCustomHandlers(customEventType, event, element);
-          }
-        }
       }
     }
   }
@@ -192,6 +209,7 @@ function endHandler(event, element, positionFromEvent) {
   startPosition = this.getStartPosition();
 
   if (startPosition !== null) {
+
     const position = positionFromEvent(event);
 
     if (position !== null) {
@@ -199,20 +217,57 @@ function endHandler(event, element, positionFromEvent) {
 
       if (positionMatchesStartPosition) {
         const velocity = Velocity.fromPositionAndStartPosition(position, startPosition),
-              speed = velocity.getSpeed();
+              direction = velocity.getDirection(),
+              speed = velocity.getSpeed(),
+              time = velocity.getTime();
+
+        let customEventType = null,
+            projectedVelocity;
 
         if (speed === 0) {
-          const time = velocity.getTime();
-
           if (time < MAXIMUM_TAP_TIME) {
-            const customEventType = TAP_CUSTOM_EVENT_TYPE;
+            customEventType = TAP_CUSTOM_EVENT_TYPE;
 
-            this.callCustomHandlers(customEventType, event, element);
+            projectedVelocity = speed;  ///
           }
+        } else if (speed > MINIMUM_SWIPE_SPEED) {
+          const angle = PI * direction / ONE_HUNDRED_AND_EIGHTY_DEGREES;
+
+          if ((Math.abs(ZERO_DEGREES - direction)) < SWIPE_RANGE_OD_DEGREES) {
+            customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+
+            projectedVelocity = speed * Math.cos(angle);
+          }
+
+          if (Math.abs(PLUS_NINETY_DEGREES - direction) < SWIPE_RANGE_OD_DEGREES) {
+            customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
+
+            projectedVelocity = speed * Math.sin(angle);
+          }
+
+          if (Math.abs(MINUS_NINETY_DEGREES - direction) < SWIPE_RANGE_OD_DEGREES) {
+            customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
+
+            projectedVelocity = speed * Math.sin(angle);
+          }
+
+          if ((ONE_HUNDRED_AND_EIGHTY_DEGREES - Math.abs(direction)) < SWIPE_RANGE_OD_DEGREES) {
+            customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+
+            projectedVelocity = speed * Math.cos(angle);
+          }
+        }
+
+        if (customEventType !== null) {
+          this.callCustomHandlers(customEventType, event, element, projectedVelocity);
         }
       }
     }
   }
+
+  startPosition = null;
+
+  this.setStartPosition(startPosition);
 }
 
 const customEventMixins = {
@@ -220,6 +275,10 @@ const customEventMixins = {
   disableTouch,
   onCustomTap,
   offCustomTap,
+  onCustomSwipeUp,
+  offCustomSwipeUp,
+  onCustomSwipeDown,
+  offCustomSwipeDown,
   onCustomSwipeLeft,
   offCustomSwipeLeft,
   onCustomSwipeRight,

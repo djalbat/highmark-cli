@@ -1,5 +1,7 @@
 "use strict";
 
+import withStyle from "easy-with-style";
+
 import { keyCodes } from "necessary";
 import { Element, window } from "easy";
 
@@ -17,7 +19,7 @@ const { ENTER_KEY_CODE,
         ARROW_LEFT_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
-export default class View extends Element {
+class View extends Element {
   swipeRightCustomHandler = (event, element) => {
     const swipesDisabled = this.areSwipesDisabled();
 
@@ -40,6 +42,14 @@ export default class View extends Element {
     this.disableSwipes();
     this.showRightLeftDiv();
     this.waitToEnableSwipes();
+  }
+
+  swipeDownCustomHandler = (event, element) => {
+    alert("down!")
+  }
+
+  swipeUpCustomHandler = (event, element) => {
+    alert("up!")
   }
 
   tapCustomHandler = (event, element) => {
@@ -233,6 +243,8 @@ export default class View extends Element {
           leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
 
             <LeafDiv onCustomTap={this.tapCustomHandler}
+                     onCustomSwipeUp={this.swipeUpCustomHandler}
+                     onCustomSwipeDown={this.swipeDownCustomHandler}
                      onCustomSwipeLeft={this.swipeLeftCustomHandler}
                      onCustomSwipeRight={this.swipeRightCustomHandler} />
 
@@ -273,3 +285,12 @@ export default class View extends Element {
     className: "view"
   };
 }
+
+export default withStyle(View)`
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none;
+    
+`;
