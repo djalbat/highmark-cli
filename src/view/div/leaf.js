@@ -4,38 +4,11 @@ import { Element } from "easy";
 
 import withStyle from "easy-with-style";  ///
 
-import { ZOOM_RATIO,  WIGGLE_DELAY } from "../../constants";
+import { WIGGLE_DELAY } from "../../constants";
 import { wiggleCount, wiggleDuration } from "../../styles";
 
 class LeafDiv extends Element {
-  wiggle() {
-    this.addClass("wiggle");
-
-    setTimeout(() => {
-      this.removeClass("wiggle");
-    }, WIGGLE_DELAY);
-  }
-
-  zoomIn() {
-    const zoom_ratio = 1 * ZOOM_RATIO;
-
-    this.zoom(zoom_ratio);
-  }
-
-  zoomOut() {
-    const zoom_ratio = 1 / ZOOM_RATIO;
-
-    this.zoom(zoom_ratio);
-  }
-
-  zoom(zoom_ratio) {
-    let zoom = this.getZoom();
-
-    zoom *= zoom_ratio;
-
-    this.setZoom(zoom);
-
-
+  zoom(zoom) {
     const width = `${100/zoom}%`,
           transform = `scale(${zoom})`;
 
@@ -47,16 +20,12 @@ class LeafDiv extends Element {
     this.css(css);
   }
 
-  getZoom() {
-    const { zoom } = this.getState();
+  wiggle() {
+    this.addClass("wiggle");
 
-    return zoom;
-  }
-
-  setZoom(zoom) {
-    this.updateState({
-      zoom
-    });
+    setTimeout(() => {
+      this.removeClass("wiggle");
+    }, WIGGLE_DELAY);
   }
 
   setInitialState() {

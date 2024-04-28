@@ -17,11 +17,7 @@ renderStyles();
 
 const viewDOMElement = document.querySelector(VIEW_DIV_SELECTOR),
       body = new Body(),
-      view = elementFromDOMElement(viewDOMElement, () =>
-
-        <View/>
-
-      ); ///
+      view = elementFromDOMElement(viewDOMElement, View); ///
 
 body.mount(view);
 

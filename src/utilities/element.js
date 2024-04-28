@@ -13,7 +13,7 @@ export function elementsFromDOMElements(domElements, Element) {
 }
 
 export function elementFromDOMElement(domElement, Element) {
-  const element = Element();  ///
+  const element = <Element/>;
 
   const { domElement: temporaryDOMElement } = element,
         { className: classNamesString } = temporaryDOMElement,

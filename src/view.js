@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
+import { ZOOM_RATIO, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -96,20 +96,36 @@ class View extends Element {
           clickWidthRatio = pageX / width;
 
     if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
-      const showingLeafDiv = this.findShowingLeafDiv();
-
-      showingLeafDiv.zoomIn();
-
-      // this.showLeftLeafDiv();
+      this.zoomOut();
     }
 
     if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
-      const showingLeafDiv = this.findShowingLeafDiv();
-
-      showingLeafDiv.zoomOut();
-
-      // this.showRightLeftDiv();
+      this.zoomIn();
     }
+  }
+
+  zoomIn() {
+    const zoom_ratio = 1 * ZOOM_RATIO;
+
+    this.zoom(zoom_ratio);
+  }
+
+  zoomOut() {
+    const zoom_ratio = 1 / ZOOM_RATIO;
+
+    this.zoom(zoom_ratio);
+  }
+
+  zoom(zoom_ratio) {
+    let zoom = this.getZoom();
+
+    zoom *= zoom_ratio;
+
+    this.setZoom(zoom);
+
+    const showingLeafDiv = this.findShowingLeafDiv();
+
+    showingLeafDiv.zoom(zoom);
   }
 
   showFirstLeftDiv() {
@@ -163,11 +179,14 @@ class View extends Element {
       return;
     }
 
-    const nextLeafDiv = leafDivs[nextIndex];
+    previousLeafDiv.hide();
+
+    const nextLeafDiv = leafDivs[nextIndex],
+          zoom = this.getZoom();
+
+    nextLeafDiv.zoom(zoom);
 
     nextLeafDiv.show();
-
-    previousLeafDiv.hide();
   }
 
   forEachLeafDiv(callback) {
@@ -192,13 +211,21 @@ class View extends Element {
   retrieveLeafDivs() {
     const viewChildDivDOMElementNodeList = document.querySelectorAll(VIEW_CHILD_DIVS_SELECTOR),
           viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
-          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
-
-            <LeafDiv/>
-
-          );
+          leafDivs = elementsFromDOMElements(viewChildDivDOMElements, LeafDiv);
 
     return leafDivs;
+  }
+
+  getZoom() {
+    const { zoom } = this.getState();
+
+    return zoom;
+  }
+
+  setZoom(zoom) {
+    this.updateState({
+      zoom
+    });
   }
 
   getLeafDivs() {
@@ -214,9 +241,11 @@ class View extends Element {
   }
 
   setInitialState() {
-    const leafDivs = this.retrieveLeafDivs();
+    const zoom = 1,
+          leafDivs = this.retrieveLeafDivs();
 
     this.setState({
+      zoom,
       leafDivs
     });
   }
