@@ -79,27 +79,6 @@ export default class Position {
 
     return position;
   }
-
-  static fromPointerEvent(pointerEvent) {
-    let position = null;
-
-    const { changedTouches } = pointerEvent,
-          changedTouchesLength = changedTouches.length
-
-    if (changedTouchesLength === 1) {
-      const firstChangedTouch = first(changedTouches),
-            changedTouch = firstChangedTouch, ///
-            { pageX, pageY, pointerId } = changedTouch,
-            top = pageY,  ///
-            left = pageX, ///
-            time = getTime(),
-            identifier = pointerId; ///
-
-      position = new Position(top, left, time, identifier);
-    }
-
-    return position;
-  }
 }
 
 function getTime() {

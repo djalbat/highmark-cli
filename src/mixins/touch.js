@@ -162,7 +162,7 @@ function touchStartHandler(event, element) {
 }
 
 function mouseDownHandler(event, element) {
-  this.startHandler(event, element, (event) => {  ///
+  this.startHandler(event, element, (event) => {
     const mouseEvent = event, ///
           position = Position.fromMouseEvent(mouseEvent);
 
@@ -208,7 +208,7 @@ function mouseUpHandler(event, element) {
 
 function startHandler(event, element, positionFromEvent) {
   const position = positionFromEvent(event),
-        startPosition = position;  ///
+        startPosition = position; ///
 
   this.setStartPosition(startPosition);
 }

@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { ZOOM_RATIO, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
+import { SHOW_DELAY, ZOOM_RATIO, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -186,7 +186,9 @@ class View extends Element {
 
     nextLeafDiv.zoom(zoom);
 
-    nextLeafDiv.show();
+    setTimeout(() => {
+      nextLeafDiv.show();
+    }, SHOW_DELAY);
   }
 
   forEachLeafDiv(callback) {
