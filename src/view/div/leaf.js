@@ -10,10 +10,12 @@ import { wiggleCount, wiggleDuration } from "../../styles";
 class LeafDiv extends Element {
   zoom(zoom) {
     const width = `${100/zoom}%`,
+          minHeight = `${100/zoom}%`,
           transform = `scale(${zoom})`;
 
     const css = {
       width,
+      minHeight,
       transform
     };
 
