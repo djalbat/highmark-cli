@@ -7,11 +7,13 @@ import { Element, window } from "easy";
 
 import LeafDiv from "./view/div/leaf";
 import Navigation from "./view/navigatrion";
+import eventMixins from "./mixins/event";
+import touchMixins from "./mixins/touch";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { ENABLE_SWIPES_DELAY, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
+import { MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -23,27 +25,11 @@ const { ENTER_KEY_CODE,
 
 class View extends Element {
   swipeRightCustomHandler = (event, element) => {
-    const swipesDisabled = this.areSwipesDisabled();
-
-    if (swipesDisabled) {
-      return;
-    }
-
-    this.disableSwipes();
     this.showLeftLeafDiv();
-    this.waitToEnableSwipes();
   }
 
   swipeLeftCustomHandler = (event, element) => {
-    const swipesDisabled = this.areSwipesDisabled();
-
-    if (swipesDisabled) {
-      return;
-    }
-
-    this.disableSwipes();
     this.showRightLeftDiv();
-    this.waitToEnableSwipes();
   }
 
   swipeDownCustomHandler = (event, element) => {
@@ -190,26 +176,6 @@ class View extends Element {
     leafDivs.forEach(callback);
   }
 
-  enableSwipes() {
-    const swipesDisabled = false;
-
-    this.setSwipesDisabled(swipesDisabled);
-  }
-
-  disableSwipes() {
-    const swipesDisabled = true;
-
-    this.setSwipesDisabled(swipesDisabled);
-  }
-
-  waitToEnableSwipes() {
-    const delay = ENABLE_SWIPES_DELAY;
-
-    setTimeout(() => {
-      this.enableSwipes();
-    }, delay);
-  }
-
   findShowingLeafDiv() {
     const leafDivs = this.getLeafDivs(),
           showingLeafDiv = leafDivs.find((leafDiv) => {
@@ -228,11 +194,7 @@ class View extends Element {
           viewChildDivDOMElements = leafNodesFromNodeList(viewChildDivDOMElementNodeList),  ///
           leafDivs = elementsFromDOMElements(viewChildDivDOMElements, () =>
 
-            <LeafDiv onCustomTap={this.tapCustomHandler}
-                     onCustomSwipeUp={this.swipeUpCustomHandler}
-                     onCustomSwipeDown={this.swipeDownCustomHandler}
-                     onCustomSwipeLeft={this.swipeLeftCustomHandler}
-                     onCustomSwipeRight={this.swipeRightCustomHandler} />
+            <LeafDiv/>
 
           );
 
@@ -251,35 +213,37 @@ class View extends Element {
     });
   }
 
-  areSwipesDisabled() {
-    const { swipesDisabled } = this.getState();
-
-    return swipesDisabled;
-  }
-
-  setSwipesDisabled(swipesDisabled) {
-    this.updateState({
-      swipesDisabled
-    });
-  }
-
   setInitialState() {
-    const leafDivs = this.retrieveLeafDivs(),
-          swipesDisabled = false;
+    const leafDivs = this.retrieveLeafDivs();
 
     this.setState({
-      leafDivs,
-      swipesDisabled
+      leafDivs
     });
   }
 
   didMount() {
+    this.enableTouch();
+
+    this.onCustomTap(this.tapCustomHandler);
+    this.onCustomSwipeUp(this.swipeUpCustomHandler);
+    this.onCustomSwipeDown(this.swipeDownCustomHandler);
+    this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
+    this.onCustomSwipeRight(this.swipeRightCustomHandler);
+
     this.onClick(this.clickHandler);
 
     window.onKeyDown(this.keyDownHandler);
   }
 
   willUnmount() {
+    this.offCustomTap(this.tapCustomHandler);
+    this.offCustomSwipeUp(this.swipeUpCustomHandler);
+    this.offCustomSwipeDown(this.swipeDownCustomHandler);
+    this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
+    this.offCustomSwipeRight(this.swipeRightCustomHandler);
+
+    this.disableTouch();
+
     this.offClick(this.clickHandler);
 
     window.offKeyDown(this.keyDownHandler);
@@ -311,6 +275,9 @@ class View extends Element {
     className: "view"
   };
 }
+
+Object.assign(View.prototype, eventMixins);
+Object.assign(View.prototype, touchMixins);
 
 export default withStyle(View)`
 

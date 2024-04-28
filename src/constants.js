@@ -11,6 +11,5 @@ export const WIGGLE_FREQUENCY = 10;
 export const MAXIMUM_TAP_TIME = 125;
 export const MAXIMUM_DRAG_RANGE = PI / 4;
 export const MAXIMUM_SWIPE_RANGE = PI / 6;
-export const ENABLE_SWIPES_DELAY = 500;
 export const MINIMUM_SWIPE_SPEED = 1;
 export const MAXIMUM_CLICK_WIDTH_RATIO = 0.3;

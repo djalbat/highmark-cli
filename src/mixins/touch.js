@@ -5,7 +5,7 @@ import { window } from "easy";
 import Position from "../position";
 import RelativePosition from "../position/relative";
 
-import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_DRAG_RANGE, MAXIMUM_SWIPE_RANGE } from "../constants";
+import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MAXIMUM_DRAG_RANGE, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
          DRAG_UP_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,

@@ -4,9 +4,6 @@ import { Element } from "easy";
 
 import withStyle from "easy-with-style";  ///
 
-import eventMixins from "../../mixins/event";
-import touchMixins from "../../mixins/touch";
-
 import { ZOOM_RATIO,  WIGGLE_DELAY } from "../../constants";
 import { wiggleCount, wiggleDuration } from "../../styles";
 
@@ -70,14 +67,6 @@ class LeafDiv extends Element {
     });
   }
 
-  didMount() {
-    this.enableTouch();
-  }
-
-  willUnmount() {
-    this.disableTouch();
-  }
-
   initialise() {
     this.setInitialState();
   }
@@ -88,9 +77,6 @@ class LeafDiv extends Element {
     className: "leaf"
   };
 }
-
-Object.assign(LeafDiv.prototype, eventMixins);
-Object.assign(LeafDiv.prototype, touchMixins);
 
 export default withStyle(LeafDiv)`
 
