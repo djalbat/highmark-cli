@@ -110,11 +110,19 @@ class View extends Element {
           clickWidthRatio = pageX / width;
 
     if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.showLeftLeafDiv();
+      const showingLeafDiv = this.findShowingLeafDiv();
+
+      showingLeafDiv.zoomIn();
+
+      // this.showLeftLeafDiv();
     }
 
     if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.showRightLeftDiv();
+      const showingLeafDiv = this.findShowingLeafDiv();
+
+      showingLeafDiv.zoomOut();
+
+      // this.showRightLeftDiv();
     }
   }
 
@@ -182,6 +190,26 @@ class View extends Element {
     leafDivs.forEach(callback);
   }
 
+  enableSwipes() {
+    const swipesDisabled = false;
+
+    this.setSwipesDisabled(swipesDisabled);
+  }
+
+  disableSwipes() {
+    const swipesDisabled = true;
+
+    this.setSwipesDisabled(swipesDisabled);
+  }
+
+  waitToEnableSwipes() {
+    const delay = ENABLE_SWIPES_DELAY;
+
+    setTimeout(() => {
+      this.enableSwipes();
+    }, delay);
+  }
+
   findShowingLeafDiv() {
     const leafDivs = this.getLeafDivs(),
           showingLeafDiv = leafDivs.find((leafDiv) => {
@@ -193,26 +221,6 @@ class View extends Element {
           });
 
     return showingLeafDiv;
-  }
-
-  disableSwipes() {
-    const swipesDisabled = true;
-
-    this.setSwipesDisabled(swipesDisabled);
-  }
-
-  enableSwipes() {
-    const swipesDisabled = false;
-
-    this.setSwipesDisabled(swipesDisabled);
-  }
-
-  waitToEnableSwipes() {
-    const delay = ENABLE_SWIPES_DELAY;
-
-    setTimeout(() => {
-      this.enableSwipes();
-    }, delay);
   }
 
   retrieveLeafDivs() {
@@ -308,7 +316,7 @@ export default withStyle(View)`
 
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow: scroll;
   touch-action: none;
     
 `;
