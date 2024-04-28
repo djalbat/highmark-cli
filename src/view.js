@@ -40,6 +40,14 @@ class View extends Element {
     this.showNavigation();
   }
 
+  pinchCustomHandler = (event, element, radius) => {
+    ///
+  }
+
+  dragCustomHandler = (event, element, top, left) => {
+    console.log(top, left)
+  }
+
   tapCustomHandler = (event, element) => {
     ///
   }
@@ -52,16 +60,12 @@ class View extends Element {
       case ARROW_RIGHT_KEY_CODE: {
         this.showRightLeftDiv();
 
-        event.preventDefault();
-
         break;
       }
 
       case BACKSPACE_KEY_CODE:
       case ARROW_LEFT_KEY_CODE: {
         this.showLeftLeafDiv();
-
-        event.preventDefault();
 
         break;
       }
@@ -75,15 +79,11 @@ class View extends Element {
       case ARROW_UP_KEY_CODE: {
         this.showFirstLeftDiv();
 
-        event.preventDefault();
-
         break;
       }
 
       case ARROW_DOWN_KEY_CODE: {
         this.showLastLeafDiv();
-
-        event.preventDefault();
 
         break;
       }
@@ -254,6 +254,8 @@ class View extends Element {
     this.enableTouch();
 
     this.onCustomTap(this.tapCustomHandler);
+    this.onCustomDrag(this.dragCustomHandler);
+    this.onCustomPinch(this.pinchCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
@@ -266,6 +268,8 @@ class View extends Element {
 
   willUnmount() {
     this.offCustomTap(this.tapCustomHandler);
+    this.offCustomDrag(this.dragCustomHandler);
+    this.offCustomPinch(this.pinchCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
