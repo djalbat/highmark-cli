@@ -24,6 +24,26 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
+  pinchMoveCustomHandler = (event, element, magnitude) => {
+    const startMagnitude = this.getStartMagnitude(),
+          startZoom = this.getStartZoom(),
+          zoom = startZoom * (magnitude / startMagnitude);
+
+    this.setZoom(zoom);
+
+    this.zoom(zoom);
+  }
+
+  pinchStartCustomHandler = (event, element, magnitude) => {
+    const zoom = this.getZoom(),
+          startZoom = zoom, ///
+          startMagnitude = magnitude; ///
+
+    this.setStartZoom(startZoom);
+
+    this.setStartMagnitude(startMagnitude);
+  }
+
   swipeRightCustomHandler = (event, element) => {
     this.showLeftLeafDiv();
   }
@@ -40,11 +60,7 @@ class View extends Element {
     this.showNavigation();
   }
 
-  pinchCustomHandler = (event, element, radius) => {
-    ///
-  }
-
-  dragCustomHandler = (event, element, top, left) => {
+  panCustomHandler = (event, element, top, left) => {
     console.log(top, left)
   }
 
@@ -105,24 +121,26 @@ class View extends Element {
   }
 
   zoomIn() {
-    const zoom_ratio = 1 * ZOOM_RATIO;
-
-    this.zoom(zoom_ratio);
-  }
-
-  zoomOut() {
-    const zoom_ratio = 1 / ZOOM_RATIO;
-
-    this.zoom(zoom_ratio);
-  }
-
-  zoom(zoom_ratio) {
     let zoom = this.getZoom();
 
-    zoom *= zoom_ratio;
+    zoom *= ZOOM_RATIO;
 
     this.setZoom(zoom);
 
+    this.zoom(zoom);
+  }
+
+  zoomOut() {
+    let zoom = this.getZoom();
+
+    zoom /= ZOOM_RATIO;
+
+    this.setZoom(zoom);
+
+    this.zoom(zoom);
+  }
+
+  zoom(zoom) {
     const showingLeafDiv = this.findShowingLeafDiv();
 
     showingLeafDiv.zoom(zoom);
@@ -242,13 +260,41 @@ class View extends Element {
     });
   }
 
+  getStartZoom() {
+    const { startZoom } = this.getState();
+
+    return startZoom;
+  }
+
+  setStartZoom(startZoom) {
+    this.updateState({
+      startZoom
+    });
+  }
+
+  getStartMagnitude() {
+    const { startMagnitude } = this.getState();
+
+    return startMagnitude;
+  }
+
+  setStartMagnitude(startMagnitude) {
+    this.updateState({
+      startMagnitude
+    });
+  }
+
   setInitialState() {
     const zoom = 1,
-          leafDivs = this.retrieveLeafDivs();
+          leafDivs = this.retrieveLeafDivs(),
+          startZoom = null,
+          startMagnitude = null;
 
     this.setState({
       zoom,
-      leafDivs
+      leafDivs,
+      startZoom,
+      startMagnitude
     });
   }
 
@@ -256,12 +302,13 @@ class View extends Element {
     this.enableTouch();
 
     this.onCustomTap(this.tapCustomHandler);
-    this.onCustomDrag(this.dragCustomHandler);
-    this.onCustomPinch(this.pinchCustomHandler);
+    this.onCustomPan(this.panCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.onCustomSwipeRight(this.swipeRightCustomHandler);
+    this.onCustomPinchStart(this.pinchStartCustomHandler);
+    this.onCustomPinchMove(this.pinchMoveCustomHandler);
 
     this.onClick(this.clickHandler);
 
@@ -270,12 +317,13 @@ class View extends Element {
 
   willUnmount() {
     this.offCustomTap(this.tapCustomHandler);
-    this.offCustomDrag(this.dragCustomHandler);
-    this.offCustomPinch(this.pinchCustomHandler);
+    this.offCustomPan(this.panCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.offCustomSwipeRight(this.swipeRightCustomHandler);
+    this.offCustomPinchStart(this.pinchStartCustomHandler);
+    this.offCustomPinchMove(this.pinchMoveCustomHandler);
 
     this.disableTouch();
 

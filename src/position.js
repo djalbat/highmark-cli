@@ -1,9 +1,5 @@
 "use strict";
 
-import { arrayUtilities } from "necessary";
-
-const { first } = arrayUtilities;
-
 export default class Position {
   constructor(top, left, time, identifier) {
     this.top = top;
@@ -49,6 +45,16 @@ export default class Position {
     return matches;
   }
 
+  static fromTouch(touch) {
+    const { pageX, pageY, identifier } = touch,
+          top = pageY,  ///
+          left = pageX, ///
+          time = getTime(),
+          position = new Position(top, left, time, identifier);
+
+    return position;
+  }
+
   static fromMouseEvent(mouseEvent) {
     const { pageX, pageY } = mouseEvent,
           top = pageY,  ///
@@ -56,26 +62,6 @@ export default class Position {
           time = getTime(),
           identifier = null,
           position = new Position(top, left, time, identifier);
-
-    return position;
-  }
-
-  static fromTouchEvent(touchEvent) {
-    let position = null;
-
-    const { changedTouches } = touchEvent,
-          changedTouchesLength = changedTouches.length
-
-    if (changedTouchesLength === 1) {
-      const firstChangedTouch = first(changedTouches),
-            changedTouch = firstChangedTouch, ///
-            { pageX, pageY, identifier } = changedTouch,
-            top = pageY,  ///
-            left = pageX, ///
-            time = getTime();
-
-      position = new Position(top, left, time, identifier);
-    }
 
     return position;
   }

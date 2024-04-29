@@ -36,10 +36,9 @@ export default class RelativePosition {
     return this.direction;
   }
 
-  static fromPositionAndStartPosition(position, startPosition) {
-    position = position.minus(startPosition); ///
-
-    const top = position.getTop(),
+  static fromFirstPositionAndSecondPosition(firstPosition, secondPosition) {
+    const position = secondPosition.minus(firstPosition),
+          top = position.getTop(),
           left = position.getLeft(),
           time = position.getTime(),
           magnitude = Math.sqrt(top * top + left * left),

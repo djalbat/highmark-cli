@@ -1,24 +1,32 @@
 "use strict";
 
 import { window } from "easy";
+import { arrayUtilities } from "necessary";
 
 import Position from "../position";
 import RelativePosition from "../position/relative";
 
 import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
-         DRAG_CUSTOM_EVENT_TYPE,
-         PINCH_CUSTOM_EVENT_TYPE,
+         PAN_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
-         SWIPE_RIGHT_CUSTOM_EVENT_TYPE } from "../customEventTypes";
+         SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
+         PINCH_START_CUSTOM_EVENT_TYPE,
+         PINCH_MOVE_CUSTOM_EVENT_TYPE } from "../customEventTypes";
+
+const { push, clear, filter, first, second } = arrayUtilities;
+
+let count = 0;
 
 function enableTouch() {
-  const startPosition = null;
+  const startPositions = [],
+        movingPositions = [];
 
   this.updateState({
-    startPosition
+    startPositions,
+    movingPositions
   });
 
   this.onMouseDown(this.mouseDownHandler);
@@ -56,30 +64,16 @@ function offCustomTap(tapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
+function onCustomPan(panCustomHandler, element) {
+  const customEventType = PAN_CUSTOM_EVENT_TYPE,
+        customHandler = panCustomHandler; ///
 
   this.onCustomEvent(customEventType, customHandler, element);
 }
 
-function offCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
-function onCustomPinch(pinchCustomHandler, element) {
-  const customEventType = PINCH_CUSTOM_EVENT_TYPE,
-        customHandler = pinchCustomHandler; ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomPinch(pinchCustomHandler, element) {
-  const customEventType = PINCH_CUSTOM_EVENT_TYPE,
-        customHandler = pinchCustomHandler; ///
+function offCustomPan(panCustomHandler, element) {
+  const customEventType = PAN_CUSTOM_EVENT_TYPE,
+        customHandler = panCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -140,163 +134,244 @@ function offCustomSwipeRight(swipeRightCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function getStartPosition() {
-  const { startPosition } = this.getState();
+function onCustomPinchStart(pinchStartCustomHandler, element) {
+  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStartCustomHandler; ///
 
-  return startPosition;
+  this.onCustomEvent(customEventType, customHandler, element);
 }
 
-function setStartPosition(startPosition) {
+function offCustomPinchStart(pinchStartCustomHandler, element) {
+  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStartCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomPinchMove(pinchMoveCustomHandler, element) {
+  const customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
+        customHandler = pinchMoveCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomPinchMove(pinchMoveCustomHandler, element) {
+  const customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
+        customHandler = pinchMoveCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function getStartPositions() {
+  const { startPositions } = this.getState();
+
+  return startPositions;
+}
+
+function setStartPositions(startPositions) {
   this.updateState({
-    startPosition
+    startPositions
+  });
+}
+
+function getMovingPositions() {
+  const { movingPositions } = this.getState();
+
+  return movingPositions;
+}
+
+function setMovingPositions(movingPositions) {
+  this.updateState({
+    movingPositions
   });
 }
 
 function touchStartHandler(event, element) {
   this.startHandler(event, element, (event) => {
     const touchEvent = event, ///
-          position = Position.fromTouchEvent(touchEvent);
+          changed = false,
+          positions = positionsFromTouchEvent(touchEvent, changed);
 
-    return position;
+    return positions;
   });
 }
 
 function mouseDownHandler(event, element) {
   this.startHandler(event, element, (event) => {
     const mouseEvent = event, ///
-          position = Position.fromMouseEvent(mouseEvent);
+          positions = positionsFromMouseEvent(mouseEvent);
 
-    return position;
+    return positions;
   });
 }
 
 function touchMoveHandler(event, element) {
   this.moveHandler(event, element, (event) => {
     const touchEvent = event, ///
-          position = Position.fromTouchEvent(touchEvent);
+          changed = true,
+          positions = positionsFromTouchEvent(touchEvent, changed);
 
-    return position;
+    return positions;
   });
 }
 
 function mouseMoveHandler(event, element) {
   this.moveHandler(event, element, (event) => {
     const mouseEvent = event, ///
-          position = Position.fromMouseEvent(mouseEvent);
+          positions = positionsFromMouseEvent(mouseEvent);
 
-    return position;
+    return positions;
   });
 }
 
 function touchEndHandler(event, element) {
   this.endHandler(event, element, (event) => {
     const touchEvent = event, ///
-          position = Position.fromTouchEvent(touchEvent);
+          changed = true,
+          positions = positionsFromTouchEvent(touchEvent, changed);
 
-    return position;
+    return positions;
   });
 }
 
 function mouseUpHandler(event, element) {
-  this.endHandler(event, element, (event) => {  ///
+  this.endHandler(event, element, (event) => {
     const mouseEvent = event, ///
-          position = Position.fromMouseEvent(mouseEvent);
+          positions = positionsFromMouseEvent(mouseEvent);
 
-    return position;
+    return positions;
   });
 }
 
-function startHandler(event, element, positionFromEvent) {
-  const position = positionFromEvent(event),
-        startPosition = position; ///
+function startHandler(event, element, positionsFromEvent) {
+  const positions = positionsFromEvent(event),
+        startPositions = this.getStartPositions();
 
-  this.setStartPosition(startPosition);
-}
+  filterPositions(startPositions, positions);
 
-function moveHandler(event, element, positionFromEvent) {
-  let startPosition = this.getStartPosition();
+  push(startPositions, positions);
 
-  if (startPosition !== null) {
-    const position = positionFromEvent(event);
+  const startingPositionsLength = startPositions.length;
 
-    if (position !== null) {
-      const positionMatchesStartPosition = position.match(startPosition);
+  if (startingPositionsLength === 2) {
+    const firstStartPosition = first(startPositions),
+          secondStartPosition = second(startPositions),
+          relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
+          customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+          magnitude = relativeStartPosition.getMagnitude();
 
-      if (positionMatchesStartPosition) {
-        const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
-              top = relativePosition.getTop(),
-              left = relativePosition.getLeft(),
-              customEventType = DRAG_CUSTOM_EVENT_TYPE;
-
-        this.callCustomHandlers(customEventType, event, element, top, left);
-      }
-    }
+    this.callCustomHandlers(customEventType, event, element, magnitude);
   }
 }
 
-function endHandler(event, element, positionFromEvent) {
-  let startPosition;
+function moveHandler(event, element, positionsFromEvent) {
+  const positions = positionsFromEvent(event),
+        startPositions = this.getStartPositions(),
+        movingPositions = this.getMovingPositions();
 
-  startPosition = this.getStartPosition();
+  filterPositions(movingPositions, positions);
 
-  if (startPosition !== null) {
+  push(movingPositions, positions);
 
-    const position = positionFromEvent(event);
+  sortPositions(movingPositions, startPositions);
 
-    if (position !== null) {
-      const positionMatchesStartPosition = position.match(startPosition);
+  const movingPositionsLength = movingPositions.length;
 
-      if (positionMatchesStartPosition) {
-        const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
-              direction = relativePosition.getDirection(),
-              speed = relativePosition.getSpeed(),
-              time = relativePosition.getTime();
+  if (movingPositionsLength === 1) {
+    const firstStartPosition = first(startPositions),
+          firstMovingPosition = first(movingPositions),
+          firstPosition = firstStartPosition, ///
+          secondPosition = firstMovingPosition, ///
+          relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
+          customEventType = PAN_CUSTOM_EVENT_TYPE,
+          left = relativePosition.getLeft(),
+          top = relativePosition.getTop();
 
-        let customEventType = null,
-            projectedVelocity;
-
-        if (speed === 0) {
-          if (time < MAXIMUM_TAP_TIME) {
-            customEventType = TAP_CUSTOM_EVENT_TYPE;
-
-            projectedVelocity = speed;  ///
-          }
-        } else if (speed > MINIMUM_SWIPE_SPEED) {
-          if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-            customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
-
-            projectedVelocity = speed * Math.cos(direction);
-          }
-
-          if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-            customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
-
-            projectedVelocity = speed * Math.sin(direction);
-          }
-
-          if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-            customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
-
-            projectedVelocity = speed * Math.sin(direction);
-          }
-
-          if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-            customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
-
-            projectedVelocity = speed * Math.cos(direction);
-          }
-        }
-
-        if (customEventType !== null) {
-          this.callCustomHandlers(customEventType, event, element, projectedVelocity);
-        }
-      }
-    }
+    this.callCustomHandlers(customEventType, event, element, top, left);
   }
 
-  startPosition = null;
+  if (movingPositionsLength === 2) {
+    const firstMovingPosition = first(movingPositions),
+          secondMovingPosition = second(movingPositions),
+          relativeMovingPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstMovingPosition, secondMovingPosition),
+          customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
+          magnitude = relativeMovingPosition.getMagnitude();
 
-  this.setStartPosition(startPosition);
+    this.callCustomHandlers(customEventType, event, element, magnitude);
+  }
+}
+
+function endHandler(event, element, positionsFromEvent) {
+  const positions = positionsFromEvent(event),
+        startPositions = this.getStartPositions(),
+        movingPositions = this.getMovingPositions();
+
+  filterPositions(startPositions, positions);
+
+  filterPositions(movingPositions, positions);
+
+  // let startPosition;
+  //
+  // startPosition = this.getStartPosition();
+  //
+  // if (startPosition !== null) {
+  //
+  //   const position = positionsFromEvent(event);
+  //
+  //   if (position !== null) {
+  //     const positionMatchesStartPosition = position.match(startPosition);
+  //
+  //     if (positionMatchesStartPosition) {
+  //       const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
+  //             direction = relativePosition.getDirection(),
+  //             speed = relativePosition.getSpeed(),
+  //             time = relativePosition.getTime();
+  //
+  //       let customEventType = null,
+  //           projectedVelocity;
+  //
+  //       if (speed === 0) {
+  //         if (time < MAXIMUM_TAP_TIME) {
+  //           customEventType = TAP_CUSTOM_EVENT_TYPE;
+  //
+  //           projectedVelocity = speed;  ///
+  //         }
+  //       } else if (speed > MINIMUM_SWIPE_SPEED) {
+  //         if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+  //           customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+  //
+  //           projectedVelocity = speed * Math.cos(direction);
+  //         }
+  //
+  //         if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+  //           customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
+  //
+  //           projectedVelocity = speed * Math.sin(direction);
+  //         }
+  //
+  //         if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+  //           customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
+  //
+  //           projectedVelocity = speed * Math.sin(direction);
+  //         }
+  //
+  //         if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+  //           customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+  //
+  //           projectedVelocity = speed * Math.cos(direction);
+  //         }
+  //       }
+  //
+  //       if (customEventType !== null) {
+  //         this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+  //       }
+  //     }
+  //   }
+  // }
+  //
+  // startPosition = null;
+  //
+  // this.setStartPosition(startPosition);
 }
 
 const touchMixins = {
@@ -304,10 +379,8 @@ const touchMixins = {
   disableTouch,
   onCustomTap,
   offCustomTap,
-  onCustomDrag,
-  offCustomDrag,
-  onCustomPinch,
-  offCustomPinch,
+  onCustomPan,
+  offCustomPan,
   onCustomSwipeUp,
   offCustomSwipeUp,
   onCustomSwipeDown,
@@ -316,8 +389,14 @@ const touchMixins = {
   offCustomSwipeLeft,
   onCustomSwipeRight,
   offCustomSwipeRight,
-  getStartPosition,
-  setStartPosition,
+  onCustomPinchStart,
+  offCustomPinchStart,
+  onCustomPinchMove,
+  offCustomPinchMove,
+  getStartPositions,
+  setStartPositions,
+  getMovingPositions,
+  setMovingPositions,
   touchStartHandler,
   mouseDownHandler,
   touchMoveHandler,
@@ -330,3 +409,84 @@ const touchMixins = {
 };
 
 export default touchMixins;
+
+function sortPositions(positionsA, positionsB) {
+  const positionAMap = positionsA.reduce((positionAMap, positionA) => {
+    const identifier = positionA.getIdentifier();
+
+    positionAMap[identifier] = positionA;
+
+    return positionAMap;
+  }, {});
+
+  clear(positionsA);
+
+  positionsB.forEach((positionB) => {
+    const identifier = positionB.getIdentifier(),
+          positionA = positionAMap[identifier];
+
+    positionsA.push(positionA);
+  });
+}
+
+function filterPositions(positionsA, positionsB) {
+  filter(positionsA, (positionA) => {
+    const matches = positionsB.some((positionB) => {
+      const matches = positionA.match(positionB);
+
+      if (matches) {
+        return true;
+      }
+    });
+
+    if (!matches) {
+      return true;
+    }
+  });
+}
+
+function compressPositions(positions) {
+  const positionMap = positions.reduce((positionMap, position) => {
+    const identifier = position.getIdentifier();
+
+    positionMap[identifier] = position;
+
+    return positionMap;
+  }, {});
+
+  positions = Object.values(positionMap);
+
+  return positions;
+}
+
+function positionsFromMouseEvent(mouseEvent) {
+  const position = Position.fromMouseEvent(mouseEvent),
+        positions = [
+          position
+        ];
+
+  return positions;
+}
+
+function positionsFromTouchEvent(touchEvent, changed = true) {
+  let touchesNodeList;
+
+  if (changed) {
+    ({ changedTouches: touchesNodeList } = touchEvent);
+  } else {
+    ({ touches: touchesNodeList } = touchEvent);
+  }
+
+  const touches = [
+          ...touchesNodeList
+        ],
+        positions = touches.map((touch) => {
+          const position = Position.fromTouch(touch);
+
+          return position;
+        });
+
+  compressPositions(positions);
+
+  return positions;
+}
