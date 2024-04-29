@@ -306,72 +306,61 @@ function endHandler(event, element, positionsFromEvent) {
         startPositions = this.getStartPositions(),
         movingPositions = this.getMovingPositions();
 
+  const startPositionsLength = startPositions.length;
+
+  if (startPositionsLength === 1) {
+    const firstStartPosition = first(startPositions),
+          firstMovingPosition = first(movingPositions),
+          firstPosition = firstStartPosition, ///
+          secondPosition = firstMovingPosition, ///
+          relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
+          direction = relativePosition.getDirection(),
+          speed = relativePosition.getSpeed(),
+          time = relativePosition.getTime();
+
+    let customEventType = null,
+        projectedVelocity;
+
+    if (speed === 0) {
+      if (time < MAXIMUM_TAP_TIME) {
+        customEventType = TAP_CUSTOM_EVENT_TYPE;
+
+        projectedVelocity = speed;  ///
+      }
+    } else if (speed > MINIMUM_SWIPE_SPEED) {
+      if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+        customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+
+        projectedVelocity = speed * Math.cos(direction);
+      }
+
+      if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+        customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
+
+        projectedVelocity = speed * Math.sin(direction);
+      }
+
+      if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+        customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
+
+        projectedVelocity = speed * Math.sin(direction);
+      }
+
+      if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+        customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+
+        projectedVelocity = speed * Math.cos(direction);
+      }
+    }
+
+    if (customEventType !== null) {
+      this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+    }
+  }
+
   filterPositions(startPositions, positions);
 
   filterPositions(movingPositions, positions);
-
-  // let startPosition;
-  //
-  // startPosition = this.getStartPosition();
-  //
-  // if (startPosition !== null) {
-  //
-  //   const position = positionsFromEvent(event);
-  //
-  //   if (position !== null) {
-  //     const positionMatchesStartPosition = position.match(startPosition);
-  //
-  //     if (positionMatchesStartPosition) {
-  //       const relativePosition = RelativePosition.fromPositionAndStartPosition(position, startPosition),
-  //             direction = relativePosition.getDirection(),
-  //             speed = relativePosition.getSpeed(),
-  //             time = relativePosition.getTime();
-  //
-  //       let customEventType = null,
-  //           projectedVelocity;
-  //
-  //       if (speed === 0) {
-  //         if (time < MAXIMUM_TAP_TIME) {
-  //           customEventType = TAP_CUSTOM_EVENT_TYPE;
-  //
-  //           projectedVelocity = speed;  ///
-  //         }
-  //       } else if (speed > MINIMUM_SWIPE_SPEED) {
-  //         if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-  //           customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
-  //
-  //           projectedVelocity = speed * Math.cos(direction);
-  //         }
-  //
-  //         if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-  //           customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
-  //
-  //           projectedVelocity = speed * Math.sin(direction);
-  //         }
-  //
-  //         if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-  //           customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
-  //
-  //           projectedVelocity = speed * Math.sin(direction);
-  //         }
-  //
-  //         if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-  //           customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
-  //
-  //           projectedVelocity = speed * Math.cos(direction);
-  //         }
-  //       }
-  //
-  //       if (customEventType !== null) {
-  //         this.callCustomHandlers(customEventType, event, element, projectedVelocity);
-  //       }
-  //     }
-  //   }
-  // }
-  //
-  // startPosition = null;
-  //
-  // this.setStartPosition(startPosition);
 }
 
 const touchMixins = {

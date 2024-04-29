@@ -192,8 +192,6 @@ class View extends Element {
           previousLeafDiv = leafDivs[previousIndex];
 
     if ((nextIndex === -1) || (nextIndex === previousIndex) || (nextIndex === leafDivsLength)) {
-      previousLeafDiv.wiggle();
-
       return;
     }
 

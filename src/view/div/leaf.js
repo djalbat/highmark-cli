@@ -4,9 +4,6 @@ import { Element } from "easy";
 
 import withStyle from "easy-with-style";  ///
 
-import { WIGGLE_DELAY } from "../../constants";
-import { wiggleCount, wiggleDuration } from "../../styles";
-
 class LeafDiv extends Element {
   zoom(zoom) {
     const width = `${100/zoom}%`,
@@ -20,14 +17,6 @@ class LeafDiv extends Element {
     };
 
     this.css(css);
-  }
-
-  wiggle() {
-    this.addClass("wiggle");
-
-    setTimeout(() => {
-      this.removeClass("wiggle");
-    }, WIGGLE_DELAY);
   }
 
   setInitialState() {
@@ -55,15 +44,4 @@ export default withStyle(LeafDiv)`
   min-height: 100%;
   transform-origin: top left;
   
-  @keyframes wiggle {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(+3px); }
-    75% { transform: translateX(-3px); }
-    100% { transform: translateX(0); }
-  }
-  
-  .wiggle {
-    animation: wiggle ${wiggleDuration} ease-in-out ${wiggleCount};
-  }
-
 `;
