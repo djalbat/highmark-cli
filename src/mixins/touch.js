@@ -8,17 +8,16 @@ import RelativePosition from "../position/relative";
 
 import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
-         DRAG_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
+         DRAG_MOVE_CUSTOM_EVENT_TYPE,
+         DRAG_START_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
+         PINCH_MOVE_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
-         PINCH_START_CUSTOM_EVENT_TYPE,
-         PINCH_MOVE_CUSTOM_EVENT_TYPE } from "../customEventTypes";
+         PINCH_START_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
 const { push, clear, filter, first, second } = arrayUtilities;
-
-let count = 0;
 
 function enableTouch() {
   const startMagnitude = null,
@@ -66,16 +65,30 @@ function offCustomTap(tapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
+function onCustomDragMove(dragMoveCustomHandler, element) {
+  const customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
+        customHandler = dragMoveCustomHandler; ///
 
   this.onCustomEvent(customEventType, customHandler, element);
 }
 
-function offCustomDrag(dragCustomHandler, element) {
-  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
-        customHandler = dragCustomHandler; ///
+function offCustomDragMove(dragMoveCustomHandler, element) {
+  const customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
+        customHandler = dragStartCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomDragStart(dragStartCustomHandler, element) {
+  const customEventType = DRAG_START_CUSTOM_EVENT_TYPE,
+        customHandler = dragStartCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomDragStart(dragStartCustomHandler, element) {
+  const customEventType = DRAG_START_CUSTOM_EVENT_TYPE,
+        customHandler = dragStartCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -136,20 +149,6 @@ function offCustomSwipeRight(swipeRightCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomPinchStart(pinchStartCustomHandler, element) {
-  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
-        customHandler = pinchStartCustomHandler; ///
-
-  this.onCustomEvent(customEventType, customHandler, element);
-}
-
-function offCustomPinchStart(pinchStartCustomHandler, element) {
-  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
-        customHandler = pinchStartCustomHandler; ///
-
-  this.offCustomEvent(customEventType, customHandler, element);
-}
-
 function onCustomPinchMove(pinchMoveCustomHandler, element) {
   const customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
         customHandler = pinchMoveCustomHandler; ///
@@ -160,6 +159,20 @@ function onCustomPinchMove(pinchMoveCustomHandler, element) {
 function offCustomPinchMove(pinchMoveCustomHandler, element) {
   const customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
         customHandler = pinchMoveCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomPinchStart(pinchStartCustomHandler, element) {
+  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStartCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomPinchStart(pinchStartCustomHandler, element) {
+  const customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
+        customHandler = pinchStartCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -290,96 +303,103 @@ function moveHandler(event, element, positionsFromEvent) {
 
   push(movingPositions, positions);
 
-  sortPositions(movingPositions, startPositions);
+  const positionsMatch = matchPositions(startPositions, movingPositions);
 
-  const movingPositionsLength = movingPositions.length;
+  if (positionsMatch) {
+    sortPositions(movingPositions, startPositions);
 
-  if (movingPositionsLength === 1) {
-    const firstStartPosition = first(startPositions),
-          firstMovingPosition = first(movingPositions),
-          firstPosition = firstStartPosition, ///
-          secondPosition = firstMovingPosition, ///
-          relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
-          customEventType = DRAG_CUSTOM_EVENT_TYPE,
-          left = relativePosition.getLeft(),
-          top = relativePosition.getTop();
+    const movingPositionsLength = movingPositions.length;
 
-    this.callCustomHandlers(customEventType, event, element, top, left);
-  }
+    if (movingPositionsLength === 1) {
+      const firstStartPosition = first(startPositions),
+            firstMovingPosition = first(movingPositions),
+            firstPosition = firstStartPosition, ///
+            secondPosition = firstMovingPosition, ///
+            relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
+            customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
+            left = relativePosition.getLeft(),
+            top = relativePosition.getTop();
 
-  if (movingPositionsLength === 2) {
-    const firstMovingPosition = first(movingPositions),
-          secondMovingPosition = second(movingPositions),
-          relativeMovingPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstMovingPosition, secondMovingPosition),
-          customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
-          startMagnitude = this.getStartMagnitude(),
-          magnitude = relativeMovingPosition.getMagnitude(),
-          ratio = magnitude / startMagnitude;
+      this.callCustomHandlers(customEventType, event, element, top, left);
+    }
 
-    this.callCustomHandlers(customEventType, event, element, ratio);
+    if (movingPositionsLength === 2) {
+      const firstMovingPosition = first(movingPositions),
+            secondMovingPosition = second(movingPositions),
+            relativeMovingPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstMovingPosition, secondMovingPosition),
+            customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
+            startMagnitude = this.getStartMagnitude(),
+            magnitude = relativeMovingPosition.getMagnitude(),
+            ratio = magnitude / startMagnitude;
+
+      this.callCustomHandlers(customEventType, event, element, ratio);
+    }
   }
 }
 
 function endHandler(event, element, positionsFromEvent) {
   const positions = positionsFromEvent(event),
         startPositions = this.getStartPositions(),
-        movingPositions = this.getMovingPositions();
-
-  const startPositionsLength = startPositions.length,
+        movingPositions = this.getMovingPositions(),
+        startPositionsLength = startPositions.length,
         movingPositionsLength = movingPositions.length;
 
-  let customEventType = null,
-      projectedVelocity;
+  const positionsMatch = matchPositions(startPositions, movingPositions);
 
-  if (movingPositionsLength === 0) {
-    customEventType = TAP_CUSTOM_EVENT_TYPE;
+  if (positionsMatch) {
+    let customEventType = null,
+        projectedVelocity;
 
-    projectedVelocity = 0;
-  } else if (startPositionsLength === 1) {
-    const firstStartPosition = first(startPositions),
-          firstMovingPosition = first(movingPositions),
-          firstPosition = firstStartPosition, ///
-          secondPosition = firstMovingPosition, ///
-          relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
-          direction = relativePosition.getDirection(),
-          speed = relativePosition.getSpeed(),
-          time = relativePosition.getTime();
+    if (movingPositionsLength === 0) {
+      customEventType = TAP_CUSTOM_EVENT_TYPE;
 
-    if (speed === 0) {
-      if (time < MAXIMUM_TAP_TIME) {
-        customEventType = TAP_CUSTOM_EVENT_TYPE;
+      projectedVelocity = 0;
+    } else if (startPositionsLength === 1) {
+      const firstStartPosition = first(startPositions),
+            firstMovingPosition = first(movingPositions),
+            firstPosition = firstStartPosition, ///
+            secondPosition = firstMovingPosition, ///
+            relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
+            direction = relativePosition.getDirection(),
+            speed = relativePosition.getSpeed(),
+            time = relativePosition.getTime();
 
-        projectedVelocity = speed;  ///
-      }
-    } else if (speed > MINIMUM_SWIPE_SPEED) {
-      if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-        customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
+      if (speed === 0) {
+        if (time < MAXIMUM_TAP_TIME) {
+          customEventType = TAP_CUSTOM_EVENT_TYPE;
 
-        projectedVelocity = speed * Math.cos(direction);
-      }
+          projectedVelocity = speed;  ///
+        }
+      } else if (speed > MINIMUM_SWIPE_SPEED) {
+        if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
 
-      if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-        customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
+          projectedVelocity = speed * Math.cos(direction);
+        }
 
-        projectedVelocity = speed * Math.sin(direction);
-      }
+        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
 
-      if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
-        customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
+          projectedVelocity = speed * Math.sin(direction);
+        }
 
-        projectedVelocity = speed * Math.sin(direction);
-      }
+        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
 
-      if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
-        customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+          projectedVelocity = speed * Math.sin(direction);
+        }
 
-        projectedVelocity = speed * Math.cos(direction);
+        if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+          customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
+
+          projectedVelocity = speed * Math.cos(direction);
+        }
       }
     }
-  }
 
-  if (customEventType !== null) {
-    this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+    if (customEventType !== null) {
+      this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+    }
   }
 
   filterPositions(startPositions, positions);
@@ -392,8 +412,10 @@ const touchMixins = {
   disableTouch,
   onCustomTap,
   offCustomTap,
-  onCustomDrag,
-  offCustomDrag,
+  onCustomDragMove,
+  offCustomDragMove,
+  onCustomDragStart,
+  offCustomDragStart,
   onCustomSwipeUp,
   offCustomSwipeUp,
   onCustomSwipeDown,
@@ -402,10 +424,10 @@ const touchMixins = {
   offCustomSwipeLeft,
   onCustomSwipeRight,
   offCustomSwipeRight,
-  onCustomPinchStart,
-  offCustomPinchStart,
   onCustomPinchMove,
   offCustomPinchMove,
+  onCustomPinchStart,
+  offCustomPinchStart,
   getStartMagnitude,
   setStartMagnitude,
   getStartPositions,
@@ -442,6 +464,34 @@ function sortPositions(positionsA, positionsB) {
 
     positionsA.push(positionA);
   });
+}
+
+function matchPositions(positionsA, positionsB) {
+  let positionsMatch = false;
+
+  const positionsALength = positionsA.length,
+        positionsBLength = positionsB.length;
+
+  if (positionsALength === positionsBLength) {
+    const identifiersA = identifiersFromPositions(positionsA),
+          identifiersB = identifiersFromPositions(positionsB);
+
+    identifiersA.sort();
+
+    identifiersB.sort();
+
+    const identifiersMatch = identifiersA.every((identifierA, index) => {
+      const identifierB = identifiersB[index];
+
+      if (identifierA === identifierB) {
+        return true;
+      }
+    });
+
+    positionsMatch = identifiersMatch;  ///
+  }
+
+  return positionsMatch;
 }
 
 function filterPositions(positionsA, positionsB) {
@@ -504,4 +554,14 @@ function positionsFromTouchEvent(touchEvent, changed = true) {
   compressPositions(positions);
 
   return positions;
+}
+
+function identifiersFromPositions(positions) {
+  const identifiers = positions.map((position) => {
+    const identifier = position.getIdentifier();
+
+    return identifier;
+  });
+
+  return identifiers;
 }

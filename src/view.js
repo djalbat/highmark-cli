@@ -56,8 +56,12 @@ class View extends Element {
     this.showNavigation();
   }
 
-  dragCustomHandler = (event, element, top, left) => {
-    console.log(top, left)
+  dragStartCustomHandler = (event, element, top, left) => {
+    console.log("start", top, left)
+  }
+
+  dragMoveCustomHandler = (event, element, top, left) => {
+    console.log("move", top, left)
   }
 
   tapCustomHandler = (event, element) => {
@@ -282,13 +286,14 @@ class View extends Element {
     this.enableTouch();
 
     this.onCustomTap(this.tapCustomHandler);
-    this.onCustomDrag(this.dragCustomHandler);
+    this.onCustomDragMove(this.dragMoveCustomHandler);
+    this.onCustomDragStart(this.dragStartCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.onCustomSwipeRight(this.swipeRightCustomHandler);
-    this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
+    this.onCustomPinchStart(this.pinchStartCustomHandler);
 
     this.onClick(this.clickHandler);
 
@@ -297,13 +302,14 @@ class View extends Element {
 
   willUnmount() {
     this.offCustomTap(this.tapCustomHandler);
-    this.offCustomDrag(this.dragCustomHandler);
+    this.offCustomDragMove(this.dragMoveCustomHandler);
+    this.offCustomDragStart(this.dragStartCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
     this.offCustomSwipeRight(this.swipeRightCustomHandler);
-    this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
+    this.offCustomPinchStart(this.pinchStartCustomHandler);
 
     this.disableTouch();
 
