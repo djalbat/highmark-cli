@@ -419,13 +419,11 @@ function endHandler(event, element, positionsFromEvent) {
   const positionsMatch = matchPositions(startPositions, movingPositions);
 
   if (positionsMatch) {
-    let customEventType = null,
-        projectedVelocity;
+    let speed,
+        customEventType = null;
 
     if (movingPositionsLength === 0) {
       customEventType = TAP_CUSTOM_EVENT_TYPE;
-
-      projectedVelocity = 0;
     } else if (startPositionsLength === 1) {
       const firstStartPosition = first(startPositions),
             firstMovingPosition = first(movingPositions),
@@ -433,44 +431,43 @@ function endHandler(event, element, positionsFromEvent) {
             secondPosition = firstMovingPosition, ///
             relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
             direction = relativePosition.getDirection(),
-            speed = relativePosition.getSpeed(),
             time = relativePosition.getTime();
+
+      speed = relativePosition.getSpeed();
 
       if (speed === 0) {
         if (time < MAXIMUM_TAP_TIME) {
           customEventType = TAP_CUSTOM_EVENT_TYPE;
-
-          projectedVelocity = speed;  ///
         }
       } else if (speed > MINIMUM_SWIPE_SPEED) {
         if ((Math.abs(direction)) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
 
-          projectedVelocity = speed * Math.cos(direction);
+          speed = speed * Math.cos(direction);
         }
 
         if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
 
-          projectedVelocity = speed * Math.sin(direction);
+          speed = speed * Math.sin(direction);
         }
 
         if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
 
-          projectedVelocity = speed * Math.sin(direction);
+          speed = speed * Math.sin(direction);
         }
 
         if ((PI - Math.abs(direction)) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
 
-          projectedVelocity = speed * Math.cos(direction);
+          speed = speed * Math.cos(direction);
         }
       }
     }
 
     if (customEventType !== null) {
-      this.callCustomHandlers(customEventType, event, element, projectedVelocity);
+      this.callCustomHandlers(customEventType, event, element, speed);
     }
   }
 

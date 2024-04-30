@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { SHOW_DELAY, ZOOM_RATIO, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
+import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DOWN_DIRECTION, DECELERATION, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -48,12 +48,16 @@ class View extends Element {
     this.showRightLeftDiv();
   }
 
-  swipeDownCustomHandler = (event, element) => {
-    // this.hideNavigation();
+  swipeDownCustomHandler = (event, element, speed) => {
+    const direction = DOWN_DIRECTION;
+
+    this.swipe(speed, direction);
   }
 
-  swipeUpCustomHandler = (event, element) => {
-    // this.showNavigation();
+  swipeUpCustomHandler = (event, element, speed) => {
+    const direction = UP_DIRECTION;
+
+    this.swipe(speed, direction);
   }
 
   dragStartCustomHandler = (event, element) => {
@@ -133,16 +137,6 @@ class View extends Element {
     }
   }
 
-  zoomIn() {
-    let zoom = this.getZoom();
-
-    zoom *= ZOOM_RATIO;
-
-    this.setZoom(zoom);
-
-    this.zoom(zoom);
-  }
-
   zoomOut() {
     let zoom = this.getZoom();
 
@@ -153,10 +147,54 @@ class View extends Element {
     this.zoom(zoom);
   }
 
+  zoomIn() {
+    let zoom = this.getZoom();
+
+    zoom *= ZOOM_RATIO;
+
+    this.setZoom(zoom);
+
+    this.zoom(zoom);
+  }
+
   zoom(zoom) {
     const showingLeafDiv = this.findShowingLeafDiv();
 
     showingLeafDiv.zoom(zoom);
+  }
+
+  swipe(speed, direction) {
+    let scrollTop = this.getScrollTop();
+
+    scrollTop += speed * SCROLL_DELAY;
+
+    this.setScrollTop(scrollTop);
+
+    let interval = this.getInterval();
+
+    if (interval !== null) {
+      clearInterval(interval);
+    }
+
+    interval = setInterval(() => {
+      speed = speed - direction * DECELERATION;
+
+      if ((speed * direction) < 0) {
+        clearInterval(interval);
+
+        interval = null;
+
+        this.setInterval(interval);
+      }
+
+      let scrollTop = this.getScrollTop();
+
+      scrollTop += speed * SCROLL_DELAY;
+
+      this.setScrollTop(scrollTop);
+    }, SCROLL_DELAY);
+
+    this.setInterval(interval);
   }
 
   showFirstLeftDiv() {
@@ -276,6 +314,18 @@ class View extends Element {
     });
   }
 
+  getInterval() {
+    const { interval } = this.getState();
+
+    return interval;
+  }
+
+  setInterval(interval) {
+    this.updateState({
+      interval
+    });
+  }
+
   getStartZoom() {
     const { startZoom } = this.getState();
 
@@ -303,12 +353,14 @@ class View extends Element {
   setInitialState() {
     const zoom = 1,
           leafDivs = this.retrieveLeafDivs(),
+          interval = null,
           startZoom = null,
           startScrollTop = null;
 
     this.setState({
       zoom,
       leafDivs,
+      interval,
       startZoom,
       startScrollTop
     });
