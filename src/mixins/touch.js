@@ -8,7 +8,7 @@ import RelativePosition from "../position/relative";
 
 import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
 import { TAP_CUSTOM_EVENT_TYPE,
-         PAN_CUSTOM_EVENT_TYPE,
+         DRAG_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
@@ -21,10 +21,12 @@ const { push, clear, filter, first, second } = arrayUtilities;
 let count = 0;
 
 function enableTouch() {
-  const startPositions = [],
+  const startMagnitude = null,
+        startPositions = [],
         movingPositions = [];
 
   this.updateState({
+    startMagnitude,
     startPositions,
     movingPositions
   });
@@ -64,16 +66,16 @@ function offCustomTap(tapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomPan(panCustomHandler, element) {
-  const customEventType = PAN_CUSTOM_EVENT_TYPE,
-        customHandler = panCustomHandler; ///
+function onCustomDrag(dragCustomHandler, element) {
+  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
+        customHandler = dragCustomHandler; ///
 
   this.onCustomEvent(customEventType, customHandler, element);
 }
 
-function offCustomPan(panCustomHandler, element) {
-  const customEventType = PAN_CUSTOM_EVENT_TYPE,
-        customHandler = panCustomHandler; ///
+function offCustomDrag(dragCustomHandler, element) {
+  const customEventType = DRAG_CUSTOM_EVENT_TYPE,
+        customHandler = dragCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -162,6 +164,18 @@ function offCustomPinchMove(pinchMoveCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
+function getStartMagnitude() {
+  const { startMagnitude } = this.getState();
+
+  return startMagnitude;
+}
+
+function setStartMagnitude(startMagnitude) {
+  this.updateState({
+    startMagnitude
+  });
+}
+
 function getStartPositions() {
   const { startPositions } = this.getState();
 
@@ -208,7 +222,7 @@ function mouseDownHandler(event, element) {
 function touchMoveHandler(event, element) {
   this.moveHandler(event, element, (event) => {
     const touchEvent = event, ///
-          changed = true,
+          changed = false,
           positions = positionsFromTouchEvent(touchEvent, changed);
 
     return positions;
@@ -257,10 +271,13 @@ function startHandler(event, element, positionsFromEvent) {
     const firstStartPosition = first(startPositions),
           secondStartPosition = second(startPositions),
           relativeStartPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstStartPosition, secondStartPosition),
-          customEventType = PINCH_START_CUSTOM_EVENT_TYPE,
-          magnitude = relativeStartPosition.getMagnitude();
+          magnitude = relativeStartPosition.getMagnitude(),
+          startMagnitude = magnitude, ///
+          customEventType = PINCH_START_CUSTOM_EVENT_TYPE;
 
-    this.callCustomHandlers(customEventType, event, element, magnitude);
+    this.setStartMagnitude(startMagnitude);
+
+    this.callCustomHandlers(customEventType, event, element);
   }
 }
 
@@ -283,7 +300,7 @@ function moveHandler(event, element, positionsFromEvent) {
           firstPosition = firstStartPosition, ///
           secondPosition = firstMovingPosition, ///
           relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
-          customEventType = PAN_CUSTOM_EVENT_TYPE,
+          customEventType = DRAG_CUSTOM_EVENT_TYPE,
           left = relativePosition.getLeft(),
           top = relativePosition.getTop();
 
@@ -295,9 +312,11 @@ function moveHandler(event, element, positionsFromEvent) {
           secondMovingPosition = second(movingPositions),
           relativeMovingPosition = RelativePosition.fromFirstPositionAndSecondPosition(firstMovingPosition, secondMovingPosition),
           customEventType = PINCH_MOVE_CUSTOM_EVENT_TYPE,
-          magnitude = relativeMovingPosition.getMagnitude();
+          startMagnitude = this.getStartMagnitude(),
+          magnitude = relativeMovingPosition.getMagnitude(),
+          ratio = magnitude / startMagnitude;
 
-    this.callCustomHandlers(customEventType, event, element, magnitude);
+    this.callCustomHandlers(customEventType, event, element, ratio);
   }
 }
 
@@ -306,9 +325,17 @@ function endHandler(event, element, positionsFromEvent) {
         startPositions = this.getStartPositions(),
         movingPositions = this.getMovingPositions();
 
-  const startPositionsLength = startPositions.length;
+  const startPositionsLength = startPositions.length,
+        movingPositionsLength = movingPositions.length;
 
-  if (startPositionsLength === 1) {
+  let customEventType = null,
+      projectedVelocity;
+
+  if (movingPositionsLength === 0) {
+    customEventType = TAP_CUSTOM_EVENT_TYPE;
+
+    projectedVelocity = 0;
+  } else if (startPositionsLength === 1) {
     const firstStartPosition = first(startPositions),
           firstMovingPosition = first(movingPositions),
           firstPosition = firstStartPosition, ///
@@ -317,9 +344,6 @@ function endHandler(event, element, positionsFromEvent) {
           direction = relativePosition.getDirection(),
           speed = relativePosition.getSpeed(),
           time = relativePosition.getTime();
-
-    let customEventType = null,
-        projectedVelocity;
 
     if (speed === 0) {
       if (time < MAXIMUM_TAP_TIME) {
@@ -352,10 +376,10 @@ function endHandler(event, element, positionsFromEvent) {
         projectedVelocity = speed * Math.cos(direction);
       }
     }
+  }
 
-    if (customEventType !== null) {
-      this.callCustomHandlers(customEventType, event, element, projectedVelocity);
-    }
+  if (customEventType !== null) {
+    this.callCustomHandlers(customEventType, event, element, projectedVelocity);
   }
 
   filterPositions(startPositions, positions);
@@ -368,8 +392,8 @@ const touchMixins = {
   disableTouch,
   onCustomTap,
   offCustomTap,
-  onCustomPan,
-  offCustomPan,
+  onCustomDrag,
+  offCustomDrag,
   onCustomSwipeUp,
   offCustomSwipeUp,
   onCustomSwipeDown,
@@ -382,6 +406,8 @@ const touchMixins = {
   offCustomPinchStart,
   onCustomPinchMove,
   offCustomPinchMove,
+  getStartMagnitude,
+  setStartMagnitude,
   getStartPositions,
   setStartPositions,
   getMovingPositions,

@@ -24,24 +24,20 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
-  pinchMoveCustomHandler = (event, element, magnitude) => {
-    const startMagnitude = this.getStartMagnitude(),
-          startZoom = this.getStartZoom(),
-          zoom = startZoom * (magnitude / startMagnitude);
+  pinchMoveCustomHandler = (event, element, ratio) => {
+    const startZoom = this.getStartZoom(),
+          zoom = startZoom * Math.sqrt(ratio);
 
     this.setZoom(zoom);
 
     this.zoom(zoom);
   }
 
-  pinchStartCustomHandler = (event, element, magnitude) => {
+  pinchStartCustomHandler = (event, element) => {
     const zoom = this.getZoom(),
-          startZoom = zoom, ///
-          startMagnitude = magnitude; ///
+          startZoom = zoom; ///
 
     this.setStartZoom(startZoom);
-
-    this.setStartMagnitude(startMagnitude);
   }
 
   swipeRightCustomHandler = (event, element) => {
@@ -60,7 +56,7 @@ class View extends Element {
     this.showNavigation();
   }
 
-  panCustomHandler = (event, element, top, left) => {
+  dragCustomHandler = (event, element, top, left) => {
     console.log(top, left)
   }
 
@@ -270,29 +266,15 @@ class View extends Element {
     });
   }
 
-  getStartMagnitude() {
-    const { startMagnitude } = this.getState();
-
-    return startMagnitude;
-  }
-
-  setStartMagnitude(startMagnitude) {
-    this.updateState({
-      startMagnitude
-    });
-  }
-
   setInitialState() {
     const zoom = 1,
           leafDivs = this.retrieveLeafDivs(),
-          startZoom = null,
-          startMagnitude = null;
+          startZoom = null;
 
     this.setState({
       zoom,
       leafDivs,
-      startZoom,
-      startMagnitude
+      startZoom
     });
   }
 
@@ -300,7 +282,7 @@ class View extends Element {
     this.enableTouch();
 
     this.onCustomTap(this.tapCustomHandler);
-    this.onCustomPan(this.panCustomHandler);
+    this.onCustomDrag(this.dragCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
@@ -315,7 +297,7 @@ class View extends Element {
 
   willUnmount() {
     this.offCustomTap(this.tapCustomHandler);
-    this.offCustomPan(this.panCustomHandler);
+    this.offCustomDrag(this.dragCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
