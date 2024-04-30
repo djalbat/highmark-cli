@@ -3,21 +3,24 @@
 import { window } from "easy";
 import { arrayUtilities } from "necessary";
 
-import Position from "../position";
 import RelativePosition from "../position/relative";
 
-import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SWIPE_RANGE } from "../constants";
+import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
+import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
 import { TAP_CUSTOM_EVENT_TYPE,
-         SWIPE_UP_CUSTOM_EVENT_TYPE,
-         DRAG_MOVE_CUSTOM_EVENT_TYPE,
+         DRAG_UP_CUSTOM_EVENT_TYPE,
+         DRAG_DOWN_CUSTOM_EVENT_TYPE,
+         DRAG_LEFT_CUSTOM_EVENT_TYPE,
+         DRAG_RIGHT_CUSTOM_EVENT_TYPE,
          DRAG_START_CUSTOM_EVENT_TYPE,
+         SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
-         PINCH_MOVE_CUSTOM_EVENT_TYPE,
          SWIPE_RIGHT_CUSTOM_EVENT_TYPE,
+         PINCH_MOVE_CUSTOM_EVENT_TYPE,
          PINCH_START_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
-const { push, clear, filter, first, second } = arrayUtilities;
+const { push, first, second } = arrayUtilities;
 
 function enableTouch() {
   const startMagnitude = null,
@@ -65,16 +68,58 @@ function offCustomTap(tapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
-function onCustomDragMove(dragMoveCustomHandler, element) {
-  const customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
-        customHandler = dragMoveCustomHandler; ///
+function onCustomDragUp(dragUpCustomHandler, element) {
+  const customEventType = DRAG_UP_CUSTOM_EVENT_TYPE,
+        customHandler = dragUpCustomHandler; ///
 
   this.onCustomEvent(customEventType, customHandler, element);
 }
 
-function offCustomDragMove(dragMoveCustomHandler, element) {
-  const customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
-        customHandler = dragStartCustomHandler; ///
+function offCustomDragUp(dragUpCustomHandler, element) {
+  const customEventType = DRAG_UP_CUSTOM_EVENT_TYPE,
+        customHandler = dragUpCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomDragDown(dragDownCustomHandler, element) {
+  const customEventType = DRAG_DOWN_CUSTOM_EVENT_TYPE,
+        customHandler = dragDownCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomDragDown(dragDownCustomHandler, element) {
+  const customEventType = DRAG_DOWN_CUSTOM_EVENT_TYPE,
+        customHandler = dragDownCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomDragLeft(dragLeftCustomHandler, element) {
+  const customEventType = DRAG_LEFT_CUSTOM_EVENT_TYPE,
+        customHandler = dragLeftCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomDragLeft(dragLeftCustomHandler, element) {
+  const customEventType = DRAG_LEFT_CUSTOM_EVENT_TYPE,
+        customHandler = dragLeftCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
+function onCustomDragRight(dragRightCustomHandler, element) {
+  const customEventType = DRAG_RIGHT_CUSTOM_EVENT_TYPE,
+        customHandler = dragRightCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomDragRight(dragRightCustomHandler, element) {
+  const customEventType = DRAG_RIGHT_CUSTOM_EVENT_TYPE,
+        customHandler = dragRightCustomHandler; ///
 
   this.offCustomEvent(customEventType, customHandler, element);
 }
@@ -280,6 +325,12 @@ function startHandler(event, element, positionsFromEvent) {
 
   const startingPositionsLength = startPositions.length;
 
+  if (startingPositionsLength === 1) {
+    const customEventType = DRAG_START_CUSTOM_EVENT_TYPE;
+
+    this.callCustomHandlers(customEventType, event, element);
+  }
+
   if (startingPositionsLength === 2) {
     const firstStartPosition = first(startPositions),
           secondStartPosition = second(startPositions),
@@ -316,11 +367,32 @@ function moveHandler(event, element, positionsFromEvent) {
             firstPosition = firstStartPosition, ///
             secondPosition = firstMovingPosition, ///
             relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
-            customEventType = DRAG_MOVE_CUSTOM_EVENT_TYPE,
-            left = relativePosition.getLeft(),
-            top = relativePosition.getTop();
+            direction = relativePosition.getDirection();
 
-      this.callCustomHandlers(customEventType, event, element, top, left);
+      let customEventType = null;
+
+      if ((Math.abs(direction)) < MAXIMUM_SPREAD) {
+        customEventType = DRAG_RIGHT_CUSTOM_EVENT_TYPE;
+      }
+
+      if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
+        customEventType = DRAG_UP_CUSTOM_EVENT_TYPE;
+      }
+
+      if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
+        customEventType = DRAG_DOWN_CUSTOM_EVENT_TYPE;
+      }
+
+      if ((PI - Math.abs(direction)) < MAXIMUM_SPREAD) {
+        customEventType = DRAG_LEFT_CUSTOM_EVENT_TYPE;
+      }
+
+      if (customEventType !== null) {
+        const top = relativePosition.getTop(),
+              left = relativePosition.getLeft();
+
+        this.callCustomHandlers(customEventType, event, element, top, left);
+      }
     }
 
     if (movingPositionsLength === 2) {
@@ -371,25 +443,25 @@ function endHandler(event, element, positionsFromEvent) {
           projectedVelocity = speed;  ///
         }
       } else if (speed > MINIMUM_SWIPE_SPEED) {
-        if ((Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+        if ((Math.abs(direction)) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_RIGHT_CUSTOM_EVENT_TYPE;
 
           projectedVelocity = speed * Math.cos(direction);
         }
 
-        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+        if (Math.abs(PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE;
 
           projectedVelocity = speed * Math.sin(direction);
         }
 
-        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SWIPE_RANGE) {
+        if (Math.abs(-PI_OVER_TWO - direction) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_DOWN_CUSTOM_EVENT_TYPE;
 
           projectedVelocity = speed * Math.sin(direction);
         }
 
-        if ((PI - Math.abs(direction)) < MAXIMUM_SWIPE_RANGE) {
+        if ((PI - Math.abs(direction)) < MAXIMUM_SPREAD) {
           customEventType = SWIPE_LEFT_CUSTOM_EVENT_TYPE;
 
           projectedVelocity = speed * Math.cos(direction);
@@ -412,8 +484,14 @@ const touchMixins = {
   disableTouch,
   onCustomTap,
   offCustomTap,
-  onCustomDragMove,
-  offCustomDragMove,
+  onCustomDragUp,
+  offCustomDragUp,
+  onCustomDragDown,
+  offCustomDragDown,
+  onCustomDragLeft,
+  offCustomDragLeft,
+  onCustomDragRight,
+  offCustomDragRight,
   onCustomDragStart,
   offCustomDragStart,
   onCustomSwipeUp,
@@ -446,122 +524,3 @@ const touchMixins = {
 };
 
 export default touchMixins;
-
-function sortPositions(positionsA, positionsB) {
-  const positionAMap = positionsA.reduce((positionAMap, positionA) => {
-    const identifier = positionA.getIdentifier();
-
-    positionAMap[identifier] = positionA;
-
-    return positionAMap;
-  }, {});
-
-  clear(positionsA);
-
-  positionsB.forEach((positionB) => {
-    const identifier = positionB.getIdentifier(),
-          positionA = positionAMap[identifier];
-
-    positionsA.push(positionA);
-  });
-}
-
-function matchPositions(positionsA, positionsB) {
-  let positionsMatch = false;
-
-  const positionsALength = positionsA.length,
-        positionsBLength = positionsB.length;
-
-  if (positionsALength === positionsBLength) {
-    const identifiersA = identifiersFromPositions(positionsA),
-          identifiersB = identifiersFromPositions(positionsB);
-
-    identifiersA.sort();
-
-    identifiersB.sort();
-
-    const identifiersMatch = identifiersA.every((identifierA, index) => {
-      const identifierB = identifiersB[index];
-
-      if (identifierA === identifierB) {
-        return true;
-      }
-    });
-
-    positionsMatch = identifiersMatch;  ///
-  }
-
-  return positionsMatch;
-}
-
-function filterPositions(positionsA, positionsB) {
-  filter(positionsA, (positionA) => {
-    const matches = positionsB.some((positionB) => {
-      const matches = positionA.match(positionB);
-
-      if (matches) {
-        return true;
-      }
-    });
-
-    if (!matches) {
-      return true;
-    }
-  });
-}
-
-function compressPositions(positions) {
-  const positionMap = positions.reduce((positionMap, position) => {
-    const identifier = position.getIdentifier();
-
-    positionMap[identifier] = position;
-
-    return positionMap;
-  }, {});
-
-  positions = Object.values(positionMap);
-
-  return positions;
-}
-
-function positionsFromMouseEvent(mouseEvent) {
-  const position = Position.fromMouseEvent(mouseEvent),
-        positions = [
-          position
-        ];
-
-  return positions;
-}
-
-function positionsFromTouchEvent(touchEvent, changed = true) {
-  let touchesNodeList;
-
-  if (changed) {
-    ({ changedTouches: touchesNodeList } = touchEvent);
-  } else {
-    ({ touches: touchesNodeList } = touchEvent);
-  }
-
-  const touches = [
-          ...touchesNodeList
-        ],
-        positions = touches.map((touch) => {
-          const position = Position.fromTouch(touch);
-
-          return position;
-        });
-
-  compressPositions(positions);
-
-  return positions;
-}
-
-function identifiersFromPositions(positions) {
-  const identifiers = positions.map((position) => {
-    const identifier = position.getIdentifier();
-
-    return identifier;
-  });
-
-  return identifiers;
-}

@@ -49,19 +49,32 @@ class View extends Element {
   }
 
   swipeDownCustomHandler = (event, element) => {
-    this.hideNavigation();
+    // this.hideNavigation();
   }
 
   swipeUpCustomHandler = (event, element) => {
-    this.showNavigation();
+    // this.showNavigation();
   }
 
-  dragStartCustomHandler = (event, element, top, left) => {
-    console.log("start", top, left)
+  dragStartCustomHandler = (event, element) => {
+    const scrollTop = this.getScrollTop(),
+          startScrollTop = scrollTop; ///
+
+    this.setStartScrollTop(startScrollTop);
   }
 
-  dragMoveCustomHandler = (event, element, top, left) => {
-    console.log("move", top, left)
+  dragDownCustomHandler = (event, element, top, left) => {
+    const startScrollTop = this.getStartScrollTop(),
+          scrollTop = startScrollTop - top;
+
+    this.setScrollTop(scrollTop);
+  }
+
+  dragUpCustomHandler = (event, element, top, left) => {
+    const startScrollTop = this.getStartScrollTop(),
+          scrollTop = startScrollTop - top;
+
+    this.setScrollTop(scrollTop);
   }
 
   tapCustomHandler = (event, element) => {
@@ -180,7 +193,8 @@ class View extends Element {
     const showingLeafDiv = this.findShowingLeafDiv(),
           leafDivs = this.getLeafDivs(),
           index = leafDivs.indexOf(showingLeafDiv),
-          nextIndex = leafDivs.length - 1,
+          leafDivsLength = leafDivs.length,
+          nextIndex = leafDivsLength - 1,
           previousIndex = index;  ///
 
     this.showNextLeafDiv(nextIndex, previousIndex);
@@ -203,6 +217,10 @@ class View extends Element {
     nextLeafDiv.zoom(zoom);
 
     setTimeout(() => {
+      const scrollTop = 0;
+
+      nextLeafDiv.setScrollTop(scrollTop);
+
       nextLeafDiv.show();
     }, SHOW_DELAY);
   }
@@ -270,15 +288,29 @@ class View extends Element {
     });
   }
 
+  getStartScrollTop() {
+    const { startScrollTop } = this.getState();
+
+    return startScrollTop;
+  }
+
+  setStartScrollTop(startScrollTop) {
+    this.updateState({
+      startScrollTop
+    });
+  }
+
   setInitialState() {
     const zoom = 1,
           leafDivs = this.retrieveLeafDivs(),
-          startZoom = null;
+          startZoom = null,
+          startScrollTop = null;
 
     this.setState({
       zoom,
       leafDivs,
-      startZoom
+      startZoom,
+      startScrollTop
     });
   }
 
@@ -286,7 +318,8 @@ class View extends Element {
     this.enableTouch();
 
     this.onCustomTap(this.tapCustomHandler);
-    this.onCustomDragMove(this.dragMoveCustomHandler);
+    this.onCustomDragUp(this.dragUpCustomHandler);
+    this.onCustomDragDown(this.dragDownCustomHandler);
     this.onCustomDragStart(this.dragStartCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
@@ -302,7 +335,8 @@ class View extends Element {
 
   willUnmount() {
     this.offCustomTap(this.tapCustomHandler);
-    this.offCustomDragMove(this.dragMoveCustomHandler);
+    this.offCustomDragUp(this.dragUpCustomHandler);
+    this.offCustomDragDown(this.dragDownCustomHandler);
     this.offCustomDragStart(this.dragStartCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
