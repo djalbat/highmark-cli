@@ -24,6 +24,14 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
+  doubleTapCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    nativeGesturesEnabled ?
+      this.disableNativeGestures() :
+        this.enableNativeGestures();
+  }
+
   pinchStartCustomHandler = (event, element) => {
     const nativeGesturesEnabled = this.areNativeGesturesEnabled();
 
@@ -136,11 +144,7 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    nativeGesturesEnabled ?
-      this.disableNativeGestures() :
-        this.enableNativeGestures();
+    debugger
   }
 
   keyDownHandler = (event, element) => {
@@ -451,6 +455,7 @@ class View extends Element {
     this.onCustomSwipeRight(this.swipeRightCustomHandler);
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
     this.onCustomPinchStart(this.pinchStartCustomHandler);
+    this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
     this.onClick(this.clickHandler);
 
@@ -468,6 +473,7 @@ class View extends Element {
     this.offCustomSwipeRight(this.swipeRightCustomHandler);
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
+    this.offCustomDoubleTap(this.doubleTapCustomHandler);
 
     this.disableTouch();
 
@@ -509,7 +515,7 @@ Object.assign(View.prototype, touchMixins);
 export default withStyle(View)`
 
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
   overflow: hidden;
   touch-action: none;
   

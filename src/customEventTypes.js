@@ -12,3 +12,4 @@ export const SWIPE_LEFT_CUSTOM_EVENT_TYPE = "swipe-left";
 export const SWIPE_RIGHT_CUSTOM_EVENT_TYPE = "swipe-right";
 export const PINCH_MOVE_CUSTOM_EVENT_TYPE = "pinch-move";
 export const PINCH_START_CUSTOM_EVENT_TYPE = "pinch-start";
+export const DOUBLE_TAP_CUSTOM_EVENT_TYPE = "double-tap";
