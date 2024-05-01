@@ -82,7 +82,7 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
-    ///
+
   }
 
   keyDownHandler = (event, element) => {
