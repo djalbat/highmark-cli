@@ -5,7 +5,7 @@ import { arrayUtilities } from "necessary";
 
 import RelativePosition from "../position/relative";
 
-import { PI, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
+import { PI, TAP_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
 import { TAP_CUSTOM_EVENT_TYPE,
          DRAG_UP_CUSTOM_EVENT_TYPE,
@@ -24,11 +24,13 @@ import { TAP_CUSTOM_EVENT_TYPE,
 const { push, first, second } = arrayUtilities;
 
 function enableTouch() {
-  const startMagnitude = null,
+  const tapInterval = null,
+        startMagnitude = null,
         startPositions = [],
         movingPositions = [];
 
   this.updateState({
+    tapInterval,
     startMagnitude,
     startPositions,
     movingPositions
@@ -237,6 +239,18 @@ function offCustomDoubleTap(doubleTapCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
+function getTapInterval() {
+  const { tapInterval } = this.getState();
+
+  return tapInterval;
+}
+
+function setTapInterval(tapInterval) {
+  this.updateState({
+    tapInterval
+  });
+}
+
 function getStartMagnitude() {
   const { startMagnitude } = this.getState();
 
@@ -386,7 +400,7 @@ function endHandler(event, element, positionsFromEvent) {
           movingPositionsLength = movingPositions.length;
 
     if (movingPositionsLength === 0) {
-      this.tap(event, element);
+      this.tapOrDoubleTap(event, element);
     } else if (startPositionsLength === 1) {
       this.possibleTap(event, element);
 
@@ -485,6 +499,12 @@ function swipe(event, element, speed, direction) {
   }
 }
 
+function doubleTap(event, element) {
+  const customEventType = DOUBLE_TAP_CUSTOM_EVENT_TYPE;
+
+  this.callCustomHandlers(customEventType, event, element);
+}
+
 function dragStart(event, element) {
   const customEventType = DRAG_START_CUSTOM_EVENT_TYPE;
 
@@ -517,7 +537,7 @@ function possibleTap(event, element) {
         speed = relativePosition.getSpeed();
 
   if ((speed === 0) && (time < MAXIMUM_TAP_TIME)){
-    this.tap(event, element);
+    this.tapOrDoubleTap(event, element);
   }
 }
 
@@ -529,13 +549,38 @@ function possibleSwipe(event, element) {
         firstPosition = firstStartPosition, ///
         secondPosition = firstMovingPosition, ///
         relativePosition = RelativePosition.fromFirstPositionAndSecondPosition(firstPosition, secondPosition),
-        direction = relativePosition.getDirection();
-
-  let speed = relativePosition.getSpeed();
+        direction = relativePosition.getDirection(),
+        speed = relativePosition.getSpeed();
 
   if (speed > MINIMUM_SWIPE_SPEED) {
     this.swipe(event, element, speed, direction);
   }
+}
+
+function tapOrDoubleTap(event, element) {
+  let tapInterval = this.getTapInterval();
+
+  if (tapInterval !== null) {
+    clearTimeout(tapInterval);
+
+    tapInterval = null;
+
+    this.setTapInterval(tapInterval);
+
+    this.doubleTap(event, element);
+
+    return;
+  }
+
+  tapInterval = setTimeout(() => {
+    tapInterval = null;
+
+    this.setTapInterval(tapInterval);
+
+    this.tap(event, element);
+  }, TAP_DELAY);
+
+  this.setTapInterval(tapInterval);
 }
 
 const touchMixins = {
@@ -567,6 +612,8 @@ const touchMixins = {
   offCustomPinchStart,
   onCustomDoubleTap,
   offCustomDoubleTap,
+  getTapInterval,
+  setTapInterval,
   getStartMagnitude,
   setStartMagnitude,
   getStartPositions,
@@ -586,10 +633,12 @@ const touchMixins = {
   drag,
   pinch,
   swipe,
+  doubleTap,
   dragStart,
   pinchStart,
   possibleTap,
-  possibleSwipe
+  possibleSwipe,
+  tapOrDoubleTap
 };
 
 export default touchMixins;

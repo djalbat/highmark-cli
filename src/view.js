@@ -25,11 +25,7 @@ const { ENTER_KEY_CODE,
 
 class View extends Element {
   doubleTapCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    nativeGesturesEnabled ?
-      this.disableNativeGestures() :
-        this.enableNativeGestures();
+    this.enableNativeGestures();
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -89,7 +85,7 @@ class View extends Element {
 
     const direction = DOWN_DIRECTION;
 
-    this.swipe(speed, direction);
+    this.scroll(speed, direction);
   }
 
   swipeUpCustomHandler = (event, element, speed) => {
@@ -101,7 +97,7 @@ class View extends Element {
 
     const direction = UP_DIRECTION;
 
-    this.swipe(speed, direction);
+    this.scroll(speed, direction);
   }
 
   dragStartCustomHandler = (event, element) => {
@@ -144,7 +140,7 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
-    debugger
+    this.disableNativeGestures();
   }
 
   keyDownHandler = (event, element) => {
@@ -225,7 +221,7 @@ class View extends Element {
     displayedLeafDiv.zoom(zoom);
   }
 
-  swipe(speed, direction) {
+  scroll(speed, direction) {
     let scrollTop = this.getScrollTop();
 
     scrollTop += speed * SCROLL_DELAY;
@@ -524,3 +520,5 @@ export default withStyle(View)`
   }
     
 `;
+
+let count = 0;
