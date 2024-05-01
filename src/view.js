@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DOWN_DIRECTION, DECELERATION, MAXIMUM_CLICK_WIDTH_RATIO } from "./constants";
+import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -178,20 +178,6 @@ class View extends Element {
 
         break;
       }
-    }
-  }
-
-  clickHandler = (event, element) => {
-    const { pageX } = event,
-          width = this.getWidth(),
-          clickWidthRatio = pageX / width;
-
-    if (clickWidthRatio < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.zoomOut();
-    }
-
-    if ((1 - clickWidthRatio) < MAXIMUM_CLICK_WIDTH_RATIO) {
-      this.zoomIn();
     }
   }
 
@@ -453,8 +439,6 @@ class View extends Element {
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
-    this.onClick(this.clickHandler);
-
     window.onKeyDown(this.keyDownHandler);
   }
 
@@ -472,8 +456,6 @@ class View extends Element {
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
 
     this.disableTouch();
-
-    this.offClick(this.clickHandler);
 
     window.offKeyDown(this.keyDownHandler);
   }
