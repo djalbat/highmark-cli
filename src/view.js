@@ -492,8 +492,8 @@ Object.assign(View.prototype, touchMixins);
 
 export default withStyle(View)`
 
-  width: 100vw;
-  height: 85vh;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   touch-action: none;
   
