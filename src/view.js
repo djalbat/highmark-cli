@@ -24,6 +24,13 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
+  pinchStartCustomHandler = (event, element) => {
+    const zoom = this.getZoom(),
+          startZoom = zoom; ///
+
+    this.setStartZoom(startZoom);
+  }
+
   pinchMoveCustomHandler = (event, element, ratio) => {
     const startZoom = this.getStartZoom(),
           zoom = startZoom * Math.sqrt(ratio);
@@ -31,13 +38,6 @@ class View extends Element {
     this.setZoom(zoom);
 
     this.zoom(zoom);
-  }
-
-  pinchStartCustomHandler = (event, element) => {
-    const zoom = this.getZoom(),
-          startZoom = zoom; ///
-
-    this.setStartZoom(startZoom);
   }
 
   swipeRightCustomHandler = (event, element) => {
@@ -158,9 +158,9 @@ class View extends Element {
   }
 
   zoom(zoom) {
-    const showingLeafDiv = this.findShowingLeafDiv();
+    const displayedLeafDiv = this.findDisplayedLeafDiv();
 
-    showingLeafDiv.zoom(zoom);
+    displayedLeafDiv.zoom(zoom);
   }
 
   swipe(speed, direction) {
@@ -198,9 +198,9 @@ class View extends Element {
   }
 
   showFirstLeftDiv() {
-    const showingLeafDiv = this.findShowingLeafDiv(),
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(showingLeafDiv),
+          index = leafDivs.indexOf(displayedLeafDiv),
           nextIndex = 0,
           previousIndex = index;  ///
 
@@ -208,9 +208,9 @@ class View extends Element {
   }
 
   showLeftLeafDiv() {
-    const showingLeafDiv = this.findShowingLeafDiv(),
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(showingLeafDiv),
+          index = leafDivs.indexOf(displayedLeafDiv),
           nextIndex = index - 1,
           previousIndex = index;  ///
 
@@ -218,9 +218,9 @@ class View extends Element {
   }
 
   showRightLeftDiv() {
-    const showingLeafDiv = this.findShowingLeafDiv(),
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(showingLeafDiv),
+          index = leafDivs.indexOf(displayedLeafDiv),
           nextIndex = index + 1,
           previousIndex = index;  ///
 
@@ -228,9 +228,9 @@ class View extends Element {
   }
 
   showLastLeafDiv() {
-    const showingLeafDiv = this.findShowingLeafDiv(),
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(showingLeafDiv),
+          index = leafDivs.indexOf(displayedLeafDiv),
           leafDivsLength = leafDivs.length,
           nextIndex = leafDivsLength - 1,
           previousIndex = index;  ///
@@ -269,17 +269,17 @@ class View extends Element {
     leafDivs.forEach(callback);
   }
 
-  findShowingLeafDiv() {
+  findDisplayedLeafDiv() {
     const leafDivs = this.getLeafDivs(),
-          showingLeafDiv = leafDivs.find((leafDiv) => {
-            const showing = leafDiv.isShowing();
+          displayedLeafDiv = leafDivs.find((leafDiv) => {
+            const displayed = leafDiv.isDisplayed();
 
-            if (showing) {
+            if (displayed) {
               return true;
             }
           });
 
-    return showingLeafDiv;
+    return displayedLeafDiv;
   }
 
   retrieveLeafDivs() {
@@ -438,7 +438,7 @@ export default withStyle(View)`
 
   width: 100vw;
   height: 100vh;
-  overflow: scroll;
+  overflow: hidden;
   touch-action: none;
     
 `;
