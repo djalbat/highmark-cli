@@ -520,5 +520,3 @@ export default withStyle(View)`
   }
     
 `;
-
-let count = 0;
