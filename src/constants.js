@@ -14,3 +14,4 @@ export const DOWN_DIRECTION = -1;
 export const MAXIMUM_SPREAD = PI / 4;
 export const MAXIMUM_TAP_TIME = 125;
 export const MINIMUM_SWIPE_SPEED = 1;
+export const MENU_DIV_SWIPE_BOTTOM = 100;

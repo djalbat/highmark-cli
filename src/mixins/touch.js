@@ -5,6 +5,7 @@ import { arrayUtilities } from "necessary";
 
 import RelativePosition from "../position/relative";
 
+import { TOUCHSTART_EVENT_TYPE, TOUCHMOVE_EVENT_TYPE, TOUCHEND_EVENT_TYPE } from "../eventTypes";
 import { PI, TAP_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
 import { TAP_CUSTOM_EVENT_TYPE,
@@ -55,6 +56,48 @@ function disableTouch() {
   this.offTouchStart(this.touchStartHandler);
   this.offTouchMove(this.touchMoveHandler);
   this.offTouchEnd(this.touchEndHandler);
+}
+
+function onTouchStart(touchStartHandler) {
+  const eventType = TOUCHSTART_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.onEvent(eventType, handler);
+}
+
+function offTouchStart(touchStartHandler) {
+  const eventType = TOUCHSTART_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.offEvent(eventType, handler);
+}
+
+function onTouchMove(touchStartHandler) {
+  const eventType = TOUCHMOVE_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.onEvent(eventType, handler);
+}
+
+function offTouchMove(touchStartHandler) {
+  const eventType = TOUCHMOVE_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.offEvent(eventType, handler);
+}
+
+function onTouchEnd(touchStartHandler) {
+  const eventType = TOUCHEND_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.onEvent(eventType, handler);
+}
+
+function offTouchEnd(touchStartHandler) {
+  const eventType = TOUCHEND_EVENT_TYPE,
+        handler = touchStartHandler;  ///
+
+  this.offEvent(eventType, handler);
 }
 
 function onCustomTap(tapCustomHandler, element) {
@@ -414,6 +457,12 @@ function endHandler(event, element, positionsFromEvent) {
 }
 
 function tap(event, element) {
+  const elementTarget = isElementTarget(event, element);
+
+  if (!elementTarget) {
+    return;
+  }
+
   const customEventType = TAP_CUSTOM_EVENT_TYPE;
 
   this.callCustomHandlers(customEventType, event, element);
@@ -495,7 +544,13 @@ function swipe(event, element, speed, direction) {
   }
 
   if (customEventType !== null) {
-    this.callCustomHandlers(customEventType, event, element, speed);
+    const startPositions = this.getStartPositions(),
+          firstStartPosition = first(startPositions),
+          startPosition = firstStartPosition, ///
+          top = startPosition.getTop(),
+          left = startPosition.getLeft();
+
+    this.callCustomHandlers(customEventType, event, element, top, left, speed);
   }
 }
 
@@ -586,6 +641,12 @@ function tapOrDoubleTap(event, element) {
 const touchMixins = {
   enableTouch,
   disableTouch,
+  onTouchStart,
+  offTouchStart,
+  onTouchMove,
+  offTouchMove,
+  onTouchEnd,
+  offTouchEnd,
   onCustomTap,
   offCustomTap,
   onCustomDragUp,
@@ -642,3 +703,16 @@ const touchMixins = {
 };
 
 export default touchMixins;
+
+function isElementTarget(event, element) {
+  if (element === window) {
+    debugger
+  }
+
+  const { target } = event,
+        domElement = element.getDOMElement(),
+        domElementTarget = (domElement === target),
+        elementTarget = domElementTarget;  ///
+
+  return elementTarget;
+}

@@ -6,14 +6,13 @@ import { keyCodes } from "necessary";
 import { Element, window } from "easy";
 
 import LeafDiv from "./view/div/leaf";
-import Navigation from "./view/navigatrion";
-import eventMixins from "./mixins/event";
+import MenuDiv from "./view/div/menu";
 import touchMixins from "./mixins/touch";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION } from "./constants";
+import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -76,7 +75,7 @@ class View extends Element {
     this.showRightLeftDiv();
   }
 
-  swipeDownCustomHandler = (event, element, speed) => {
+  swipeDownCustomHandler = (event, element, top, left, speed) => {
     const nativeGesturesEnabled = this.areNativeGesturesEnabled();
 
     if (nativeGesturesEnabled) {
@@ -88,10 +87,19 @@ class View extends Element {
     this.scroll(speed, direction);
   }
 
-  swipeUpCustomHandler = (event, element, speed) => {
+  swipeUpCustomHandler = (event, element, top, left, speed) => {
     const nativeGesturesEnabled = this.areNativeGesturesEnabled();
 
     if (nativeGesturesEnabled) {
+      return;
+    }
+
+    const height = this.getHeight(),
+          bottom = height - top;
+
+    if (bottom < MENU_DIV_SWIPE_BOTTOM) {
+      this.showMenuDiv();
+
       return;
     }
 
@@ -140,6 +148,9 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
+
+    alert("view tap...")
+
     this.disableNativeGestures();
   }
 
@@ -463,7 +474,7 @@ class View extends Element {
   childElements() {
     return (
 
-      <Navigation/>
+      <MenuDiv/>
 
     );
   }
@@ -487,7 +498,6 @@ class View extends Element {
   };
 }
 
-Object.assign(View.prototype, eventMixins);
 Object.assign(View.prototype, touchMixins);
 
 export default withStyle(View)`

@@ -1,7 +1,7 @@
 {
   "name": "highmark-cli",
   "author": "James Smith",
-  "version": "0.0.137",
+  "version": "0.0.138",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/highmark-cli",
   "description": "Extensible, styleable Markdown.",
@@ -20,11 +20,11 @@
   },
   "devDependencies": {
     "@swc/core": "1.2.52",
-    "easy": "^16.0.19",
-    "easy-layout": "^6.0.144",
-    "easy-with-style": "^3.0.348",
+    "easy": "^16.0.21",
+    "easy-layout": "^6.0.145",
+    "easy-with-style": "^3.0.349",
     "esbuild": "^0.9.2",
-    "juxtapose": "^4.0.80",
+    "juxtapose": "^4.0.81",
     "watchful-cli": "^1.7.44"
   },
   "scripts": {
