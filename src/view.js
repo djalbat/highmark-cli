@@ -25,6 +25,12 @@ const { ENTER_KEY_CODE,
 
 class View extends Element {
   pinchStartCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const zoom = this.getZoom(),
           startZoom = zoom; ///
 
@@ -32,6 +38,12 @@ class View extends Element {
   }
 
   pinchMoveCustomHandler = (event, element, ratio) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const startZoom = this.getStartZoom(),
           zoom = startZoom * Math.sqrt(ratio);
 
@@ -41,26 +53,56 @@ class View extends Element {
   }
 
   swipeRightCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     this.showLeftLeafDiv();
   }
 
   swipeLeftCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     this.showRightLeftDiv();
   }
 
   swipeDownCustomHandler = (event, element, speed) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const direction = DOWN_DIRECTION;
 
     this.swipe(speed, direction);
   }
 
   swipeUpCustomHandler = (event, element, speed) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const direction = UP_DIRECTION;
 
     this.swipe(speed, direction);
   }
 
   dragStartCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const scrollTop = this.getScrollTop(),
           startScrollTop = scrollTop; ///
 
@@ -68,6 +110,12 @@ class View extends Element {
   }
 
   dragDownCustomHandler = (event, element, top, left) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const startScrollTop = this.getStartScrollTop(),
           scrollTop = startScrollTop - top;
 
@@ -75,6 +123,12 @@ class View extends Element {
   }
 
   dragUpCustomHandler = (event, element, top, left) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturesEnabled) {
+      return;
+    }
+
     const startScrollTop = this.getStartScrollTop(),
           scrollTop = startScrollTop - top;
 
@@ -82,7 +136,11 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
+    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
 
+    nativeGesturesEnabled ?
+      this.disableNativeGestures() :
+        this.enableNativeGestures();
   }
 
   keyDownHandler = (event, element) => {
@@ -263,6 +321,14 @@ class View extends Element {
     }, SHOW_DELAY);
   }
 
+  enableNativeGestures() {
+    this.addClass("native-gestures");
+  }
+
+  disableNativeGestures() {
+    this.removeClass("native-gestures");
+  }
+
   forEachLeafDiv(callback) {
     const leafDivs = this.getLeafDivs();
 
@@ -348,6 +414,12 @@ class View extends Element {
     this.updateState({
       startScrollTop
     });
+  }
+
+  areNativeGesturesEnabled() {
+    const nativeGesturesEnabled = this.hasClass("native-gestures");
+
+    return nativeGesturesEnabled;
   }
 
   setInitialState() {
@@ -440,5 +512,9 @@ export default withStyle(View)`
   height: 100vh;
   overflow: hidden;
   touch-action: none;
+  
+  .native-gestures {
+    touch-action: auto;
+  }
     
 `;
