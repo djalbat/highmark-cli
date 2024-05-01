@@ -457,12 +457,6 @@ function endHandler(event, element, positionsFromEvent) {
 }
 
 function tap(event, element) {
-  const elementTarget = isElementTarget(event, element);
-
-  if (!elementTarget) {
-    return;
-  }
-
   const customEventType = TAP_CUSTOM_EVENT_TYPE;
 
   this.callCustomHandlers(customEventType, event, element);
@@ -703,16 +697,3 @@ const touchMixins = {
 };
 
 export default touchMixins;
-
-function isElementTarget(event, element) {
-  if (element === window) {
-    debugger
-  }
-
-  const { target } = event,
-        domElement = element.getDOMElement(),
-        domElementTarget = (domElement === target),
-        elementTarget = domElementTarget;  ///
-
-  return elementTarget;
-}

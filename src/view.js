@@ -148,9 +148,6 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
-
-    alert("view tap...")
-
     this.disableNativeGestures();
   }
 

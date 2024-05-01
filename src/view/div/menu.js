@@ -4,27 +4,9 @@ import withStyle from "easy-with-style";
 
 import { Element } from "easy";
 
-import touchMixins from "../../mixins/touch";
-
 import { menuDivHeight } from "../../style";
 
 class MenuDiv extends Element {
-  customTapHandler = (event, element) => {
-    alert("MENU DIV TAP!")
-  }
-
-  didMount() {
-    this.enableTouch();
-
-    this.onCustomTap(this.customTapHandler);
-  }
-
-  willUnmount() {
-    this.disableTouch();
-
-    this.offCustomTap(this.customTapHandler);
-  }
-
   initialise() {
     this.hide();
   }
@@ -47,8 +29,6 @@ class MenuDiv extends Element {
     className: "menu"
   };
 }
-
-Object.assign(MenuDiv.prototype, touchMixins);
 
 export default withStyle(MenuDiv)`
 
