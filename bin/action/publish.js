@@ -5,6 +5,7 @@ const htmlOperation = require("../operation/html"),
       copyFontsOperation = require("../operation/copyFonts"),
       copyClientOperation = require("../operation/copyClient"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
+      copyCheckmarkOperation = require("../operation/copyCheckmark"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
 
 const { executeOperations } = require("../utilities/operation"),
@@ -14,6 +15,7 @@ function publishAction(port, watch, server, quietly, copyFonts, copyClient, inpu
   const operations = [
           markdownStylesCSSOperation,
           markdownHTMLOperation,
+          copyCheckmarkOperation,
           copyClientOperation,
           copyFontsOperation,
           htmlOperation,

@@ -2,10 +2,9 @@
 
 const express = require("express");
 
-const { createLiveReloadHandler } = require("lively-cli");
-
-const { ERROR, LIVE_RELOAD_PATH } = require("../constants"),
-      { directoryPathFromFilePath } = require("../utilities/path"),
+const { createStaticRouter } = require("../router/static"),
+      { createLiveReloadHandler } = require("../handler/liveReload"),
+      { ERROR, LIVE_RELOAD_PATH } = require("../constants"),
       { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
@@ -17,17 +16,15 @@ function serverOperation(proceed, abort, context) {
     return;
   }
 
-  const { port, watch, quietly, outputFilePath } = context,
-        outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
-        staticRouter = express.static(outputDirectoryPath);
-
   server = express(); ///
+
+  const { port, watch } = context,
+        staticRouter = createStaticRouter(context);
 
   server.use(staticRouter);
 
   if (watch) {
-    const watchPattern = outputDirectoryPath, ///
-          liveReloadHandler = createLiveReloadHandler(watchPattern, quietly);
+    const liveReloadHandler = createLiveReloadHandler(context);
 
     server.get(LIVE_RELOAD_PATH, liveReloadHandler);
   }

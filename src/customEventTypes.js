@@ -6,6 +6,7 @@ export const DRAG_DOWN_CUSTOM_EVENT_TYPE = "drag-down";
 export const DRAG_LEFT_CUSTOM_EVENT_TYPE = "drag-left";
 export const DRAG_RIGHT_CUSTOM_EVENT_TYPE = "drag-right";
 export const DRAG_START_CUSTOM_EVENT_TYPE = "drag-start";
+export const DRAG_END_CUSTOM_EVENT_TYPE = "drag-end";
 export const SWIPE_UP_CUSTOM_EVENT_TYPE = "swipe-up";
 export const SWIPE_DOWN_CUSTOM_EVENT_TYPE = "swipe-down";
 export const SWIPE_LEFT_CUSTOM_EVENT_TYPE = "swipe-left";

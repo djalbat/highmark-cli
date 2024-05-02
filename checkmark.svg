@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="14mm"
+   height="14mm"
+   viewBox="0 0 14 14"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(0.60286798,-0.60286798,0.60286798,0.60286798,0.03767235,4.8899624)" >
+    <rect
+       style="fill:#eee;stroke-width:0.264583;"
+       width="10"
+       height="3"
+       x="0"
+       y="6.9999995" />
+    <rect
+       style="fill:#eee;stroke-width:0.285782;"
+       width="3"
+       height="3.5000002"
+       x="-2.9999999e-08"
+       y="3.4999998" />
+  </g>
+</svg>

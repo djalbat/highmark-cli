@@ -1,3 +1,4 @@
 "use strict";
 
-export const menuDivHeight = "256px";
+export const checkboxSize = "128px";
+export const menuDivHeight = "500px";

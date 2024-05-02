@@ -14,6 +14,7 @@ import { TAP_CUSTOM_EVENT_TYPE,
          DRAG_LEFT_CUSTOM_EVENT_TYPE,
          DRAG_RIGHT_CUSTOM_EVENT_TYPE,
          DRAG_START_CUSTOM_EVENT_TYPE,
+         DRAG_END_CUSTOM_EVENT_TYPE,
          SWIPE_UP_CUSTOM_EVENT_TYPE,
          SWIPE_DOWN_CUSTOM_EVENT_TYPE,
          SWIPE_LEFT_CUSTOM_EVENT_TYPE,
@@ -27,12 +28,14 @@ const { push, first, second } = arrayUtilities;
 function enableTouch() {
   const tapInterval = null,
         startMagnitude = null,
+        gesturesEnabled = true,
         startPositions = [],
         movingPositions = [];
 
   this.updateState({
     tapInterval,
     startMagnitude,
+    gesturesEnabled,
     startPositions,
     movingPositions
   });
@@ -56,6 +59,18 @@ function disableTouch() {
   this.offTouchStart(this.touchStartHandler);
   this.offTouchMove(this.touchMoveHandler);
   this.offTouchEnd(this.touchEndHandler);
+}
+
+function enableGestures() {
+  const gesturedEnabled = true;
+
+  this.setGesturesEnabled(gesturedEnabled);
+}
+
+function disableGestures() {
+  const gesturedEnabled = false;
+
+  this.setGesturesEnabled(gesturedEnabled);
 }
 
 function onTouchStart(touchStartHandler) {
@@ -184,6 +199,20 @@ function offCustomDragStart(dragStartCustomHandler, element) {
   this.offCustomEvent(customEventType, customHandler, element);
 }
 
+function onCustomDragEnd(dragEndCustomHandler, element) {
+  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE,
+        customHandler = dragEndCustomHandler; ///
+
+  this.onCustomEvent(customEventType, customHandler, element);
+}
+
+function offCustomDragEnd(dragEndCustomHandler, element) {
+  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE,
+        customHandler = dragEndCustomHandler; ///
+
+  this.offCustomEvent(customEventType, customHandler, element);
+}
+
 function onCustomSwipeUp(swipeUpCustomHandler, element) {
   const customEventType = SWIPE_UP_CUSTOM_EVENT_TYPE,
         customHandler = swipeUpCustomHandler; ///
@@ -303,6 +332,18 @@ function getStartMagnitude() {
 function setStartMagnitude(startMagnitude) {
   this.updateState({
     startMagnitude
+  });
+}
+
+function areGesturesEnabled() {
+  const { gesturesEnabled } = this.getState();
+
+  return gesturesEnabled;
+}
+
+function setGesturesEnabled(gesturesEnabled) {
+  this.updateState({
+    gesturesEnabled
   });
 }
 
@@ -445,6 +486,8 @@ function endHandler(event, element, positionsFromEvent) {
     if (movingPositionsLength === 0) {
       this.tapOrDoubleTap(event, element);
     } else if (startPositionsLength === 1) {
+      this.dragEnd(event, element);
+
       this.possibleTap(event, element);
 
       this.possibleSwipe(event, element);
@@ -459,7 +502,7 @@ function endHandler(event, element, positionsFromEvent) {
 function tap(event, element) {
   const customEventType = TAP_CUSTOM_EVENT_TYPE;
 
-  this.callCustomHandlers(customEventType, event, element);
+  this.callCustomHandlers(customEventType, event, element); ///
 }
 
 function drag(event, element) {
@@ -493,7 +536,7 @@ function drag(event, element) {
   }
 
   if (customEventType !== null) {
-    this.callCustomHandlers(customEventType, event, element, top, left);
+    this.callCustomHandlersConditionally(customEventType, event, element, top, left);
   }
 }
 
@@ -507,7 +550,7 @@ function pinch(event, element) {
         magnitude = relativeMovingPosition.getMagnitude(),
         ratio = magnitude / startMagnitude;
 
-  this.callCustomHandlers(customEventType, event, element, ratio);
+  this.callCustomHandlersConditionally(customEventType, event, element, ratio);
 }
 
 function swipe(event, element, speed, direction) {
@@ -544,20 +587,31 @@ function swipe(event, element, speed, direction) {
           top = startPosition.getTop(),
           left = startPosition.getLeft();
 
-    this.callCustomHandlers(customEventType, event, element, top, left, speed);
+    this.callCustomHandlersConditionally(customEventType, event, element, top, left, speed);
   }
 }
 
 function doubleTap(event, element) {
   const customEventType = DOUBLE_TAP_CUSTOM_EVENT_TYPE;
 
-  this.callCustomHandlers(customEventType, event, element);
+  this.callCustomHandlersConditionally(customEventType, event, element);
+}
+
+function dragEnd(event, element) {
+  const customEventType = DRAG_END_CUSTOM_EVENT_TYPE;
+
+  this.callCustomHandlersConditionally(customEventType, event, element);
 }
 
 function dragStart(event, element) {
-  const customEventType = DRAG_START_CUSTOM_EVENT_TYPE;
+  const customEventType = DRAG_START_CUSTOM_EVENT_TYPE,
+        startPositions = this.getStartPositions(),
+        firstStartPosition = first(startPositions),
+        startPosition = firstStartPosition,  ///
+        top = startPosition.getTop(),
+        left = startPosition.getLeft();
 
-  this.callCustomHandlers(customEventType, event, element);
+  this.callCustomHandlersConditionally(customEventType, event, element, top, left);
 }
 
 function pinchStart(event, element) {
@@ -571,7 +625,7 @@ function pinchStart(event, element) {
 
   this.setStartMagnitude(startMagnitude);
 
-  this.callCustomHandlers(customEventType, event, element);
+  this.callCustomHandlersConditionally(customEventType, event, element);
 }
 
 function possibleTap(event, element) {
@@ -632,9 +686,19 @@ function tapOrDoubleTap(event, element) {
   this.setTapInterval(tapInterval);
 }
 
+function callCustomHandlersConditionally(customEventType, event, element, ...remainingArguments) {
+  const gesturesEnabled = this.areGesturesEnabled();
+
+  if (gesturesEnabled) {
+    this.callCustomHandlers(customEventType, event, element, ...remainingArguments);
+  }
+}
+
 const touchMixins = {
   enableTouch,
   disableTouch,
+  enableGestures,
+  disableGestures,
   onTouchStart,
   offTouchStart,
   onTouchMove,
@@ -653,6 +717,8 @@ const touchMixins = {
   offCustomDragRight,
   onCustomDragStart,
   offCustomDragStart,
+  onCustomDragEnd,
+  offCustomDragEnd,
   onCustomSwipeUp,
   offCustomSwipeUp,
   onCustomSwipeDown,
@@ -673,6 +739,8 @@ const touchMixins = {
   setStartMagnitude,
   getStartPositions,
   setStartPositions,
+  areGesturesEnabled,
+  setGesturesEnabled,
   getMovingPositions,
   setMovingPositions,
   touchStartHandler,
@@ -689,11 +757,13 @@ const touchMixins = {
   pinch,
   swipe,
   doubleTap,
+  dragEnd,
   dragStart,
   pinchStart,
   possibleTap,
   possibleSwipe,
-  tapOrDoubleTap
+  tapOrDoubleTap,
+  callCustomHandlersConditionally
 };
 
 export default touchMixins;

@@ -22,10 +22,10 @@ function copyClientOperation(proceed, abort, context) {
   const { outputFilePath } = context,
         packagePath = getPackagePath(),
         outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
-        sourceClientFilePath = concatenatePaths(packagePath, CLIENT_FILE_NAME),
-        targetClientFilePath = concatenatePaths(outputDirectoryPath, CLIENT_FILE_NAME);
+        sourceFilePath = concatenatePaths(packagePath, CLIENT_FILE_NAME),
+        targetFilePath = concatenatePaths(outputDirectoryPath, CLIENT_FILE_NAME);
 
-  copyFile(sourceClientFilePath, targetClientFilePath);
+  copyFile(sourceFilePath, targetFilePath);
 
   const { watch } = context;
 
@@ -35,7 +35,7 @@ function copyClientOperation(proceed, abort, context) {
     return;
   }
 
-  const watchPattern = sourceClientFilePath,  ///
+  const watchPattern = sourceFilePath,  ///
         registerHandler = watchFile(watchPattern);
 
   registerHandler(copyClientFile);
@@ -43,7 +43,7 @@ function copyClientOperation(proceed, abort, context) {
   proceed();
 
   function copyClientFile() {
-    copyFile(sourceClientFilePath, targetClientFilePath);
+    copyFile(sourceFilePath, targetFilePath);
 
     defer(() => {
       registerHandler(copyClientFile);

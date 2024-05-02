@@ -28,12 +28,6 @@ class View extends Element {
   }
 
   pinchStartCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    if (nativeGesturesEnabled) {
-      return;
-    }
-
     const zoom = this.getZoom(),
           startZoom = zoom; ///
 
@@ -41,12 +35,6 @@ class View extends Element {
   }
 
   pinchMoveCustomHandler = (event, element, ratio) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    if (nativeGesturesEnabled) {
-      return;
-    }
-
     const startZoom = this.getStartZoom(),
           zoom = startZoom * Math.sqrt(ratio);
 
@@ -56,29 +44,19 @@ class View extends Element {
   }
 
   swipeRightCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    if (nativeGesturesEnabled) {
-      return;
-    }
-
     this.showLeftLeafDiv();
   }
 
   swipeLeftCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    if (nativeGesturesEnabled) {
-      return;
-    }
-
     this.showRightLeftDiv();
   }
 
   swipeDownCustomHandler = (event, element, top, left, speed) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+    const menuDivDragging = this.isMenuDivDragging();
 
-    if (nativeGesturesEnabled) {
+    if (menuDivDragging) {
+      debugger
+
       return;
     }
 
@@ -88,11 +66,7 @@ class View extends Element {
   }
 
   swipeUpCustomHandler = (event, element, top, left, speed) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
-
-    if (nativeGesturesEnabled) {
-      return;
-    }
+    let menuDivSwipedUp = false;
 
     const height = this.getHeight(),
           bottom = height - top;
@@ -100,6 +74,10 @@ class View extends Element {
     if (bottom < MENU_DIV_SWIPE_BOTTOM) {
       this.showMenuDiv();
 
+      menuDivSwipedUp = true;
+    }
+
+    if (menuDivSwipedUp) {
       return;
     }
 
@@ -108,10 +86,28 @@ class View extends Element {
     this.scroll(speed, direction);
   }
 
-  dragStartCustomHandler = (event, element) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+  dragEndCustomHandler = (event, element, top, left) => {
+    this.menuDivDragEnd();
+  }
 
-    if (nativeGesturesEnabled) {
+  dragStartCustomHandler = (event, element, top, left) => {
+    let menuDivStartingDrag = false;
+
+    const menuDivDisplayed = this.isMenuDivDisplayed();
+
+    if (menuDivDisplayed) {
+      const height = this.getHeight(),
+            bottom = height - top,
+            menuDivHeight = this.getMenuDivHeight();
+
+      if (bottom < menuDivHeight) {
+        menuDivStartingDrag = true;
+      }
+    }
+
+    if (menuDivStartingDrag) {
+      this.menuDivDragStart();
+
       return;
     }
 
@@ -122,9 +118,11 @@ class View extends Element {
   }
 
   dragDownCustomHandler = (event, element, top, left) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+    const menuDivDragging = this.isMenuDivDragging();
 
-    if (nativeGesturesEnabled) {
+    if (menuDivDragging) {
+      this.menuDivDrag(top);
+
       return;
     }
 
@@ -135,9 +133,11 @@ class View extends Element {
   }
 
   dragUpCustomHandler = (event, element, top, left) => {
-    const nativeGesturesEnabled = this.areNativeGesturesEnabled();
+    const menuDivDragging = this.isMenuDivDragging();
 
-    if (nativeGesturesEnabled) {
+    if (menuDivDragging) {
+      this.menuDivDrag(top);
+
       return;
     }
 
@@ -317,10 +317,14 @@ class View extends Element {
 
   enableNativeGestures() {
     this.addClass("native-gestures");
+
+    this.disableGestures();
   }
 
   disableNativeGestures() {
     this.removeClass("native-gestures");
+
+    this.enableGestures();
   }
 
   forEachLeafDiv(callback) {
@@ -410,12 +414,6 @@ class View extends Element {
     });
   }
 
-  areNativeGesturesEnabled() {
-    const nativeGesturesEnabled = this.hasClass("native-gestures");
-
-    return nativeGesturesEnabled;
-  }
-
   setInitialState() {
     const zoom = 1,
           leafDivs = this.retrieveLeafDivs(),
@@ -439,6 +437,7 @@ class View extends Element {
     this.onCustomDragUp(this.dragUpCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
     this.onCustomDragStart(this.dragStartCustomHandler);
+    this.onCustomDragEnd(this.dragEndCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
@@ -455,6 +454,7 @@ class View extends Element {
     this.offCustomDragUp(this.dragUpCustomHandler);
     this.offCustomDragDown(this.dragDownCustomHandler);
     this.offCustomDragStart(this.dragStartCustomHandler);
+    this.offCustomDragEnd(this.dragEndCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
