@@ -6,54 +6,26 @@ import Element from "../element";
 import ButtonsDiv from "../div/buttons";
 import CheckboxesDiv from "../div/checkboxes";
 
+import { GRID } from "../../constants";
 import { menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  isDragging() {
-    const startHeight = this.getStartHeight(),
-          dragging = (startHeight !== null);
-
-    return dragging;
+  closeButtonClickHandler = (event, element) => {
+    this.hide();
   }
 
-  drag(top) {
-    const startHeight = this.getStartHeight(),
-          height = startHeight - top;
+  show() {
+    const display = GRID;
 
-    this.setHeight(height);
+    this.display(display);
   }
 
-  dragEnd() {
-    const startHeight = null;
-
-    this.setStartHeight(startHeight);
+  didMount() {
+    this.onCloseButtonClick(this.closeButtonClickHandler);
   }
 
-  dragStart() {
-    const height = this.getHeight(),
-          startHeight = height; ///
-
-    this.setStartHeight(startHeight);
-  }
-
-  getStartHeight() {
-    const { startHeight } = this.getState();
-
-    return startHeight;
-  }
-
-  setStartHeight(startHeight) {
-    this.updateState({
-      startHeight
-    });
-  }
-
-  setInitialState() {
-    const startHeight = null;
-
-    this.setState({
-      startHeight
-    });
+  willUnmount() {
+    this.offCloseButtonClick(this.closeButtonClickHandler);
   }
 
   childElements() {
@@ -66,31 +38,28 @@ class MenuDiv extends Element {
   }
 
   parentContext() {
-    const showMenuDiv = this.show.bind(this),  ///
+    const context = this.getContext(),
+          showMenuDiv = this.show.bind(this),  ///
           hideMenuDiv = this.hide.bind(this),  ///
-          menuDivDrag = this.drag.bind(this), ///
-          menuDivDragEnd = this.dragEnd.bind(this), ///
-          menuDivDragStart = this.dragStart.bind(this), ///
           getMenuDivHeight = this.getHeight.bind(this), ///
-          isMenuDivDragging = this.isDragging.bind(this), ///
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
 
     return ({
+      ...context,
       showMenuDiv,
       hideMenuDiv,
-      menuDivDrag,
-      menuDivDragEnd,
-      menuDivDragStart,
       getMenuDivHeight,
-      isMenuDivDragging,
       isMenuDivDisplayed
     });
   }
 
   initialise() {
-    this.setInitialState();
+    this.assignContext([
+      "onCloseButtonClick",
+      "offCloseButtonClick"
+    ]);
 
-    // this.hide();
+    this.hide();
   }
 
   static tagName = "div";

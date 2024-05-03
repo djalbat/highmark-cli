@@ -1,14 +1,14 @@
 "use strict";
 
 import Span from "../../span";
-import Checkbox from "../../checkbox";
 import CheckboxDiv from "../../div/checkbox";
+import InvertColoursCheckbox from "../../checkbox/invertColours";
 
 export default class InvertColoursCheckboxDiv extends CheckboxDiv {
   childElements() {
     return ([
 
-      <Checkbox/>,
+      <InvertColoursCheckbox/>,
       <Span>
         Invert colours
       </Span>

@@ -31,6 +31,8 @@ export default withStyle(ButtonsDiv)`
 
   gap: ${buttonsDivGap};
   display: flex;
+  align-items: flex-end;
   flex-direction: column;
+  justify-content: flex-start;
   
 `;

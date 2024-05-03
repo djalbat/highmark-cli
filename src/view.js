@@ -24,6 +24,14 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
+  invertColoursCheckboxChangeHandler = (event, element) => {
+    const invertColoursCheckboxChecked = this.isInvertColoursCheckboxChecked();
+
+    invertColoursCheckboxChecked ?
+      this.addClass("inverted-colours") :
+        this.removeClass("inverted-colours");
+  }
+
   doubleTapCustomHandler = (event, element) => {
     this.enableNativeGestures();
   }
@@ -53,32 +61,18 @@ class View extends Element {
   }
 
   swipeDownCustomHandler = (event, element, top, left, speed) => {
-    const menuDivDragging = this.isMenuDivDragging();
-
-    if (menuDivDragging) {
-      debugger
-
-      return;
-    }
-
     const direction = DOWN_DIRECTION;
 
     this.scroll(speed, direction);
   }
 
   swipeUpCustomHandler = (event, element, top, left, speed) => {
-    let menuDivSwipedUp = false;
-
     const height = this.getHeight(),
           bottom = height - top;
 
     if (bottom < MENU_DIV_SWIPE_BOTTOM) {
       this.showMenuDiv();
 
-      menuDivSwipedUp = true;
-    }
-
-    if (menuDivSwipedUp) {
       return;
     }
 
@@ -87,30 +81,22 @@ class View extends Element {
     this.scroll(speed, direction);
   }
 
-  dragEndCustomHandler = (event, element, top, left) => {
-    this.menuDivDragEnd();
-  }
-
   dragStartCustomHandler = (event, element, top, left) => {
-    // let menuDivStartingDrag = false;
-    //
-    // const menuDivDisplayed = this.isMenuDivDisplayed();
-    //
-    // if (menuDivDisplayed) {
-    //   const height = this.getHeight(),
-    //         bottom = height - top,
-    //         menuDivHeight = this.getMenuDivHeight();
-    //
-    //   if (bottom < menuDivHeight) {
-    //     menuDivStartingDrag = true;
-    //   }
-    // }
-    //
-    // if (menuDivStartingDrag) {
-    //   this.menuDivDragStart();
-    //
-    //   return;
-    // }
+    const menuDivDisplayed = this.isMenuDivDisplayed();
+
+    if (menuDivDisplayed) {
+      const height = this.getHeight(),
+            bottom = height - top,
+            menuDivHeight = this.getMenuDivHeight();
+
+      if (bottom < menuDivHeight) {
+        const startScrollTop = null;
+
+        this.setStartScrollTop(startScrollTop);
+
+        return;
+      }
+    }
 
     const scrollTop = this.getScrollTop(),
           startScrollTop = scrollTop; ///
@@ -119,31 +105,25 @@ class View extends Element {
   }
 
   dragDownCustomHandler = (event, element, top, left) => {
-    const menuDivDragging = this.isMenuDivDragging();
+    const startScrollTop = this.getStartScrollTop();
 
-    if (menuDivDragging) {
-      this.menuDivDrag(top);
-
+    if (startScrollTop === null) {
       return;
     }
 
-    const startScrollTop = this.getStartScrollTop(),
-          scrollTop = startScrollTop - top;
+    const scrollTop = startScrollTop - top;
 
     this.setScrollTop(scrollTop);
   }
 
   dragUpCustomHandler = (event, element, top, left) => {
-    const menuDivDragging = this.isMenuDivDragging();
+    const startScrollTop = this.getStartScrollTop();
 
-    if (menuDivDragging) {
-      this.menuDivDrag(top);
-
+    if (startScrollTop === null) {
       return;
     }
 
-    const startScrollTop = this.getStartScrollTop(),
-          scrollTop = startScrollTop - top;
+    const scrollTop = startScrollTop - top;
 
     this.setScrollTop(scrollTop);
   }
@@ -438,7 +418,6 @@ class View extends Element {
     this.onCustomDragUp(this.dragUpCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
     this.onCustomDragStart(this.dragStartCustomHandler);
-    this.onCustomDragEnd(this.dragEndCustomHandler);
     this.onCustomSwipeUp(this.swipeUpCustomHandler);
     this.onCustomSwipeDown(this.swipeDownCustomHandler);
     this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
@@ -446,6 +425,8 @@ class View extends Element {
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
+
+    this.onInvertColoursCheckboxChange(this.invertColoursCheckboxChangeHandler);
 
     window.onKeyDown(this.keyDownHandler);
   }
@@ -455,7 +436,6 @@ class View extends Element {
     this.offCustomDragUp(this.dragUpCustomHandler);
     this.offCustomDragDown(this.dragDownCustomHandler);
     this.offCustomDragStart(this.dragStartCustomHandler);
-    this.offCustomDragEnd(this.dragEndCustomHandler);
     this.offCustomSwipeUp(this.swipeUpCustomHandler);
     this.offCustomSwipeDown(this.swipeDownCustomHandler);
     this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
@@ -463,6 +443,8 @@ class View extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
+
+    this.onInvertColoursCheckboxChange(this.invertColoursCheckboxChangeHandler);
 
     this.disableTouch();
 
@@ -507,6 +489,10 @@ export default withStyle(View)`
   
   .native-gestures {
     touch-action: auto;
+  }
+  
+  .inverted-colours {
+    filter: invert(1);
   }
     
 `;

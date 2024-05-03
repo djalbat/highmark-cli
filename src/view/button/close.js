@@ -12,6 +12,16 @@ export default class CloseButton extends Button {
     );
   }
 
+  parentContext() {
+    const onCloseButtonClick = this.onClick.bind(this), ///
+          offCloseButtonClick = this.offClick.bind(this); ///
+
+    return ({
+      onCloseButtonClick,
+      offCloseButtonClick
+    });
+  }
+
   static defaultProperties = {
     className: "close"
   };
