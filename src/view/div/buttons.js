@@ -3,6 +3,7 @@
 import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
+import CloseButton from "../button/close";
 import IncreaseFontSizeButton from "../button/increaseFontSize";
 import DecreaseFontSizeButton from "../button/decreaseFontSize";
 
@@ -12,6 +13,7 @@ class ButtonsDiv extends Element {
   childElements() {
     return ([
 
+      <CloseButton/>,
       <IncreaseFontSizeButton/>,
       <DecreaseFontSizeButton/>
 
