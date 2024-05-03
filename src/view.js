@@ -1,10 +1,11 @@
 "use strict";
 
-import withStyle from "easy-with-style";
+import withStyle from "easy-with-style";  ///
 
 import { keyCodes } from "necessary";
-import { Element, window } from "easy";
+import { window } from "easy";
 
+import Element from "./view/element";
 import LeafDiv from "./view/div/leaf";
 import MenuDiv from "./view/div/menu";
 import touchMixins from "./mixins/touch";
@@ -91,25 +92,25 @@ class View extends Element {
   }
 
   dragStartCustomHandler = (event, element, top, left) => {
-    let menuDivStartingDrag = false;
-
-    const menuDivDisplayed = this.isMenuDivDisplayed();
-
-    if (menuDivDisplayed) {
-      const height = this.getHeight(),
-            bottom = height - top,
-            menuDivHeight = this.getMenuDivHeight();
-
-      if (bottom < menuDivHeight) {
-        menuDivStartingDrag = true;
-      }
-    }
-
-    if (menuDivStartingDrag) {
-      this.menuDivDragStart();
-
-      return;
-    }
+    // let menuDivStartingDrag = false;
+    //
+    // const menuDivDisplayed = this.isMenuDivDisplayed();
+    //
+    // if (menuDivDisplayed) {
+    //   const height = this.getHeight(),
+    //         bottom = height - top,
+    //         menuDivHeight = this.getMenuDivHeight();
+    //
+    //   if (bottom < menuDivHeight) {
+    //     menuDivStartingDrag = true;
+    //   }
+    // }
+    //
+    // if (menuDivStartingDrag) {
+    //   this.menuDivDragStart();
+    //
+    //   return;
+    // }
 
     const scrollTop = this.getScrollTop(),
           startScrollTop = scrollTop; ///

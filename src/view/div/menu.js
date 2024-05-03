@@ -1,13 +1,12 @@
 "use strict";
 
-import withStyle from "easy-with-style";
+import withStyle from "easy-with-style";  ///
 
-import { Element } from "easy";
+import Element from "../element";
+import ButtonsDiv from "../div/buttons";
+import CheckboxesDiv from "../div/checkboxes";
 
-import Checkbox from "../checkbox";
-
-import { menuDivHeight } from "../../style";
-import { menuDivBackgroundColour } from "../../colours";
+import { menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
   isDragging() {
@@ -58,11 +57,12 @@ class MenuDiv extends Element {
   }
 
   childElements() {
-    return (
+    return ([
 
-      <Checkbox/>
+      <CheckboxesDiv/>,
+      <ButtonsDiv/>
 
-    );
+    ]);
   }
 
   parentContext() {
@@ -90,7 +90,7 @@ class MenuDiv extends Element {
   initialise() {
     this.setInitialState();
 
-    this.hide();
+    // this.hide();
   }
 
   static tagName = "div";
@@ -103,16 +103,15 @@ class MenuDiv extends Element {
 export default withStyle(MenuDiv)`
 
   left: 0;
-  color: white;
   width: 100%;
-  height: ${menuDivHeight};
+  height: fit-content;
+  filter: brightness(0.8);
   bottom: 0;
-  display: flex;
+  display: grid;
+  padding: ${menuDivPadding};
   position: fixed;
-  font-size: 60px;
-  align-items: center; 
-  flex-direction: row;
-  justify-content: center;
   background-color: ${menuDivBackgroundColour};
-  
+  grid-template-rows: auto;
+  grid-template-columns: auto ${buttonsDivWidth};
+
 `;

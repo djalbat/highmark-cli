@@ -1,8 +1,8 @@
 "use strict";
 
-import { Element } from "easy";
-
 import withStyle from "easy-with-style";  ///
+
+import { Element } from "easy";
 
 class LeafDiv extends Element {
   zoom(zoom) {

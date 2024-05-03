@@ -4,26 +4,26 @@ import withStyle from "easy-with-style";  ///
 
 import { Checkbox } from "easy";
 
-import { checkboxSize } from "../style";
+import { borderWidth, borderRadius, borderColour, checkboxSize, checkboxBackgroundColour } from "../styles";
 
 export default withStyle(Checkbox)`
 
   width: ${checkboxSize};
-  height: ${checkboxSize};  
-  display: inline-block;
+  height: ${checkboxSize};
+  cursor: pointer;  
+  display: block;
   outline: none;
   position: relative;
   appearance: none;
-  vertical-align: middle;
   
   ::before {
     width: ${checkboxSize};
     height: ${checkboxSize};
-    border: 10px solid #eee;
+    border: ${borderWidth} solid ${borderColour};
     content: " ";
     position: absolute;
-    border-radius: 24px;
-    background-color: #000;
+    border-radius: ${borderRadius};
+    background-color: ${checkboxBackgroundColour};
   }
   
   ::after {
