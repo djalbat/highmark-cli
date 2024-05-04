@@ -10,7 +10,9 @@ import { Body, Element } from "easy";
 import View from "./view";
 import createMethods from "./createMethods";
 
+import { setOrientation } from "./state";
 import { elementFromDOMElement } from "./utilities/element";
+import { getOrientation, onOrientationChange } from "./utilities/responsive";
 import { LOADING_DIV_SELECTOR, VIEW_DIV_SELECTOR } from "./selectors";
 
 const { renderStyles } = withStyle;
@@ -24,10 +26,19 @@ const viewDOMElement = document.querySelector(VIEW_DIV_SELECTOR),
 
 controller.assignMethods(createMethods, scheduler, model, view);
 
-const body = new Body();
+const body = new Body(),
+      loadingDiv = new Element(LOADING_DIV_SELECTOR);
 
-body.mount(view);
+onOrientationChange((orientation) => {
+  setOrientation(orientation);
 
-const loadingDiv = new Element(LOADING_DIV_SELECTOR);
+  view.update();
+});
 
-loadingDiv.hide();
+getOrientation((orientation) => {
+  setOrientation(orientation);
+
+  body.mount(view);
+
+  loadingDiv.hide();
+});
