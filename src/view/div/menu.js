@@ -7,7 +7,7 @@ import ButtonsDiv from "../div/buttons";
 import CheckboxesDiv from "../div/checkboxes";
 
 import { GRID } from "../../constants";
-import { menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
+import { borderColour, menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
   increaseFontSize() {
@@ -78,6 +78,7 @@ export default withStyle(MenuDiv)`
   display: grid;
   padding: ${menuDivPadding};
   position: fixed;
+  border-top: 1px solid ${borderColour};
   background-color: ${menuDivBackgroundColour};
   grid-template-rows: auto;
   grid-template-columns: auto ${buttonsDivWidth};

@@ -230,11 +230,15 @@ class View extends Element {
   }
 
   invertColours() {
-    this.addClass("inverted-colours");
+    this.forEachLeafDiv((leafDiv) => {
+      leafDiv.invertColours();
+    });
   }
 
   revertColours() {
-    this.removeClass("inverted-colours");
+    this.forEachLeafDiv((leafDiv) => {
+      leafDiv.revertColours();
+    });
   }
 
   restoreNativeGestures() {
@@ -334,9 +338,7 @@ class View extends Element {
   }
 
   hideAllButFirstLeafDivs() {
-    const leafDivs = this.getLeafDivs();
-
-    leafDivs.forEach((leafDiv, index) => {
+    this.forEachLeafDiv((leafDiv, index) => {
       if (index > 0) {
         leafDiv.hide();
       }
@@ -362,6 +364,12 @@ class View extends Element {
           leafDivs = elementsFromDOMElements(viewChildDivDOMElements, LeafDiv);
 
     return leafDivs;
+  }
+
+  forEachLeafDiv(callback) {
+    const leafDivs = this.getLeafDivs();
+
+    leafDivs.forEach(callback);
   }
 
   getZoom() {
@@ -514,8 +522,4 @@ export default withStyle(View)`
     touch-action: auto;
   }
   
-  .inverted-colours {
-    filter: invert(1);
-  }
-    
 `;
