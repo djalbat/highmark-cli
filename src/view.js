@@ -238,6 +238,14 @@ class View extends Element {
     });
   }
 
+  enterFullScreen() {
+    const domElement = this.getDOMElement();
+
+    domElement.requestFullscreen().catch((error) => {
+      alert(error);
+    });
+  }
+
   restoreNativeGestures() {
     this.addClass("native-gestures");
 

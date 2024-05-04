@@ -35,6 +35,10 @@ export default function createMethods(scheduler, model, view) {
     view.updateColours();
   }
 
+  function enterFullScreen() {
+    view.enterFullScreen();
+  }
+
   function restoreNativeGestures() {
     view.restoreNativeGestures();
   }
@@ -54,6 +58,7 @@ export default function createMethods(scheduler, model, view) {
     zoomMenuOut,
     invertColours,
     revertColours,
+    enterFullScreen,
     restoreNativeGestures,
     suppressNativeGestures,
     enablePersistentState,

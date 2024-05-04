@@ -4,6 +4,7 @@ import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
 import CloseMenuButton from "../button/closeMenu";
+import FullScreenButton from "../button/fullScreen";
 import ZoomMenuInButton from "../button/zoomMenuIn";
 import ZoomMenuOutButton from "../button/zoomMenuOut";
 
@@ -14,6 +15,7 @@ class ButtonsDiv extends Element {
     return ([
 
       <CloseMenuButton/>,
+      <FullScreenButton/>,
       <ZoomMenuInButton/>,
       <ZoomMenuOutButton/>
 
