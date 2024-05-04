@@ -28,16 +28,16 @@ const { push, first, second } = arrayUtilities;
 function enableTouch() {
   const tapInterval = null,
         startMagnitude = null,
-        gesturesEnabled = true,
         startPositions = [],
-        movingPositions = [];
+        movingPositions = [],
+        customGesturesEnabled = true;
 
   this.updateState({
     tapInterval,
     startMagnitude,
-    gesturesEnabled,
     startPositions,
-    movingPositions
+    movingPositions,
+    customGesturesEnabled
   });
 
   this.onMouseDown(this.mouseDownHandler);
@@ -59,18 +59,6 @@ function disableTouch() {
   this.offTouchStart(this.touchStartHandler);
   this.offTouchMove(this.touchMoveHandler);
   this.offTouchEnd(this.touchEndHandler);
-}
-
-function enableGestures() {
-  const gesturedEnabled = true;
-
-  this.setGesturesEnabled(gesturedEnabled);
-}
-
-function disableGestures() {
-  const gesturedEnabled = false;
-
-  this.setGesturesEnabled(gesturedEnabled);
 }
 
 function onTouchStart(touchStartHandler) {
@@ -335,15 +323,15 @@ function setStartMagnitude(startMagnitude) {
   });
 }
 
-function areGesturesEnabled() {
-  const { gesturesEnabled } = this.getState();
+function areCustomGesturesEnabled() {
+  const { customGesturesEnabled } = this.getState();
 
-  return gesturesEnabled;
+  return customGesturesEnabled;
 }
 
-function setGesturesEnabled(gesturesEnabled) {
+function setCustonGesturesEnabled(customGesturesEnabled) {
   this.updateState({
-    gesturesEnabled
+    customGesturesEnabled
   });
 }
 
@@ -686,10 +674,22 @@ function tapOrDoubleTap(event, element) {
   this.setTapInterval(tapInterval);
 }
 
-function callCustomHandlersConditionally(customEventType, event, element, ...remainingArguments) {
-  const gesturesEnabled = this.areGesturesEnabled();
+function enableCustomGestures() {
+  const customGesturedEnabled = true;
 
-  if (gesturesEnabled) {
+  this.setCustonGesturesEnabled(customGesturedEnabled);
+}
+
+function disableCustomGestures() {
+  const customGesturedEnabled = false;
+
+  this.setCustonGesturesEnabled(customGesturedEnabled);
+}
+
+function callCustomHandlersConditionally(customEventType, event, element, ...remainingArguments) {
+  const customGesturesEnabled = this.areCustomGesturesEnabled();
+
+  if (customGesturesEnabled) {
     this.callCustomHandlers(customEventType, event, element, ...remainingArguments);
   }
 }
@@ -697,8 +697,6 @@ function callCustomHandlersConditionally(customEventType, event, element, ...rem
 const touchMixins = {
   enableTouch,
   disableTouch,
-  enableGestures,
-  disableGestures,
   onTouchStart,
   offTouchStart,
   onTouchMove,
@@ -739,8 +737,8 @@ const touchMixins = {
   setStartMagnitude,
   getStartPositions,
   setStartPositions,
-  areGesturesEnabled,
-  setGesturesEnabled,
+  areCustomGesturesEnabled,
+  setCustonGesturesEnabled,
   getMovingPositions,
   setMovingPositions,
   touchStartHandler,
@@ -763,6 +761,8 @@ const touchMixins = {
   possibleTap,
   possibleSwipe,
   tapOrDoubleTap,
+  enableCustomGestures,
+  disableCustomGestures,
   callCustomHandlersConditionally
 };
 

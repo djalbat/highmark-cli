@@ -4,10 +4,14 @@ import Button from "../button";
 import IncreaseFontSizeSVG from "../svg/increaseFontSize";
 
 export default class IncreaseFontSizeButton extends Button {
+  clickHandler = (event, element) => {
+    controller.increaseFontSize();
+  }
+
   childElements() {
     return (
 
-      <IncreaseFontSizeSVG/>
+      <IncreaseFontSizeSVG onclick={this.clickHandler} />
 
     );
   }

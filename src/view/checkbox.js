@@ -6,7 +6,15 @@ import { Checkbox } from "easy";
 
 import { borderWidth, borderRadius, borderColour, checkboxSize, checkboxBackgroundColour } from "../styles";
 
-export default withStyle(Checkbox)`
+export default withStyle(class extends Checkbox {
+  parentContext() {
+    const isCheckboxChecked = this.isChecked.bind(this);
+
+    return ({
+      isCheckboxChecked
+    });
+  }
+})`
 
   width: ${checkboxSize};
   height: ${checkboxSize};

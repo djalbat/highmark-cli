@@ -7,6 +7,10 @@ import Element from "../element";
 import { checkboxDivGap } from "../../styles";
 
 class CheckboxDiv extends Element {
+  initialise() {
+    this.assignContext();
+  }
+
   static tagName = "div";
 
   static defaultProperties = {

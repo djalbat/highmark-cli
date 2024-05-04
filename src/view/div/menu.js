@@ -10,22 +10,22 @@ import { GRID } from "../../constants";
 import { menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  closeButtonClickHandler = (event, element) => {
-    this.hide();
+  increaseFontSize() {
+    debugger
   }
 
-  show() {
+  decreaseFontSize() {
+    debugger
+  }
+
+  openMenu() {
     const display = GRID;
 
     this.display(display);
   }
 
-  didMount() {
-    this.onCloseButtonClick(this.closeButtonClickHandler);
-  }
-
-  willUnmount() {
-    this.offCloseButtonClick(this.closeButtonClickHandler);
+  closeMenu() {
+    this.hide();
   }
 
   childElements() {
@@ -38,27 +38,24 @@ class MenuDiv extends Element {
   }
 
   parentContext() {
-    const context = this.getContext(),
-          showMenuDiv = this.show.bind(this),  ///
-          hideMenuDiv = this.hide.bind(this),  ///
+    const openMenu = this.openMenu.bind(this),
+          closeMenu = this.closeMenu.bind(this),
+          increaseFontSize = this.increaseFontSize.bind(this),
+          decreaseFontSize = this.decreaseFontSize.bind(this),
           getMenuDivHeight = this.getHeight.bind(this), ///
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
 
     return ({
-      ...context,
-      showMenuDiv,
-      hideMenuDiv,
+      openMenu,
+      closeMenu,
+      increaseFontSize,
+      decreaseFontSize,
       getMenuDivHeight,
       isMenuDivDisplayed
     });
   }
 
   initialise() {
-    this.assignContext([
-      "onCloseButtonClick",
-      "offCloseButtonClick"
-    ]);
-
     this.hide();
   }
 

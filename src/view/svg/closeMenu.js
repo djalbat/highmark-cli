@@ -2,7 +2,7 @@
 
 import SVG from "../svg";
 
-export default class CloseSVG extends SVG {
+export default class CloseMenuSVG extends SVG {
   childElements() {
     return (
 
@@ -16,6 +16,6 @@ export default class CloseSVG extends SVG {
   }
 
   static defaultProperties = {
-    className: "close"
+    className: "close-menu"
   };
 }

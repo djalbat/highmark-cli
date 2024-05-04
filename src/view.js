@@ -24,16 +24,14 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
-  invertColoursCheckboxChangeHandler = (event, element) => {
-    const invertColoursCheckboxChecked = this.isInvertColoursCheckboxChecked();
-
-    invertColoursCheckboxChecked ?
-      this.addClass("inverted-colours") :
-        this.removeClass("inverted-colours");
-  }
-
   doubleTapCustomHandler = (event, element) => {
-    this.enableNativeGestures();
+    const menuDivDisplayed = this.isMenuDivDisplayed();
+
+    if (menuDivDisplayed) {
+      return;
+    }
+
+    this.restoreNativeGestures();
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -71,7 +69,7 @@ class View extends Element {
           bottom = height - top;
 
     if (bottom < MENU_DIV_SWIPE_BOTTOM) {
-      this.showMenuDiv();
+      controller.openMenu();
 
       return;
     }
@@ -129,7 +127,13 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element) => {
-    this.disableNativeGestures();
+    const menuDivDisplayed = this.isMenuDivDisplayed();
+
+    if (menuDivDisplayed) {
+      return;
+    }
+
+    this.suppressNativeGestures();
   }
 
   keyDownHandler = (event, element) => {
@@ -230,6 +234,26 @@ class View extends Element {
     this.setInterval(interval);
   }
 
+  invertColours() {
+    this.addClass("inverted-colours");
+  }
+
+  revertColours() {
+    this.removeClass("inverted-colours");
+  }
+
+  restoreNativeGestures() {
+    this.addClass("native-gestures");
+
+    this.disableCustomGestures();
+  }
+
+  suppressNativeGestures() {
+    this.removeClass("native-gestures");
+
+    this.enableCustomGestures();
+  }
+
   showFirstLeftDiv() {
     const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
@@ -296,22 +320,14 @@ class View extends Element {
     }, SHOW_DELAY);
   }
 
-  enableNativeGestures() {
-    this.addClass("native-gestures");
-
-    this.disableGestures();
-  }
-
-  disableNativeGestures() {
-    this.removeClass("native-gestures");
-
-    this.enableGestures();
-  }
-
-  forEachLeafDiv(callback) {
+  hideAllButFirstLeafDivs() {
     const leafDivs = this.getLeafDivs();
 
-    leafDivs.forEach(callback);
+    leafDivs.forEach((leafDiv, index) => {
+      if (index > 0) {
+        leafDiv.hide();
+      }
+    });
   }
 
   findDisplayedLeafDiv() {
@@ -426,8 +442,6 @@ class View extends Element {
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
-    this.onInvertColoursCheckboxChange(this.invertColoursCheckboxChangeHandler);
-
     window.onKeyDown(this.keyDownHandler);
   }
 
@@ -443,8 +457,6 @@ class View extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
-
-    this.onInvertColoursCheckboxChange(this.invertColoursCheckboxChangeHandler);
 
     this.disableTouch();
 
@@ -464,11 +476,9 @@ class View extends Element {
 
     this.setInitialState();
 
-    this.forEachLeafDiv((leafDiv, index) => {
-      (index === 0) ?
-        leafDiv.show() :
-          leafDiv.hide();
-    });
+    this.suppressNativeGestures();
+
+    this.hideAllButFirstLeafDivs();
   }
 
   static tagName = "div";

@@ -1,14 +1,22 @@
 "use strict";
 
 import Span from "../../span";
+import Checkbox from "../../checkbox";
 import CheckboxDiv from "../../div/checkbox";
-import InvertColoursCheckbox from "../../checkbox/invertColours";
 
 export default class InvertColoursCheckboxDiv extends CheckboxDiv {
+  changeHandler = (event, element) => {
+    const checkboxChecked = this.isCheckboxChecked();
+
+    checkboxChecked ?
+      controller.invertColours() :
+        controller.revertColours();
+  }
+
   childElements() {
     return ([
 
-      <InvertColoursCheckbox/>,
+      <Checkbox onChange={this.changeHandler} />,
       <Span>
         Invert colours
       </Span>
