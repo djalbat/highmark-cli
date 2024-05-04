@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { getViewZoom as getZoom, setViewZoom as setZoom } from "./state";
+import { getViewZoom as getZoom, setViewZoom as setZoom, areColoursInverted } from "./state";
 import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
@@ -170,7 +170,15 @@ class View extends Element {
     }
   }
 
-  update() {
+  updateColours() {
+    const coloursInverted = areColoursInverted();
+
+    coloursInverted ?
+      this.invertColours() :
+        this.revertColours();
+  }
+
+  updateZoom() {
     const zoom = getZoom();
 
     this.zoom(zoom);
@@ -439,6 +447,10 @@ class View extends Element {
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
     window.onKeyDown(this.keyDownHandler);
+
+    this.updateZoom();
+
+    this.updateColours();
   }
 
   willUnmount() {
@@ -460,11 +472,11 @@ class View extends Element {
   }
 
   childElements() {
-    return (
+    return ([
 
       <MenuDiv/>
 
-    );
+    ]);
   }
 
   initialise() {

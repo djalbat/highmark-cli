@@ -8,6 +8,7 @@ import { controller } from "sufficient";
 import { Body, Element } from "easy";
 
 import View from "./view";
+import PreloaderDiv from "./view/div/preloader";
 import createMethods from "./createMethods";
 
 import { setOrientation } from "./state";
@@ -29,10 +30,16 @@ controller.assignMethods(createMethods, scheduler, model, view);
 const body = new Body(),
       loadingDiv = new Element(LOADING_DIV_SELECTOR);
 
+body.mount(
+
+  <PreloaderDiv/>
+
+);
+
 onOrientationChange((orientation) => {
   setOrientation(orientation);
 
-  view.update();
+  view.updateZoom();
 });
 
 getOrientation((orientation) => {

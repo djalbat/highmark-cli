@@ -4,9 +4,25 @@ import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
 
+import Span from "../span";
+import Checkbox from "../checkbox";
+
 import { checkboxDivGap } from "../../styles";
 
 class CheckboxDiv extends Element {
+  childElements() {
+    const { message } = this.constructor;
+
+    return ([
+
+      <Checkbox onChange={this.changeHandler} />,
+      <Span>
+        {message}
+      </Span>
+
+    ]);
+  }
+
   initialise() {
     this.assignContext();
   }

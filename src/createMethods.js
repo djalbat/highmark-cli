@@ -1,5 +1,7 @@
 "use strict";
 
+import { setColoursInverted, enablePersistentState, disablePersistentState } from "./state";
+
 export default function createMethods(scheduler, model, view) {
   function openMenu() {
     view.openMenu();
@@ -18,11 +20,19 @@ export default function createMethods(scheduler, model, view) {
   }
 
   function invertColours() {
-    view.invertColours();
+    const coloursInverted = true;
+
+    setColoursInverted(coloursInverted);
+
+    view.updateColours();
   }
 
   function revertColours() {
-    view.revertColours();
+    const coloursInverted = false;
+
+    setColoursInverted(coloursInverted);
+
+    view.updateColours();
   }
 
   function restoreNativeGestures() {
@@ -46,6 +56,8 @@ export default function createMethods(scheduler, model, view) {
     revertColours,
     restoreNativeGestures,
     suppressNativeGestures,
+    enablePersistentState,
+    disablePersistentState,
     checkRestoreNativeGesturesCheckbox
   });
 }

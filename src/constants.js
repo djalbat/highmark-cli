@@ -3,6 +3,7 @@
 export const { PI } = Math;
 
 export const GRID = "grid";
+export const STATE_KEY = "state";
 export const TAP_DELAY = 250;
 export const ZOOM_RATIO = 1.1;
 export const SHOW_DELAY = 0;
