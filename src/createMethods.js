@@ -9,20 +9,20 @@ export default function createMethods(scheduler, model, view) {
     view.closeMenu();
   }
 
+  function zoomMenuIn() {
+    view.zoomMenuIn();
+  }
+
+  function zoomMenuOut() {
+    view.zoomMenuOut();
+  }
+
   function invertColours() {
     view.invertColours();
   }
 
   function revertColours() {
     view.revertColours();
-  }
-
-  function increaseFondSize() {
-    view.increaseFontSize();
-  }
-
-  function decreaseFontSize() {
-    view.decreaseFontSize();
   }
 
   function restoreNativeGestures() {
@@ -40,10 +40,10 @@ export default function createMethods(scheduler, model, view) {
   return ({
     openMenu,
     closeMenu,
+    zoomMenuIn,
+    zoomMenuOut,
     invertColours,
     revertColours,
-    increaseFondSize,
-    decreaseFontSize,
     restoreNativeGestures,
     suppressNativeGestures,
     checkRestoreNativeGesturesCheckbox

@@ -6,16 +6,40 @@ import Element from "../element";
 import ButtonsDiv from "../div/buttons";
 import CheckboxesDiv from "../div/checkboxes";
 
-import { GRID } from "../../constants";
+import { GRID, ZOOM_RATIO } from "../../constants";
 import { borderColour, menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  increaseFontSize() {
-    debugger
+  zoomMenuOut() {
+    let zoom = this.getZoom();
+
+    zoom /= ZOOM_RATIO;
+
+    this.setZoom(zoom);
+
+    this.zoom(zoom);
   }
 
-  decreaseFontSize() {
-    debugger
+  zoomMenuIn() {
+    let zoom = this.getZoom();
+
+    zoom *= ZOOM_RATIO;
+
+    this.setZoom(zoom);
+
+    this.zoom(zoom);
+  }
+
+  zoom(zoom) {
+    const width = `${100/zoom}%`,
+          transform = `scale(${zoom})`;
+
+    const css = {
+      width,
+      transform
+    };
+
+    this.css(css);
   }
 
   openMenu() {
@@ -26,6 +50,26 @@ class MenuDiv extends Element {
 
   closeMenu() {
     this.hide();
+  }
+
+  getZoom() {
+    const { zoom } = this.getState();
+
+    return zoom;
+  }
+
+  setZoom(zoom) {
+    this.updateState({
+      zoom
+    });
+  }
+
+  setInitialState() {
+    const zoom = 1;
+
+    this.setState({
+      zoom
+    });
   }
 
   childElements() {
@@ -41,8 +85,8 @@ class MenuDiv extends Element {
     const context = this.getContext(),
           openMenu = this.openMenu.bind(this),
           closeMenu = this.closeMenu.bind(this),
-          increaseFontSize = this.increaseFontSize.bind(this),
-          decreaseFontSize = this.decreaseFontSize.bind(this),
+          zoomMenuIn = this.zoomMenuIn.bind(this),
+          zoomMenuOut = this.zoomMenuOut.bind(this),
           getMenuDivHeight = this.getHeight.bind(this), ///
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
 
@@ -50,14 +94,16 @@ class MenuDiv extends Element {
       ...context,
       openMenu,
       closeMenu,
-      increaseFontSize,
-      decreaseFontSize,
+      zoomMenuIn,
+      zoomMenuOut,
       getMenuDivHeight,
       isMenuDivDisplayed
     });
   }
 
   initialise() {
+    this.setInitialState();
+
     this.hide();
   }
 
@@ -80,6 +126,7 @@ export default withStyle(MenuDiv)`
   position: fixed;
   border-top: 1px solid ${borderColour};
   background-color: ${menuDivBackgroundColour};
+  transform-origin: bottom left;
   grid-template-rows: auto;
   grid-template-columns: auto ${buttonsDivWidth};
 

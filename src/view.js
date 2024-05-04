@@ -13,7 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { SHOW_DELAY, ZOOM_RATIO, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
+import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -167,26 +167,6 @@ class View extends Element {
         break;
       }
     }
-  }
-
-  zoomOut() {
-    let zoom = this.getZoom();
-
-    zoom /= ZOOM_RATIO;
-
-    this.setZoom(zoom);
-
-    this.zoom(zoom);
-  }
-
-  zoomIn() {
-    let zoom = this.getZoom();
-
-    zoom *= ZOOM_RATIO;
-
-    this.setZoom(zoom);
-
-    this.zoom(zoom);
   }
 
   zoom(zoom) {

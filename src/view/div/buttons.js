@@ -4,8 +4,8 @@ import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
 import CloseMenuButton from "../button/closeMenu";
-import IncreaseFontSizeButton from "../button/increaseFontSize";
-import DecreaseFontSizeButton from "../button/decreaseFontSize";
+import ZoomMenuInButton from "../button/zoomMenuIn";
+import ZoomMenuOutButton from "../button/zoomMenuOut";
 
 import { buttonsDivGap } from "../../styles";
 
@@ -14,8 +14,8 @@ class ButtonsDiv extends Element {
     return ([
 
       <CloseMenuButton/>,
-      <IncreaseFontSizeButton/>,
-      <DecreaseFontSizeButton/>
+      <ZoomMenuInButton/>,
+      <ZoomMenuOutButton/>
 
     ]);
   }

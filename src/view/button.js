@@ -7,7 +7,23 @@ import { Button } from "easy";
 import { buttonSize, borderWidth, borderRadius, borderColour } from "../styles";
 
 export default withStyle(class extends Button {
-  ///
+  didMount() {
+    this.onClick(this.clickHandler);
+  }
+
+  willUnmount() {
+    this.offClick(this.clickHandler);
+  }
+
+  childElements() {
+    const { SVG } = this.constructor;
+
+    return (
+
+      <SVG/>
+
+    );
+  }
 })`
 
   width: ${buttonSize};

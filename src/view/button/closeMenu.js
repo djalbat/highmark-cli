@@ -8,21 +8,7 @@ export default class CloseMenuButton extends Button {
     controller.closeMenu();
   }
 
-  didMount() {
-    this.onClick(this.clickHandler);
-  }
-
-  willUnmount() {
-    this.offClick(this.clickHandler);
-  }
-
-  childElements() {
-    return (
-
-      <CloseMenuSVG/>
-
-    );
-  }
+  static SVG = CloseMenuSVG;
 
   static defaultProperties = {
     className: "close-menu"
