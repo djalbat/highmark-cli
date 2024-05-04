@@ -7,32 +7,19 @@ import ButtonsDiv from "../div/buttons";
 import CheckboxesDiv from "../div/checkboxes";
 
 import { GRID, ZOOM_RATIO } from "../../constants";
+import { getMenuDivZoom as getZoom, setMenuDivZoom as setZoom } from "../../state";
 import { borderColour, menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  zoomMenuOut() {
-    let zoom = this.getZoom();
-
-    zoom /= ZOOM_RATIO;
-
-    this.setZoom(zoom);
-
-    this.zoom(zoom);
-  }
-
-  zoomMenuIn() {
-    let zoom = this.getZoom();
-
-    zoom *= ZOOM_RATIO;
-
-    this.setZoom(zoom);
+  update() {
+    const zoom = getZoom();
 
     this.zoom(zoom);
   }
 
   zoom(zoom) {
     const width = `${100/zoom}%`,
-          transform = `scale(${zoom})`;
+      transform = `scale(${zoom})`;
 
     const css = {
       width,
@@ -40,6 +27,26 @@ class MenuDiv extends Element {
     };
 
     this.css(css);
+  }
+
+  zoomMenuOut() {
+    let zoom = getZoom();
+
+    zoom /= ZOOM_RATIO;
+
+    setZoom(zoom);
+
+    this.zoom(zoom);
+  }
+
+  zoomMenuIn() {
+    let zoom = getZoom();
+
+    zoom *= ZOOM_RATIO;
+
+    setZoom(zoom);
+
+    this.zoom(zoom);
   }
 
   openMenu() {
@@ -50,26 +57,6 @@ class MenuDiv extends Element {
 
   closeMenu() {
     this.hide();
-  }
-
-  getZoom() {
-    const { zoom } = this.getState();
-
-    return zoom;
-  }
-
-  setZoom(zoom) {
-    this.updateState({
-      zoom
-    });
-  }
-
-  setInitialState() {
-    const zoom = 1;
-
-    this.setState({
-      zoom
-    });
   }
 
   childElements() {
@@ -87,6 +74,7 @@ class MenuDiv extends Element {
           closeMenu = this.closeMenu.bind(this),
           zoomMenuIn = this.zoomMenuIn.bind(this),
           zoomMenuOut = this.zoomMenuOut.bind(this),
+          updateMenuDiv = this.update.bind(this), ///
           getMenuDivHeight = this.getHeight.bind(this), ///
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
 
@@ -96,14 +84,13 @@ class MenuDiv extends Element {
       closeMenu,
       zoomMenuIn,
       zoomMenuOut,
+      updateMenuDiv,
       getMenuDivHeight,
       isMenuDivDisplayed
     });
   }
 
   initialise() {
-    this.setInitialState();
-
     this.hide();
   }
 

@@ -13,6 +13,7 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
+import { getViewZoom as getZoom, setViewZoom as setZoom } from "./state";
 import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
@@ -39,7 +40,7 @@ class View extends Element {
   }
 
   pinchStartCustomHandler = (event, element) => {
-    const zoom = this.getZoom(),
+    const zoom =getZoom(),
           startZoom = zoom; ///
 
     this.setStartZoom(startZoom);
@@ -49,7 +50,7 @@ class View extends Element {
     const startZoom = this.getStartZoom(),
           zoom = startZoom * Math.sqrt(ratio);
 
-    this.setZoom(zoom);
+    setZoom(zoom);
 
     this.zoom(zoom);
   }
@@ -169,6 +170,14 @@ class View extends Element {
     }
   }
 
+  update() {
+    const zoom = getZoom();
+
+    this.zoom(zoom);
+
+    this.updateMenuDiv();
+  }
+
   zoom(zoom) {
     const displayedLeafDiv = this.findDisplayedLeafDiv();
 
@@ -286,7 +295,7 @@ class View extends Element {
     previousLeafDiv.hide();
 
     const nextLeafDiv = leafDivs[nextIndex],
-          zoom = this.getZoom();
+          zoom = getZoom();
 
     nextLeafDiv.zoom(zoom);
 
@@ -352,18 +361,6 @@ class View extends Element {
     leafDivs.forEach(callback);
   }
 
-  getZoom() {
-    const { zoom } = this.getState();
-
-    return zoom;
-  }
-
-  setZoom(zoom) {
-    this.updateState({
-      zoom
-    });
-  }
-
   getLeafDivs() {
     const { leafDivs } = this.getState();
 
@@ -413,14 +410,12 @@ class View extends Element {
   }
 
   setInitialState() {
-    const zoom = 1,
-          leafDivs = this.retrieveLeafDivs(),
+    const leafDivs = this.retrieveLeafDivs(),
           interval = null,
           startZoom = null,
           startScrollTop = null;
 
     this.setState({
-      zoom,
       leafDivs,
       interval,
       startZoom,
