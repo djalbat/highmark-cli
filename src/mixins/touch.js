@@ -471,14 +471,16 @@ function endHandler(event, element, positionsFromEvent) {
     const startPositionsLength = startPositions.length,
           movingPositionsLength = movingPositions.length;
 
-    if (movingPositionsLength === 0) {
-      this.tapOrDoubleTap(event, element);
-    } else if (startPositionsLength === 1) {
-      this.dragEnd(event, element);
+    if (startPositionsLength === 1) {
+      if (movingPositionsLength === 0) {
+        this.tapOrDoubleTap(event, element);
+      } else {
+        this.dragEnd(event, element);
 
-      this.possibleTap(event, element);
+        this.possibleTap(event, element);
 
-      this.possibleSwipe(event, element);
+        this.possibleSwipe(event, element);
+      }
     }
   }
 
@@ -487,10 +489,10 @@ function endHandler(event, element, positionsFromEvent) {
   filterPositions(movingPositions, positions);
 }
 
-function tap(event, element) {
+function tap(event, element, top, left) {
   const customEventType = TAP_CUSTOM_EVENT_TYPE;
 
-  this.callCustomHandlers(customEventType, event, element); ///
+  this.callCustomHandlers(customEventType, event, element, top, left); ///
 }
 
 function drag(event, element) {
@@ -579,10 +581,10 @@ function swipe(event, element, speed, direction) {
   }
 }
 
-function doubleTap(event, element) {
+function doubleTap(event, element, top, left) {
   const customEventType = DOUBLE_TAP_CUSTOM_EVENT_TYPE;
 
-  this.callCustomHandlersConditionally(customEventType, event, element);
+  this.callCustomHandlersConditionally(customEventType, event, element, top, left);
 }
 
 function dragEnd(event, element) {
@@ -649,6 +651,12 @@ function possibleSwipe(event, element) {
 }
 
 function tapOrDoubleTap(event, element) {
+  const startPositions = this.getStartPositions(),
+        firstStartPosition = first(startPositions),
+        startPosition = firstStartPosition, ///
+        top = startPosition.getTop(),
+        left = startPosition.getLeft();
+
   let tapInterval = this.getTapInterval();
 
   if (tapInterval !== null) {
@@ -658,7 +666,7 @@ function tapOrDoubleTap(event, element) {
 
     this.setTapInterval(tapInterval);
 
-    this.doubleTap(event, element);
+    this.doubleTap(event, element, top, left);
 
     return;
   }
@@ -668,7 +676,7 @@ function tapOrDoubleTap(event, element) {
 
     this.setTapInterval(tapInterval);
 
-    this.tap(event, element);
+    this.tap(event, element, top, left);
   }, TAP_DELAY);
 
   this.setTapInterval(tapInterval);

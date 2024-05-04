@@ -24,14 +24,18 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
-  doubleTapCustomHandler = (event, element) => {
-    const menuDivDisplayed = this.isMenuDivDisplayed();
+  doubleTapCustomHandler = (event, element, top, left) => {
+    const menuDivTouched = this.isMenuDivTouched(top, left);
 
-    if (menuDivDisplayed) {
+    if (menuDivTouched) {
       return;
     }
 
+    const checked = true;
+
     this.restoreNativeGestures();
+
+    controller.checkRestoreNativeGesturesCheckbox(checked);
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -80,23 +84,10 @@ class View extends Element {
   }
 
   dragStartCustomHandler = (event, element, top, left) => {
-    const menuDivDisplayed = this.isMenuDivDisplayed();
-
-    if (menuDivDisplayed) {
-      const height = this.getHeight(),
-            bottom = height - top,
-            menuDivHeight = this.getMenuDivHeight();
-
-      if (bottom < menuDivHeight) {
-        const startScrollTop = null;
-
-        this.setStartScrollTop(startScrollTop);
-
-        return;
-      }
-    }
-
-    const scrollTop = this.getScrollTop(),
+    const menuDivTouched = this.isMenuDivTouched(top, left),
+          scrollTop = menuDivTouched ?
+                        null :
+                          this.getScrollTop(),
           startScrollTop = scrollTop; ///
 
     this.setStartScrollTop(startScrollTop);
@@ -126,14 +117,18 @@ class View extends Element {
     this.setScrollTop(scrollTop);
   }
 
-  tapCustomHandler = (event, element) => {
-    const menuDivDisplayed = this.isMenuDivDisplayed();
+  tapCustomHandler = (event, element, top, left) => {
+    const menuDivTouched = this.isMenuDivTouched();
 
-    if (menuDivDisplayed) {
+    if (menuDivTouched) {
       return;
     }
 
+    const checked = false;
+
     this.suppressNativeGestures();
+
+    this.checkRestoreNativeGesturesCheckbox(checked);
   }
 
   keyDownHandler = (event, element) => {
@@ -318,6 +313,24 @@ class View extends Element {
 
       nextLeafDiv.show();
     }, SHOW_DELAY);
+  }
+
+  isMenuDivTouched(top, left) {
+    let menuDivTouched = false;
+
+    const menuDivDisplayed = this.isMenuDivDisplayed();
+
+    if (menuDivDisplayed) {
+      const height = this.getHeight(),
+            bottom = height - top,
+            menuDivHeight = this.getMenuDivHeight();
+
+      if (bottom < menuDivHeight) {
+        menuDivTouched = true;
+      }
+    }
+
+    return menuDivTouched;
   }
 
   hideAllButFirstLeafDivs() {

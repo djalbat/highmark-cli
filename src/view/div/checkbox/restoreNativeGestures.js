@@ -28,6 +28,14 @@ and then tap to suppress)`}
     ]);
   }
 
+  parentContext() {
+    const checkRestoreNativeGesturesCheckbox = this.checkCheckbox.bind(this); ///
+
+    return ({
+      checkRestoreNativeGesturesCheckbox
+    });
+  }
+
   static defaultProperties = {
     className: "restore-native-gestures"
   };

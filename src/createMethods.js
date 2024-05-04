@@ -33,6 +33,10 @@ export default function createMethods(scheduler, model, view) {
     view.suppressNativeGestures();
   }
 
+  function checkRestoreNativeGesturesCheckbox(checked) {
+    view.checkRestoreNativeGesturesCheckbox(checked);
+  }
+
   return ({
     openMenu,
     closeMenu,
@@ -41,6 +45,7 @@ export default function createMethods(scheduler, model, view) {
     increaseFondSize,
     decreaseFontSize,
     restoreNativeGestures,
-    suppressNativeGestures
+    suppressNativeGestures,
+    checkRestoreNativeGesturesCheckbox
   });
 }

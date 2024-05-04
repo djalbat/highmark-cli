@@ -8,9 +8,11 @@ import { borderWidth, borderRadius, borderColour, checkboxSize, checkboxBackgrou
 
 export default withStyle(class extends Checkbox {
   parentContext() {
-    const isCheckboxChecked = this.isChecked.bind(this);
+    const checkCheckbox = this.check.bind(this),  ///
+          isCheckboxChecked = this.isChecked.bind(this);  ///
 
     return ({
+      checkCheckbox,
       isCheckboxChecked
     });
   }

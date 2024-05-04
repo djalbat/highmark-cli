@@ -38,7 +38,8 @@ class MenuDiv extends Element {
   }
 
   parentContext() {
-    const openMenu = this.openMenu.bind(this),
+    const context = this.getContext(),
+          openMenu = this.openMenu.bind(this),
           closeMenu = this.closeMenu.bind(this),
           increaseFontSize = this.increaseFontSize.bind(this),
           decreaseFontSize = this.decreaseFontSize.bind(this),
@@ -46,6 +47,7 @@ class MenuDiv extends Element {
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
 
     return ({
+      ...context,
       openMenu,
       closeMenu,
       increaseFontSize,
