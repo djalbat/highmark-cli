@@ -4,7 +4,6 @@ import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
 import InvertColoursCheckboxDiv from "./checkbox/invertColours";
-import PersistentStateCheckboxDiv from "./checkbox/persistentState";
 import RestoreNativeGesturesCheckboxDiv from "./checkbox/restoreNativeGestures";
 
 import { checkboxesDivGap } from "../../styles";
@@ -14,7 +13,6 @@ class CheckboxesDiv extends Element {
     return ([
 
       <InvertColoursCheckboxDiv/>,
-      <PersistentStateCheckboxDiv/>,
       <RestoreNativeGesturesCheckboxDiv/>
 
     ]);

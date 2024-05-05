@@ -1,6 +1,6 @@
 "use strict";
 
-import { setColoursInverted, enablePersistentState, disablePersistentState } from "./state";
+import { setColoursInverted } from "./state";
 
 export default function createMethods(scheduler, model, view) {
   function openMenu() {
@@ -61,8 +61,6 @@ export default function createMethods(scheduler, model, view) {
     enterFullScreen,
     restoreNativeGestures,
     suppressNativeGestures,
-    enablePersistentState,
-    disablePersistentState,
     checkRestoreNativeGesturesCheckbox
   });
 }

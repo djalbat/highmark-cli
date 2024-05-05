@@ -241,9 +241,13 @@ class View extends Element {
   enterFullScreen() {
     const domElement = this.getDOMElement();
 
-    domElement.requestFullscreen().catch((error) => {
-      alert(error);
-    });
+    domElement.requestFullscreen()
+      .then(() => {
+
+      })
+      .catch((error) => {
+        alert(error);
+      });
   }
 
   restoreNativeGestures() {

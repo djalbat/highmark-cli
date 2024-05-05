@@ -3,22 +3,31 @@
 import { getPersistentState, setPersistentState } from "./localStorage";
 import { PORTRAIT_ORIENTATION, LANDSCAPE_ORIENTATION } from "./constants";
 
-const orientation = null,
-      viewZoom = {
-        [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 1
-      },
-      menuDivZoom = {
-        [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 1
-      },
-      coloursInverted = false,
+const persistentState = getPersistentState(),
+      orientation = null,
       state = {
-        orientation,
-        viewZoom,
-        menuDivZoom,
-        coloursInverted,
+        orientation
       };
+
+if (persistentState !== null) {
+  Object.assign(state, persistentState);
+} else {
+  const viewZoom = {
+          [PORTRAIT_ORIENTATION]: 1,
+          [LANDSCAPE_ORIENTATION]: 1
+        },
+        menuDivZoom = {
+          [PORTRAIT_ORIENTATION]: 1,
+          [LANDSCAPE_ORIENTATION]: 1
+        },
+        coloursInverted = false;
+
+  Object.assign(state, {
+    viewZoom,
+    menuDivZoom,
+    coloursInverted
+  });
+}
 
 export function getViewZoom() {
   stateFromPersistentState();
@@ -104,22 +113,7 @@ export function setColoursInverted(coloursInverted) {
   stateToPersistentState();
 }
 
-export function enablePersistentState() {
-  updatePersistentState();
-}
-
-export function disablePersistentState() {
-  nullifyPersistentState();
-}
-
-export function isPersistentStateEnabled() {
-  const persistentState = getPersistentState(),
-        persistentStateEnabled = (persistentState !== null);
-
-  return persistentStateEnabled;
-}
-
-function updatePersistentState() {
+function stateToPersistentState() {
   const { viewZoom, menuDivZoom, coloursInverted } = state,
         persistentState = {
           viewZoom,
@@ -130,30 +124,8 @@ function updatePersistentState() {
   setPersistentState(persistentState);
 }
 
-function nullifyPersistentState() {
-  const persistentState = null;
-
-  setPersistentState(persistentState);
-}
-
 function stateFromPersistentState() {
-  const persistentStateEnabled = isPersistentStateEnabled();
-
-  if (!persistentStateEnabled) {
-    return;
-  }
-
   const persistentState = getPersistentState();
 
   Object.assign(state, persistentState);
-}
-
-function stateToPersistentState() {
-  const persistentStateEnabled = isPersistentStateEnabled();
-
-  if (!persistentStateEnabled) {
-    return;
-  }
-
-  updatePersistentState();
 }

@@ -3,14 +3,12 @@
 import { STATE_KEY } from "./constants";
 
 export function getPersistentState() {
-  let persistentState;
+  let persistentState = null;
 
   const key = STATE_KEY,
         value = localStorage.getItem(key);
 
-  if (value === null) {
-    persistentState = null;
-  } else {
+  if (value !== null) {
     const persistentStateString = value;  ///
 
     persistentState = JSON.parse(persistentStateString);
