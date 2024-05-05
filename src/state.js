@@ -2,6 +2,7 @@
 
 import { isFullScreen } from "./utilities/fullScreen";
 import { getPersistentState, setPersistentState } from "./localStorage";
+import {PORTRAIT_ORIENTATION} from "./constants";
 
 const orientation = null,
       state = {
@@ -108,6 +109,13 @@ export function setColoursInverted(coloursInverted) {
   });
 
   stateToPersistentState();
+}
+
+export function isOrientationPortrait() {
+  const orientation = getOrientation(),
+        portrait = (orientation === PORTRAIT_ORIENTATION);  ///
+
+  return portrait;
 }
 
 function stateToPersistentState() {

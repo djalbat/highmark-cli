@@ -19,7 +19,7 @@ class MenuDiv extends Element {
 
   zoom(zoom) {
     const width = `${100/zoom}%`,
-      transform = `scale(${zoom})`;
+          transform = `scale(${zoom})`;
 
     const css = {
       width,

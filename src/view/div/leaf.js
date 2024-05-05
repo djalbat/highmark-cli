@@ -5,6 +5,7 @@ import withStyle from "easy-with-style";  ///
 import { Element } from "easy";
 
 import { areColoursInverted } from "../../state";
+import { isOrientationPortrait } from "../../state";
 
 class LeafDiv extends Element {
   updateColours() {
@@ -24,8 +25,11 @@ class LeafDiv extends Element {
   }
 
   zoom(zoom) {
-    const width = `${100/zoom}%`,
-          minHeight = `${100/zoom}vh`,
+    const orientationPortrait = isOrientationPortrait(),
+          width = `${100/zoom}%`,
+          minHeight = orientationPortrait ?
+                        `${100/zoom}vh` :
+                          `${100/zoom}vw`,
           transform = `scale(${zoom})`;
 
     const css = {

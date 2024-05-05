@@ -15,7 +15,7 @@ import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
 import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted } from "./state";
-import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_BOTTOM } from "./constants";
+import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_AREA_HEIGHT } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -79,13 +79,13 @@ class View extends Element {
   swipeDownCustomHandler = (event, element, top, left, speed) => {
     const direction = DOWN_DIRECTION;
 
-    this.scroll(speed, direction);
+    this.scrolling(speed, direction);
   }
 
   swipeUpCustomHandler = (event, element, top, left, speed) => {
     const direction = UP_DIRECTION;
 
-    this.scroll(speed, direction);
+    this.scrolling(speed, direction);
   }
 
   dragStartCustomHandler = (event, element, top, left) => {
@@ -137,7 +137,7 @@ class View extends Element {
       const height = this.getHeight(),
             bottom = height - top;
 
-      if (bottom < MENU_DIV_TAP_BOTTOM) {
+      if (bottom < MENU_DIV_TAP_AREA_HEIGHT) {
         controller.openMenu();
 
         return;
@@ -209,7 +209,7 @@ class View extends Element {
     displayedLeafDiv.zoom(zoom);
   }
 
-  scroll(speed, direction) {
+  scrolling(speed, direction) {
     let scrollTop = this.getScrollTop();
 
     scrollTop += speed * SCROLL_DELAY;
@@ -241,6 +241,24 @@ class View extends Element {
     }, SCROLL_DELAY);
 
     this.setInterval(interval);
+  }
+
+  scrollToTop() {
+    const scrollTop = 0;
+
+    this.setScrollTop(scrollTop);
+  }
+
+  stopScrolling() {
+    let interval = this.getInterval();
+
+    if (interval !== null) {
+      clearInterval(interval);
+
+      interval = null;
+
+      this.setInterval(interval);
+    }
   }
 
   invertColours() {
@@ -320,27 +338,32 @@ class View extends Element {
 
   showNextLeafDiv(nextIndex, previousIndex) {
     const leafDivs = this.getLeafDivs(),
-          leafDivsLength = leafDivs.length,
-          previousLeafDiv = leafDivs[previousIndex];
+          leafDivsLength = leafDivs.length;
 
     if ((nextIndex === -1) || (nextIndex === previousIndex) || (nextIndex === leafDivsLength)) {
       return;
     }
 
-    previousLeafDiv.hide();
+    let zoom;
 
     const nextLeafDiv = leafDivs[nextIndex],
-          zoom = getZoom();
+          previousLeafDiv = leafDivs[previousIndex];
+
+    zoom = 1;
+
+    previousLeafDiv.zoom(zoom);
+
+    zoom = getZoom();
 
     nextLeafDiv.zoom(zoom);
 
-    setTimeout(() => {
-      const scrollTop = 0;
+    previousLeafDiv.hide();
 
-      nextLeafDiv.setScrollTop(scrollTop);
+    this.stopScrolling();
 
-      nextLeafDiv.show();
-    }, SHOW_DELAY);
+    this.scrollToTop();
+
+    nextLeafDiv.show();
   }
 
   isMenuDivTouched(top, left) {
@@ -470,6 +493,7 @@ class View extends Element {
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
+
     this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     window.onKeyDown(this.keyDownHandler);
@@ -499,6 +523,7 @@ class View extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
+
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     window.offKeyDown(this.keyDownHandler);
