@@ -4,7 +4,7 @@ import Button from "../button";
 import ZoomMenuInSVG from "../svg/zoomMenuIn";
 
 export default class ZoomMenuInButton extends Button {
-  clickHandler = (event, element) => {
+  tapCustomHandler = (event, element) => {
     controller.zoomMenuIn();
   }
 

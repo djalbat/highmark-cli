@@ -29,6 +29,10 @@ class MenuDiv extends Element {
     this.css(css);
   }
 
+  tap(top, left) {
+    this.tapButtonsDiv(top, left);
+  }
+
   zoomMenuOut() {
     let zoom = getZoom();
 
@@ -74,6 +78,7 @@ class MenuDiv extends Element {
           closeMenu = this.closeMenu.bind(this),
           zoomMenuIn = this.zoomMenuIn.bind(this),
           zoomMenuOut = this.zoomMenuOut.bind(this),
+          tapMenuDiv = this.tap.bind(this), ///
           updateMenuDiv = this.update.bind(this), ///
           getMenuDivHeight = this.getHeight.bind(this), ///
           isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
@@ -84,6 +89,7 @@ class MenuDiv extends Element {
       closeMenu,
       zoomMenuIn,
       zoomMenuOut,
+      tapMenuDiv,
       updateMenuDiv,
       getMenuDivHeight,
       isMenuDivDisplayed
@@ -91,7 +97,11 @@ class MenuDiv extends Element {
   }
 
   initialise() {
-    // this.hide();
+    this.assignContext([
+      "tapButtonsDiv"
+    ]);
+
+    this.hide();
   }
 
   static tagName = "div";

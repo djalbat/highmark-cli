@@ -110,18 +110,20 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element, top, left) => {
+    const menuDivTouched = this.isMenuDivTouched(top, left);
+
+    if (menuDivTouched) {
+      this.tapMenuDiv(top, left);
+
+      return;
+    }
+
     const height = this.getHeight(),
           bottom = height - top;
 
     if (bottom < MENU_DIV_TAP_BOTTOM) {
       controller.openMenu();
 
-      return;
-    }
-
-    const menuDivTouched = this.isMenuDivTouched();
-
-    if (menuDivTouched) {
       return;
     }
 

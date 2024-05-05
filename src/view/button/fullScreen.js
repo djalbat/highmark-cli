@@ -4,7 +4,7 @@ import Button from "../button";
 import FullScreenSVG from "../svg/fullScreen";
 
 export default class FullScreenButton extends Button {
-  clickHandler = (event, element) => {
+  tapCustomHandler = (event, element) => {
     controller.enterFullScreen();
   }
 
