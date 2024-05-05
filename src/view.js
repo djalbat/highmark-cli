@@ -462,6 +462,8 @@ class View extends Element {
 
     window.onKeyDown(this.keyDownHandler);
 
+    this.show();
+
     this.updateZoom();
 
     this.updateColours();

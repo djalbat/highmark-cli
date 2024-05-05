@@ -15,10 +15,12 @@ class LeafDiv extends Element {
 
   zoom(zoom) {
     const width = `${100/zoom}%`,
+          minHeight = `${100/zoom}vh`,
           transform = `scale(${zoom})`;
 
     const css = {
       width,
+      minHeight,
       transform
     };
 
@@ -35,7 +37,6 @@ class LeafDiv extends Element {
 export default withStyle(LeafDiv)`
 
   width: 100%;
-  min-height: 100vh !important;
   touch-action: none;
   pointer-events: none;
   transform-origin: top left;
