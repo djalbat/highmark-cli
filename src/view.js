@@ -9,13 +9,12 @@ import Element from "./view/element";
 import LeafDiv from "./view/div/leaf";
 import MenuDiv from "./view/div/menu";
 import touchMixins from "./mixins/touch";
+import fullScreenMixins from "./mixins/fullsrean";
 
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { FULLSCREENCHANGE_EVENT_TYPE } from "./eventTypes";
-import { isFullScreen, exitFullScreen, requestFullScreen } from "./utilities/fullScreen";
-import { getViewZoom as getZoom, setViewZoom as setZoom, areColoursInverted } from "./state";
+import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted } from "./state";
 import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
@@ -27,15 +26,15 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
-  fullScreenChangeHandler = (event, element) => {
+  fullScreenChangeCustomHandler = (event, element) => {
     this.updateZoom();
   }
 
   doubleTapCustomHandler = (event, element, top, left) => {
-    const fullScreen = isFullScreen();
+    const fullScreen = this.isFullScreen();
 
     if (fullScreen) {
-      exitFullScreen();
+      this.exitFullScreen();
 
       return;
     }
@@ -132,7 +131,7 @@ class View extends Element {
       return;
     }
 
-    const fullScreen = isFullScreen();
+    const fullScreen = this.isFullScreen();
 
     if (!fullScreen) {
       const height = this.getHeight(),
@@ -191,11 +190,9 @@ class View extends Element {
   }
 
   updateColours() {
-    const coloursInverted = areColoursInverted();
-
-    coloursInverted ?
-      this.invertColours() :
-        this.revertColours();
+    this.forEachLeafDiv((leafDiv) => {
+      leafDiv.updateColours();
+    });
   }
 
   updateZoom() {
@@ -247,21 +244,23 @@ class View extends Element {
   }
 
   invertColours() {
-    this.forEachLeafDiv((leafDiv) => {
-      leafDiv.invertColours();
-    });
+    const coloursInverted = true;
+
+    setColoursInverted(coloursInverted);
+
+    this.updateColours();
   }
 
   revertColours() {
-    this.forEachLeafDiv((leafDiv) => {
-      leafDiv.revertColours();
-    });
+    const coloursInverted = false;
+
+    setColoursInverted(coloursInverted);
+
+    this.updateColours();
   }
 
-  requestFullScreen() {
-    const element = this; ///
-
-    requestFullScreen(element, () => {
+  enterFullScreen() {
+    this.requestFullScreen(() => {
       this.closeMenu();
     });
   }
@@ -460,8 +459,6 @@ class View extends Element {
   }
 
   didMount() {
-    this.enableTouch();
-
     this.onCustomTap(this.tapCustomHandler);
     this.onCustomDragUp(this.dragUpCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
@@ -473,10 +470,12 @@ class View extends Element {
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
-
-    this.onEvent(FULLSCREENCHANGE_EVENT_TYPE, this.fullScreenChangeHandler);
+    this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     window.onKeyDown(this.keyDownHandler);
+
+    this.enableTouch();
+    this.enableFullScreen();
 
     this.show();
 
@@ -486,6 +485,9 @@ class View extends Element {
   }
 
   willUnmount() {
+    this.disableTouch();
+    this.disableFullScreen();
+
     this.offCustomTap(this.tapCustomHandler);
     this.offCustomDragUp(this.dragUpCustomHandler);
     this.offCustomDragDown(this.dragDownCustomHandler);
@@ -497,12 +499,9 @@ class View extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
-
-    this.offEvent(FULLSCREENCHANGE_EVENT_TYPE, this.fullScreenChangeHandler);
+    this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     window.offKeyDown(this.keyDownHandler);
-
-    this.disableTouch();
   }
 
   childElements() {
@@ -531,6 +530,7 @@ class View extends Element {
 }
 
 Object.assign(View.prototype, touchMixins);
+Object.assign(View.prototype, fullScreenMixins);
 
 export default withStyle(View)`
 

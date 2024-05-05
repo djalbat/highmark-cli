@@ -5,7 +5,7 @@ import FullScreenSVG from "../svg/fullScreen";
 
 export default class FullScreenButton extends Button {
   tapCustomHandler = (event, element) => {
-    controller.requestFullScreen();
+    controller.enterFullScreen();
   }
 
   static SVG = FullScreenSVG;

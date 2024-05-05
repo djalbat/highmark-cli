@@ -4,7 +4,17 @@ import withStyle from "easy-with-style";  ///
 
 import { Element } from "easy";
 
+import { areColoursInverted } from "../../state";
+
 class LeafDiv extends Element {
+  updateColours() {
+    const coloursInverted = areColoursInverted();
+
+    coloursInverted ?
+      this.invertColours() :
+        this.revertColours();
+  }
+
   invertColours() {
     this.addClass("inverted-colours");
   }

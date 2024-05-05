@@ -1,7 +1,5 @@
 "use strict";
 
-import { setColoursInverted } from "./state";
-
 export default function createMethods(scheduler, model, view) {
   function openMenu() {
     view.openMenu();
@@ -20,23 +18,15 @@ export default function createMethods(scheduler, model, view) {
   }
 
   function invertColours() {
-    const coloursInverted = true;
-
-    setColoursInverted(coloursInverted);
-
-    view.updateColours();
+    view.invertColours();
   }
 
   function revertColours() {
-    const coloursInverted = false;
-
-    setColoursInverted(coloursInverted);
-
-    view.updateColours();
+    view.revertColours();
   }
 
-  function requestFullScreen() {
-    view.requestFullScreen();
+  function enterFullScreen() {
+    view.enterFullScreen();
   }
 
   function restoreNativeGestures() {
@@ -58,7 +48,7 @@ export default function createMethods(scheduler, model, view) {
     zoomMenuOut,
     invertColours,
     revertColours,
-    requestFullScreen,
+    enterFullScreen,
     restoreNativeGestures,
     suppressNativeGestures,
     checkRestoreNativeGesturesCheckbox

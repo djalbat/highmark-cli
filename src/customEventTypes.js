@@ -14,3 +14,4 @@ export const SWIPE_RIGHT_CUSTOM_EVENT_TYPE = "swipe-right";
 export const PINCH_MOVE_CUSTOM_EVENT_TYPE = "pinch-move";
 export const PINCH_START_CUSTOM_EVENT_TYPE = "pinch-start";
 export const DOUBLE_TAP_CUSTOM_EVENT_TYPE = "double-tap";
+export const FULL_SCREEN_CHANGE_CUSTOM_EVENT_TYPE = "full-screen-change";
