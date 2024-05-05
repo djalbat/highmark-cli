@@ -14,7 +14,7 @@ import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
 import { getViewZoom as getZoom, setViewZoom as setZoom, areColoursInverted } from "./state";
-import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_SWIPE_BOTTOM } from "./constants";
+import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_BOTTOM } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -70,15 +70,6 @@ class View extends Element {
   }
 
   swipeUpCustomHandler = (event, element, top, left, speed) => {
-    const height = this.getHeight(),
-          bottom = height - top;
-
-    if (bottom < MENU_DIV_SWIPE_BOTTOM) {
-      controller.openMenu();
-
-      return;
-    }
-
     const direction = UP_DIRECTION;
 
     this.scroll(speed, direction);
@@ -119,6 +110,15 @@ class View extends Element {
   }
 
   tapCustomHandler = (event, element, top, left) => {
+    const height = this.getHeight(),
+          bottom = height - top;
+
+    if (bottom < MENU_DIV_TAP_BOTTOM) {
+      controller.openMenu();
+
+      return;
+    }
+
     const menuDivTouched = this.isMenuDivTouched();
 
     if (menuDivTouched) {
