@@ -4,7 +4,7 @@ import withStyle from "easy-with-style";  ///
 
 import { Button } from "easy";
 
-import { buttonSize, borderWidth, borderRadius, borderColour } from "../styles";
+import { buttonSize, borderWidth, borderRadius, borderColour, buttonPadding } from "../styles";
 
 export default withStyle(class extends Button {
   didMount() {
@@ -31,7 +31,7 @@ export default withStyle(class extends Button {
   cursor: pointer;
   border: ${borderWidth} solid ${borderColour};
   margin: 0;
-  padding: 0;
+  padding: ${buttonPadding};
   background: transparent;
   border-radius: ${borderRadius};   
   

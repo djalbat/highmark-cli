@@ -14,10 +14,10 @@ class ButtonsDiv extends Element {
   childElements() {
     return ([
 
-      <CloseMenuButton/>,
-      <FullScreenButton/>,
       <ZoomMenuInButton/>,
-      <ZoomMenuOutButton/>
+      <CloseMenuButton/>,
+      <ZoomMenuOutButton/>,
+      <FullScreenButton/>
 
     ]);
   }
@@ -32,9 +32,8 @@ class ButtonsDiv extends Element {
 export default withStyle(ButtonsDiv)`
 
   gap: ${buttonsDivGap};
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-rows: min-content min-content;
+  grid-template-columns: min-content min-content;
   
 `;

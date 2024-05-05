@@ -8,7 +8,7 @@ import CheckboxesDiv from "../div/checkboxes";
 
 import { GRID, ZOOM_RATIO } from "../../constants";
 import { getMenuDivZoom as getZoom, setMenuDivZoom as setZoom } from "../../state";
-import { borderColour, menuDivPadding, buttonsDivWidth, menuDivBackgroundColour } from "../../styles";
+import { borderColour, menuDivPadding, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
   update() {
@@ -91,7 +91,7 @@ class MenuDiv extends Element {
   }
 
   initialise() {
-    this.hide();
+    // this.hide();
   }
 
   static tagName = "div";
@@ -115,6 +115,6 @@ export default withStyle(MenuDiv)`
   background-color: ${menuDivBackgroundColour};
   transform-origin: bottom left;
   grid-template-rows: auto;
-  grid-template-columns: auto ${buttonsDivWidth};
+  grid-template-columns: auto min-content;
 
 `;
