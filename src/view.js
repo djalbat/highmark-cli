@@ -14,8 +14,8 @@ import fullScreenMixins from "./mixins/fullsrean";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
-import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted } from "./state";
-import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_AREA_HEIGHT } from "./constants";
+import {getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted, areColoursInverted} from "./state";
+import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, BACKGROUND_COLOUR, MENU_DIV_TAP_AREA_HEIGHT } from "./constants";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -27,7 +27,7 @@ const { ENTER_KEY_CODE,
 
 class View extends Element {
   fullScreenChangeCustomHandler = (event, element) => {
-    this.updateZoom();
+    this.update();
   }
 
   doubleTapCustomHandler = (event, element, top, left) => {
@@ -79,13 +79,13 @@ class View extends Element {
   swipeDownCustomHandler = (event, element, top, left, speed) => {
     const direction = DOWN_DIRECTION;
 
-    this.scrolling(speed, direction);
+    this.startScrolling(speed, direction);
   }
 
   swipeUpCustomHandler = (event, element, top, left, speed) => {
     const direction = UP_DIRECTION;
 
-    this.scrolling(speed, direction);
+    this.startScrolling(speed, direction);
   }
 
   dragStartCustomHandler = (event, element, top, left) => {
@@ -176,7 +176,7 @@ class View extends Element {
       }
 
       case ARROW_UP_KEY_CODE: {
-        this.showFirstLeftDiv();
+        this.showFirstLeafDiv();
 
         break;
       }
@@ -189,18 +189,21 @@ class View extends Element {
     }
   }
 
-  updateColours() {
-    this.forEachLeafDiv((leafDiv) => {
-      leafDiv.updateColours();
-    });
-  }
+  update() {
+    const zoom = getZoom(),
+          coloursInverted = areColoursInverted();
 
-  updateZoom() {
-    const zoom = getZoom();
+    if (coloursInverted) {
+      this.addClass("inverted-colours");
+      this.addMenuDivClass("inverted-colours");
+    } else {
+      this.removeClass("inverted-colours");
+      this.removeMenuDivClass("inverted-colours");
+    }
 
     this.zoom(zoom);
 
-    this.updateMenuDiv();
+    this.zoomMenuDiv(zoom);
   }
 
   zoom(zoom) {
@@ -209,7 +212,25 @@ class View extends Element {
     displayedLeafDiv.zoom(zoom);
   }
 
-  scrolling(speed, direction) {
+  scrollToTop() {
+    const scrollTop = 0;
+
+    this.setScrollTop(scrollTop);
+  }
+
+  stopScrolling() {
+    let interval = this.getInterval();
+
+    if (interval !== null) {
+      clearInterval(interval);
+
+      interval = null;
+
+      this.setInterval(interval);
+    }
+  }
+
+  startScrolling(speed, direction) {
     let scrollTop = this.getScrollTop();
 
     scrollTop += speed * SCROLL_DELAY;
@@ -243,30 +264,12 @@ class View extends Element {
     this.setInterval(interval);
   }
 
-  scrollToTop() {
-    const scrollTop = 0;
-
-    this.setScrollTop(scrollTop);
-  }
-
-  stopScrolling() {
-    let interval = this.getInterval();
-
-    if (interval !== null) {
-      clearInterval(interval);
-
-      interval = null;
-
-      this.setInterval(interval);
-    }
-  }
-
   invertColours() {
     const coloursInverted = true;
 
     setColoursInverted(coloursInverted);
 
-    this.updateColours();
+    this.update();
   }
 
   revertColours() {
@@ -274,7 +277,7 @@ class View extends Element {
 
     setColoursInverted(coloursInverted);
 
-    this.updateColours();
+    this.update();
   }
 
   enterFullScreen() {
@@ -295,12 +298,9 @@ class View extends Element {
     this.enableCustomGestures();
   }
 
-  showFirstLeftDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(displayedLeafDiv),
-          nextIndex = 0,
-          previousIndex = index;  ///
+  showFirstLeafDiv() {
+    const nextIndex = 0,
+          previousIndex = nextIndex;  ///
 
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
@@ -312,42 +312,44 @@ class View extends Element {
           nextIndex = index - 1,
           previousIndex = index;  ///
 
+    if (nextIndex === -1) {
+      return;
+    }
+
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
 
   showRightLeftDiv() {
     const displayedLeafDiv = this.findDisplayedLeafDiv(),
           leafDivs = this.getLeafDivs(),
+          leafDivsLength = leafDivs.length,
           index = leafDivs.indexOf(displayedLeafDiv),
           nextIndex = index + 1,
           previousIndex = index;  ///
+
+    if (nextIndex === leafDivsLength) {
+      return;
+    }
 
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
 
   showLastLeafDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(displayedLeafDiv),
+    const leafDivs = this.getLeafDivs(),
           leafDivsLength = leafDivs.length,
           nextIndex = leafDivsLength - 1,
-          previousIndex = index;  ///
+          previousIndex = nextIndex;  ///
 
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
 
   showNextLeafDiv(nextIndex, previousIndex) {
     const leafDivs = this.getLeafDivs(),
-          leafDivsLength = leafDivs.length;
-
-    if ((nextIndex === -1) || (nextIndex === previousIndex) || (nextIndex === leafDivsLength)) {
-      return;
-    }
+          nextLeafDiv = leafDivs[nextIndex],
+          previousLeafDiv = leafDivs[previousIndex],
+          backgroundColour = nextLeafDiv.getBackgroundColour();
 
     let zoom;
-
-    const nextLeafDiv = leafDivs[nextIndex],
-          previousLeafDiv = leafDivs[previousIndex];
 
     zoom = 1;
 
@@ -359,11 +361,28 @@ class View extends Element {
 
     previousLeafDiv.hide();
 
+    this.setBackgroundColour(backgroundColour);
+
     this.stopScrolling();
 
     this.scrollToTop();
 
     nextLeafDiv.show();
+  }
+
+  setBackgroundColour(backgroundColour) {
+    const backgroundColor = backgroundColour, ///
+          css = {
+            backgroundColor
+          };
+
+    this.css(css);
+  }
+
+  hideAllLeafDivs() {
+    this.forEachLeafDiv((leafDiv) => {
+      leafDiv.hide();
+    });
   }
 
   isMenuDivTouched(top, left) {
@@ -382,14 +401,6 @@ class View extends Element {
     }
 
     return menuDivTouched;
-  }
-
-  hideAllButFirstLeafDivs() {
-    this.forEachLeafDiv((leafDiv, index) => {
-      if (index > 0) {
-        leafDiv.hide();
-      }
-    });
   }
 
   findDisplayedLeafDiv() {
@@ -501,11 +512,11 @@ class View extends Element {
     this.enableTouch();
     this.enableFullScreen();
 
+    this.showFirstLeafDiv();
+
+    this.update();
+
     this.show();
-
-    this.updateZoom();
-
-    this.updateColours();
   }
 
   willUnmount() {
@@ -544,7 +555,7 @@ class View extends Element {
 
     this.suppressNativeGestures();
 
-    this.hideAllButFirstLeafDivs();
+    this.hideAllLeafDivs();
   }
 
   static tagName = "div";
@@ -568,4 +579,8 @@ export default withStyle(View)`
     touch-action: auto;
   }
   
+  .inverted-colours {
+    filter: invert(1);
+  }
+    
 `;

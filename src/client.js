@@ -39,7 +39,7 @@ body.mount(
 onOrientationChange((orientation) => {
   setOrientation(orientation);
 
-  view.updateZoom();
+  view.update();
 });
 
 getOrientation((orientation) => {

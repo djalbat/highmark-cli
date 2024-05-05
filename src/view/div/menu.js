@@ -11,26 +11,12 @@ import { getMenuDivZoom as getZoom, setMenuDivZoom as setZoom } from "../../stat
 import { borderColour, menuDivPadding, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  update() {
-    const zoom = getZoom();
-
-    this.zoom(zoom);
+  invertColours() {
+    this.addClass("inverted-colours");
   }
 
-  zoom(zoom) {
-    const width = `${100/zoom}%`,
-          transform = `scale(${zoom})`;
-
-    const css = {
-      width,
-      transform
-    };
-
-    this.css(css);
-  }
-
-  tap(top, left) {
-    this.tapButtonsDiv(top, left);
+  revertColours() {
+    this.removeClass("inverted-colours");
   }
 
   zoomMenuOut() {
@@ -51,6 +37,21 @@ class MenuDiv extends Element {
     setZoom(zoom);
 
     this.zoom(zoom);
+  }
+
+  zoom(zoom) {
+    const width = `${100/zoom}%`,
+          transform = `scale(${zoom})`,
+          css = {
+            width,
+            transform
+          };
+
+    this.css(css);
+  }
+
+  tap(top, left) {
+    this.tapButtonsDiv(top, left);
   }
 
   openMenu() {
@@ -79,9 +80,11 @@ class MenuDiv extends Element {
           zoomMenuIn = this.zoomMenuIn.bind(this),
           zoomMenuOut = this.zoomMenuOut.bind(this),
           tapMenuDiv = this.tap.bind(this), ///
-          updateMenuDiv = this.update.bind(this), ///
+          zoomMenuDiv = this.zoom.bind(this), ///
+          addMenuDivClass = this.addClass.bind(this), ///
           getMenuDivHeight = this.getHeight.bind(this), ///
-          isMenuDivDisplayed = this.isDisplayed.bind(this);  ///
+          removeMenuDivClass = this.removeClass.bind(this), ///
+          isMenuDivDisplayed = this.isDisplayed.bind(this); ///
 
     return ({
       ...context,
@@ -90,8 +93,10 @@ class MenuDiv extends Element {
       zoomMenuIn,
       zoomMenuOut,
       tapMenuDiv,
-      updateMenuDiv,
+      zoomMenuDiv,
+      addMenuDivClass,
       getMenuDivHeight,
+      removeMenuDivClass,
       isMenuDivDisplayed
     });
   }
@@ -126,5 +131,9 @@ export default withStyle(MenuDiv)`
   transform-origin: bottom left;
   grid-template-rows: auto;
   grid-template-columns: auto min-content;
-
+  
+  .inverted-colours {
+    filter: invert(1);
+  }
+    
 `;

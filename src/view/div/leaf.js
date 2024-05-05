@@ -4,37 +4,21 @@ import withStyle from "easy-with-style";  ///
 
 import { Element } from "easy";
 
-import { areColoursInverted } from "../../state";
-import { isOrientationPortrait } from "../../state";
+import { BACKGROUND_COLOUR } from "../../constants";
 
 class LeafDiv extends Element {
-  updateColours() {
-    const coloursInverted = areColoursInverted();
+  getBackgroundColour() {
+    const backgroundColour = this.css(BACKGROUND_COLOUR) || null;
 
-    coloursInverted ?
-      this.invertColours() :
-        this.revertColours();
-  }
-
-  invertColours() {
-    this.addClass("inverted-colours");
-  }
-
-  revertColours() {
-    this.removeClass("inverted-colours");
+    return backgroundColour;
   }
 
   zoom(zoom) {
-    const orientationPortrait = isOrientationPortrait(),
-          width = `${100/zoom}%`,
-          minHeight = orientationPortrait ?
-                        `${100/zoom}vh` :
-                          `${100/zoom}vw`,
+    const width = `${100/zoom}%`,
           transform = `scale(${zoom})`;
 
     const css = {
       width,
-      minHeight,
       transform
     };
 
@@ -55,8 +39,4 @@ export default withStyle(LeafDiv)`
   pointer-events: none;
   transform-origin: top left;
   
-  .inverted-colours {
-    filter: invert(1);
-  }
-    
 `;
