@@ -13,7 +13,7 @@ import createMethods from "./createMethods";
 
 import { setOrientation } from "./state";
 import { elementFromDOMElement } from "./utilities/element";
-import { getOrientation, onOrientationChange } from "./utilities/responsive";
+import { getOrientation, onOrientationChange } from "./utilities/orientation";
 import { LOADING_DIV_SELECTOR, VIEW_DIV_SELECTOR } from "./selectors";
 
 const { renderStyles } = withStyle;

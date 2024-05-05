@@ -1,43 +1,28 @@
 "use strict";
 
+import { isFullScreen } from "./utilities/fullScreen";
 import { getPersistentState, setPersistentState } from "./localStorage";
-import { PORTRAIT_ORIENTATION, LANDSCAPE_ORIENTATION } from "./constants";
 
-const persistentState = getPersistentState(),
-      orientation = null,
+const orientation = null,
       state = {
         orientation
       };
 
-if (persistentState !== null) {
-  Object.assign(state, persistentState);
-} else {
-  const viewZoom = {
-          [PORTRAIT_ORIENTATION]: 1,
-          [LANDSCAPE_ORIENTATION]: 1
-        },
-        menuDivZoom = {
-          [PORTRAIT_ORIENTATION]: 1,
-          [LANDSCAPE_ORIENTATION]: 1
-        },
-        coloursInverted = false;
-
-  Object.assign(state, {
-    viewZoom,
-    menuDivZoom,
-    coloursInverted
-  });
-}
-
 export function getViewZoom() {
   stateFromPersistentState();
 
+  const fullScreen = isFullScreen(),
+        orientation = getOrientation();
+
   let viewZoom;
 
-  ({ viewZoom } = state);
+  if (fullScreen) {
+    ({ fullScreenViewZoom: viewZoom } = state);
+  } else {
+    ({ viewZoom } = state);
+  }
 
-  const { orientation } = state,
-        orientedViewZoom = viewZoom[orientation]; ///
+  const orientedViewZoom = viewZoom[orientation]; ///
 
   viewZoom = orientedViewZoom;  ///
 
@@ -47,10 +32,16 @@ export function getViewZoom() {
 export function setViewZoom(viewZoom) {
   stateFromPersistentState();
 
-  const { orientation } = state,
-        orientedViewZoom = viewZoom;  ///
+  const fullScreen = isFullScreen(),
+        orientation = getOrientation();
 
-  ({ viewZoom } = state);
+  const orientedViewZoom = viewZoom;  ///
+
+  if (fullScreen) {
+    ({ fullScreenViewZoom: viewZoom } = state);
+  } else {
+    ({ viewZoom } = state);
+  }
 
   Object.assign(viewZoom, {
     [orientation]: orientedViewZoom
@@ -89,6 +80,12 @@ export function setMenuDivZoom(menuDivZoom) {
   stateToPersistentState();
 }
 
+export function getOrientation() {
+  const { orientation } = state;
+
+  return orientation;
+}
+
 export function setOrientation(orientation) {
   Object.assign(state, {
     orientation
@@ -114,10 +111,11 @@ export function setColoursInverted(coloursInverted) {
 }
 
 function stateToPersistentState() {
-  const { viewZoom, menuDivZoom, coloursInverted } = state,
+  const { viewZoom, menuDivZoom, fullScreenViewZoom, coloursInverted } = state,
         persistentState = {
           viewZoom,
           menuDivZoom,
+          fullScreenViewZoom,
           coloursInverted
         };
 

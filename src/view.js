@@ -13,6 +13,8 @@ import touchMixins from "./mixins/touch";
 import { leafNodesFromNodeList } from "./utilities/tree";
 import { elementsFromDOMElements } from "./utilities/element";
 import { VIEW_CHILD_DIVS_SELECTOR } from "./selectors";
+import { FULLSCREENCHANGE_EVENT_TYPE } from "./eventTypes";
+import { isFullScreen, exitFullScreen, requestFullScreen } from "./utilities/fullScreen";
 import { getViewZoom as getZoom, setViewZoom as setZoom, areColoursInverted } from "./state";
 import { SHOW_DELAY, SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_BOTTOM } from "./constants";
 
@@ -25,7 +27,19 @@ const { ENTER_KEY_CODE,
         ARROW_RIGHT_KEY_CODE } = keyCodes;
 
 class View extends Element {
+  fullScreenChangeHandler = (event, element) => {
+    this.updateZoom();
+  }
+
   doubleTapCustomHandler = (event, element, top, left) => {
+    const fullScreen = isFullScreen();
+
+    if (fullScreen) {
+      exitFullScreen();
+
+      return;
+    }
+
     const menuDivTouched = this.isMenuDivTouched(top, left);
 
     if (menuDivTouched) {
@@ -118,13 +132,17 @@ class View extends Element {
       return;
     }
 
-    const height = this.getHeight(),
-          bottom = height - top;
+    const fullScreen = isFullScreen();
 
-    if (bottom < MENU_DIV_TAP_BOTTOM) {
-      controller.openMenu();
+    if (!fullScreen) {
+      const height = this.getHeight(),
+            bottom = height - top;
 
-      return;
+      if (bottom < MENU_DIV_TAP_BOTTOM) {
+        controller.openMenu();
+
+        return;
+      }
     }
 
     const checked = false;
@@ -240,16 +258,12 @@ class View extends Element {
     });
   }
 
-  enterFullScreen() {
-    const domElement = this.getDOMElement();
+  requestFullScreen() {
+    const element = this; ///
 
-    domElement.requestFullscreen()
-      .then(() => {
-
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    requestFullScreen(element, () => {
+      this.closeMenu();
+    });
   }
 
   restoreNativeGestures() {
@@ -460,6 +474,8 @@ class View extends Element {
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
+    this.onEvent(FULLSCREENCHANGE_EVENT_TYPE, this.fullScreenChangeHandler);
+
     window.onKeyDown(this.keyDownHandler);
 
     this.show();
@@ -482,9 +498,11 @@ class View extends Element {
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
 
-    this.disableTouch();
+    this.offEvent(FULLSCREENCHANGE_EVENT_TYPE, this.fullScreenChangeHandler);
 
     window.offKeyDown(this.keyDownHandler);
+
+    this.disableTouch();
   }
 
   childElements() {

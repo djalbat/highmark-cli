@@ -19,9 +19,7 @@ export default class RestoreNativeGesturesCheckboxDiv extends CheckboxDiv {
     });
   }
 
-  static message = `Restore native gestures
-(alternatively double tap 
-and then tap to suppress)`;
+  static message = "Restore native gestures";
 
   static defaultProperties = {
     className: "restore-native-gestures"
