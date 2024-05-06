@@ -67,8 +67,8 @@ function selectorStringFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath,  ///
         className = classNameFromFilePath(filePath),
         selectorString = (className !== null) ?
-                          `div.${className}` :
-                            `div`;
+                          `${DEFAULT_SELECTOR_STRING}.${className}` :
+                            `${DEFAULT_SELECTOR_STRING}`;
 
   return selectorString;
 }

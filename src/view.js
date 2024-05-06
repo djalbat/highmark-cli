@@ -46,6 +46,7 @@ export default withStyle(View)`
 
   width: 100%;
   height: 100%;
+  overflos: hidden;
   position: relative;
   align-items: stretch;
   flex-direction: column;

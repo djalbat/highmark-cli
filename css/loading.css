@@ -3,11 +3,6 @@
       display: none;
     }
 
-    div.overlay > div {
-      height: 100% !important;
-      padding: 0 !important;;
-    }
-
     body > div.loading {
       width: 100vw;
       height: 100vh;
