@@ -8,6 +8,11 @@ import OverlayDiv from "./view/div/overlay";
 import PreloaderDiv from "./view/div/preloader";
 
 class View extends Element {
+  updateZoom() {
+    this.updateMenuDivZoom();
+    this.updateOverlayDivZoom();
+  }
+
   childElements() {
     const { divDOMElement } = this.properties;
 

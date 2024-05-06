@@ -37,6 +37,8 @@ const body = new Body(),
 
 onOrientationChange((orientation) => {
   setOrientation(orientation);
+
+  view.updateZoom();
 });
 
 getOrientation((orientation) => {

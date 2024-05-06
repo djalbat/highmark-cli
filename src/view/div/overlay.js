@@ -505,13 +505,15 @@ class OverlayDiv extends Element {
     const invertColours = this.invertColours.bind(this),
           revertColours = this.revertColours.bind(this),
           exitFullScreen = this.exitFullScreen.bind(this),
-          enterFullScreen = this.enterFullScreen.bind(this);
+          enterFullScreen = this.enterFullScreen.bind(this),
+          updateOverlayDivZoom = this.updateZoom.bind(this);  ///
 
     return ({
       invertColours,
       revertColours,
       exitFullScreen,
-      enterFullScreen
+      enterFullScreen,
+      updateOverlayDivZoom
     });
   }
 

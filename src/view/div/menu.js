@@ -79,14 +79,16 @@ class MenuDiv extends Element {
           openMenu = this.openMenu.bind(this),
           closeMenu = this.closeMenu.bind(this),
           zoomMenuIn = this.zoomMenuIn.bind(this),
-          zoomMenuOut = this.zoomMenuOut.bind(this); ///
+          zoomMenuOut = this.zoomMenuOut.bind(this),
+          updateMenuDivZoom = this.updateZoom.bind(this); ///
 
     return ({
       ...context,
       openMenu,
       closeMenu,
       zoomMenuIn,
-      zoomMenuOut
+      zoomMenuOut,
+      updateMenuDivZoom
     });
   }
 
