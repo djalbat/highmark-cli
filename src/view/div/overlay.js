@@ -272,8 +272,13 @@ class OverlayDiv extends Element {
   }
 
   showFirstLeafDiv() {
-    const nextIndex = 0,
-          previousIndex = nextIndex;  ///
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
+          leafDivs = this.getLeafDivs(),
+          index = leafDivs.indexOf(displayedLeafDiv),
+          nextIndex = 0,
+          previousIndex = (index === -1) ?
+                            nextIndex : ///
+                              index;  ///
 
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
@@ -308,10 +313,14 @@ class OverlayDiv extends Element {
   }
 
   showLastLeafDiv() {
-    const leafDivs = this.getLeafDivs(),
+    const displayedLeafDiv = this.findDisplayedLeafDiv(),
+          leafDivs = this.getLeafDivs(),
+          index = leafDivs.indexOf(displayedLeafDiv),
           leafDivsLength = leafDivs.length,
           nextIndex = leafDivsLength - 1,
-          previousIndex = nextIndex;  ///
+          previousIndex = (index === -1) ?
+                            nextIndex : ///
+                              index;  ///
 
     this.showNextLeafDiv(nextIndex, previousIndex);
   }
