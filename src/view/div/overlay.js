@@ -517,14 +517,18 @@ class OverlayDiv extends Element {
           revertColours = this.revertColours.bind(this),
           exitFullScreen = this.exitFullScreen.bind(this),
           enterFullScreen = this.enterFullScreen.bind(this),
-          updateOverlayDivZoom = this.updateZoom.bind(this);  ///
+          updateOverlayDivZoom = this.updateZoom.bind(this),  ///
+          restoreNativeGestures = this.restoreNativeGestures.bind(this),
+          suppressNativeGestures = this.suppressNativeGestures.bind(this);
 
     return ({
       invertColours,
       revertColours,
       exitFullScreen,
       enterFullScreen,
-      updateOverlayDivZoom
+      updateOverlayDivZoom,
+      restoreNativeGestures,
+      suppressNativeGestures
     });
   }
 
@@ -558,10 +562,12 @@ export default withStyle(OverlayDiv)`
   
   width: 100%;
   height: 100%;
+
   overflow: hidden;
   touch-action: none;
     
   .native-gestures {
+    overflow: scroll;
     touch-action: auto;
   }
   

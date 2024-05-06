@@ -3,7 +3,7 @@
 import CheckboxDiv from "../../div/checkbox";
 
 export default class RestoreNativeGesturesCheckboxDiv extends CheckboxDiv {
-  clickHandler = (event, element) => {
+  changeHandler = (event, element) => {
     const checkboxChecked = this.isCheckboxChecked();
 
     checkboxChecked ?
