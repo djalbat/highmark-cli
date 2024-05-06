@@ -7,8 +7,8 @@ import ButtonsDiv from "../div/buttons";
 import CheckboxesDiv from "../div/checkboxes";
 
 import { GRID, ZOOM_RATIO } from "../../constants";
+import { borderColour, menuDivPadding, backgroundColour } from "../../styles";
 import { getMenuDivZoom as getZoom, setMenuDivZoom as setZoom } from "../../state";
-import { borderColour, menuDivPadding, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
   zoomMenuOut() {
@@ -109,10 +109,9 @@ export default withStyle(MenuDiv)`
   bottom: 0;
   display: grid;
   padding: ${menuDivPadding};
-  position: absolute;
-  overflow: hidden;
+  position: fixed;
   border-top: 1px solid ${borderColour};
-  background-color: ${menuDivBackgroundColour};
+  background-color: ${backgroundColour};
   transform-origin: bottom left;
   grid-template-rows: auto;
   grid-template-columns: auto min-content;

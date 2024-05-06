@@ -558,7 +558,8 @@ export default withStyle(OverlayDiv)`
   
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow: hidden;
+  touch-action: none;
     
   .native-gestures {
     touch-action: auto;

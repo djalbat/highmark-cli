@@ -36,7 +36,6 @@ export default withStyle(LeafDiv)`
 
   width: 100%;
   min-height: 100%;
-  touch-action: none;
   pointer-events: none;
   transform-origin: top left;
   

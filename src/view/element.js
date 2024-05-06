@@ -12,6 +12,5 @@ export default withStyle(class extends Element {
   margin: 0;
   padding: 0;
   background: transparent;
-  touch-action: none;
   
 `;
