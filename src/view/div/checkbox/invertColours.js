@@ -14,10 +14,11 @@ export default class InvertColoursCheckboxDiv extends CheckboxDiv {
   }
 
   didMount() {
-    const coloursInverted = areColoursInverted(),
-          checked = coloursInverted; ///
+    const coloursInverted = areColoursInverted();
 
-    this.checkCheckbox(checked);
+    coloursInverted ?
+      this.checkCheckbox() :
+        this.uncheckCheckbox();
   }
 
   willUnmount() {

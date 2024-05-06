@@ -18,7 +18,7 @@ class MenuDiv extends Element {
 
     setZoom(zoom);
 
-    this.zoom(zoom);
+    this.updateZoom();
   }
 
   zoomMenuIn() {
@@ -28,11 +28,12 @@ class MenuDiv extends Element {
 
     setZoom(zoom);
 
-    this.zoom(zoom);
+    this.updateZoom();
   }
 
-  zoom(zoom) {
-    const width = `${100/zoom}%`,
+  updateZoom() {
+    const zoom = getZoom(),
+          width = `${100/zoom}%`,
           transform = `scale(${zoom})`,
           css = {
             width,
@@ -54,6 +55,14 @@ class MenuDiv extends Element {
 
   closeMenu() {
     this.hide();
+  }
+
+  didMount() {
+    this.updateZoom();
+  }
+
+  willUnmount() {
+    ///
   }
 
   childElements() {
@@ -94,8 +103,11 @@ class MenuDiv extends Element {
 
 export default withStyle(MenuDiv)`
 
+  left: 0;
+  bottom: 0;
   display: grid;
   padding: ${menuDivPadding};
+  position: absolute;
   overflow: hidden;
   border-top: 1px solid ${borderColour};
   background-color: ${menuDivBackgroundColour};

@@ -12,10 +12,12 @@ export default class RestoreNativeGesturesCheckboxDiv extends CheckboxDiv {
   }
 
   parentContext() {
-    const checkRestoreNativeGesturesCheckbox = this.checkCheckbox.bind(this); ///
+    const checkRestoreNativeGesturesCheckbox = this.checkCheckbox.bind(this), ///
+          uncheckRestoreNativeGesturesCheckbox = this.uncheckCheckbox.bind(this); ///
 
     return ({
-      checkRestoreNativeGesturesCheckbox
+      checkRestoreNativeGesturesCheckbox,
+      uncheckRestoreNativeGesturesCheckbox
     });
   }
 

@@ -45,6 +45,10 @@ export default function createMethods(scheduler, model, view) {
     view.checkRestoreNativeGesturesCheckbox(checked);
   }
 
+  function uncheckRestoreNativeGesturesCheckbox(checked) {
+    view.uncheckRestoreNativeGesturesCheckbox(checked);
+  }
+
   return ({
     openMenu,
     closeMenu,
@@ -56,6 +60,7 @@ export default function createMethods(scheduler, model, view) {
     enterFullScreen,
     restoreNativeGestures,
     suppressNativeGestures,
-    checkRestoreNativeGesturesCheckbox
+    checkRestoreNativeGesturesCheckbox,
+    uncheckRestoreNativeGesturesCheckbox
   });
 }

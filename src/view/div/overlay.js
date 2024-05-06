@@ -2,18 +2,34 @@
 
 import withStyle from "easy-with-style";  ///
 
+import { window } from "easy";
+import { keyCodes } from "necessary";
+
 import Element from "../element";
 import LeafDiv from "../div/leaf";
 import touchMixins from "../../mixins/touch";
+import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
 import { DIVS_SELECTOR } from "../../selectors";
 import { leafNodesFromNodeList } from "../../utilities/tree";
 import { elementsFromDOMElements } from "../../utilities/element";
-import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, MENU_DIV_TAP_AREA_HEIGHT } from "../../constants";
+import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted, areColoursInverted } from "../../state";
 
+const { ENTER_KEY_CODE,
+        ESCAPE_KEY_CODE,
+        BACKSPACE_KEY_CODE,
+        ARROW_UP_KEY_CODE,
+        ARROW_DOWN_KEY_CODE,
+        ARROW_LEFT_KEY_CODE,
+        ARROW_RIGHT_KEY_CODE } = keyCodes;
+
 class OverlayDiv extends Element {
+  fullScreenChangeCustomHandler = (event, element) => {
+    this.updateZoom();
+  }
+
   doubleTapCustomHandler = (event, element, top, left) => {
     const fullScreen = isFullScreen();
 
@@ -23,15 +39,13 @@ class OverlayDiv extends Element {
       return;
     }
 
-    const checked = true;
-
     this.restoreNativeGestures();
 
-    controller.checkRestoreNativeGesturesCheckbox(checked);
+    controller.checkRestoreNativeGesturesCheckbox();
   }
 
   pinchStartCustomHandler = (event, element) => {
-    const zoom =getZoom(),
+    const zoom = getZoom(),
           startZoom = zoom; ///
 
     this.setStartZoom(startZoom);
@@ -43,7 +57,7 @@ class OverlayDiv extends Element {
 
     setZoom(zoom);
 
-    this.zoom(zoom);
+    this.updateZoom();
   }
 
   swipeRightCustomHandler = (event, element) => {
@@ -104,33 +118,69 @@ class OverlayDiv extends Element {
       const height = this.getHeight(),
             bottom = height - top;
 
-      if (bottom < MENU_DIV_TAP_AREA_HEIGHT) {
+      if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
         controller.openMenu();
 
         return;
       }
     }
 
-    const checked = false;
-
     this.suppressNativeGestures();
 
-    this.checkRestoreNativeGesturesCheckbox(checked);
+    controller.uncheckRestoreNativeGesturesCheckbox();
   }
 
-  update() {
-    const zoom = getZoom(),
-          coloursInverted = areColoursInverted();
+  keyDownHandler = (event, element) => {
+    const { keyCode } = event;
+
+    switch (keyCode) {
+      case ENTER_KEY_CODE:
+      case ARROW_RIGHT_KEY_CODE: {
+        this.showRightLeftDiv();
+
+        break;
+      }
+
+      case BACKSPACE_KEY_CODE:
+      case ARROW_LEFT_KEY_CODE: {
+        this.showLeftLeafDiv();
+
+        break;
+      }
+
+      case ESCAPE_KEY_CODE: {
+        ///
+
+        break;
+      }
+
+      case ARROW_UP_KEY_CODE: {
+        this.showFirstLeafDiv();
+
+        break;
+      }
+
+      case ARROW_DOWN_KEY_CODE: {
+        this.showLastLeafDiv();
+
+        break;
+      }
+    }
+  }
+
+  updateColours() {
+    const coloursInverted = areColoursInverted();
 
     coloursInverted ?
       this.addClass("inverted-colours") :
         this.removeClass("inverted-colours");
 
-    this.zoom(zoom);
+    this.updateZoom();
   }
 
-  zoom(zoom) {
-    const displayedLeafDiv = this.findDisplayedLeafDiv();
+  updateZoom() {
+    const zoom = getZoom(),
+          displayedLeafDiv = this.findDisplayedLeafDiv();
 
     displayedLeafDiv.zoom(zoom);
   }
@@ -192,7 +242,7 @@ class OverlayDiv extends Element {
 
     setColoursInverted(coloursInverted);
 
-    this.update();
+    this.updateColours();
   }
 
   revertColours() {
@@ -200,13 +250,11 @@ class OverlayDiv extends Element {
 
     setColoursInverted(coloursInverted);
 
-    this.update();
+    this.updateColours();
   }
 
   enterFullScreen() {
-    this.requestFullScreen(() => {
-      this.closeMenu();
-    });
+    this.requestFullScreen();
   }
 
   restoreNativeGestures() {
@@ -406,6 +454,8 @@ class OverlayDiv extends Element {
   }
 
   didMount() {
+    window.onKeyDown(this.keyDownHandler);
+
     this.onCustomTap(this.tapCustomHandler);
     this.onCustomDragUp(this.dragUpCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
@@ -418,15 +468,21 @@ class OverlayDiv extends Element {
     this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
+    this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
+
+    this.enableFullScreen();
     this.enableTouch();
 
     this.showFirstLeafDiv();
 
-    this.update();
+    this.updateColours();
+
+    this.updateZoom();
   }
 
   willUnmount() {
     this.disableTouch();
+    this.disableFullScreen();
 
     this.offCustomTap(this.tapCustomHandler);
     this.offCustomDragUp(this.dragUpCustomHandler);
@@ -439,6 +495,24 @@ class OverlayDiv extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
+
+    this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
+
+    window.offKeyDown(this.keyDownHandler);
+  }
+
+  parentContext() {
+    const invertColours = this.invertColours.bind(this),
+          revertColours = this.revertColours.bind(this),
+          exitFullScreen = this.exitFullScreen.bind(this),
+          enterFullScreen = this.enterFullScreen.bind(this);
+
+    return ({
+      invertColours,
+      revertColours,
+      exitFullScreen,
+      enterFullScreen
+    });
   }
 
   initialise() {
@@ -465,9 +539,12 @@ class OverlayDiv extends Element {
 }
 
 Object.assign(OverlayDiv.prototype, touchMixins);
+Object.assign(OverlayDiv.prototype, fullScreenMixins);
 
 export default withStyle(OverlayDiv)`
-
+  
+  width: 100%;
+  height: 100%;
   overflow: hidden;
     
   .native-gestures {

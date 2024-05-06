@@ -7,12 +7,26 @@ import { Checkbox } from "easy";
 import { borderWidth, borderRadius, borderColour, checkboxSize, checkboxBackgroundColour } from "../styles";
 
 export default withStyle(class extends Checkbox {
+  check() {
+    const checked = true;
+
+    super.check(checked);
+  }
+
+  uncheck() {
+    const checked = false;
+
+    super.check(checked);
+  }
+
   parentContext() {
     const checkCheckbox = this.check.bind(this),  ///
+          uncheckCheckbox = this.uncheck.bind(this),  ///
           isCheckboxChecked = this.isChecked.bind(this);  ///
 
     return ({
       checkCheckbox,
+      uncheckCheckbox,
       isCheckboxChecked
     });
   }

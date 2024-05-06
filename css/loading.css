@@ -4,7 +4,8 @@
     }
 
     div.overlay > div {
-        padding: 0 !important;;
+      height: 100% !important;
+      padding: 0 !important;;
     }
 
     body > div.loading {

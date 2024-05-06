@@ -18,7 +18,6 @@ class PreloaderDiv extends Element {
 
 export default withStyle(PreloaderDiv)`
 
-  width: 0;
   height: 0;
   overflow: hidden;
   background-image: url("checkmark.svg");
