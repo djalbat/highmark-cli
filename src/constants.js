@@ -18,5 +18,5 @@ export const BACKGROUND_COLOUR = "background-color"; ///
 export const MINIMUM_SWIPE_SPEED = 1;
 export const PORTRAIT_ORIENTATION = "portrait";
 export const LANDSCAPE_ORIENTATION = "landscape";
-export const MENU_DIV_TAP_AREA_HEIGHT = 128;
+export const MENU_DIV_TAP_AREA_HEIGHT = 256;
 export const ORIENTATION_PORTRAIT_QUERY = "(orientation: portrait)";

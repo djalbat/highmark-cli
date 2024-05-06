@@ -8,38 +8,35 @@ import { controller } from "sufficient";
 import { Body, Element } from "easy";
 
 import View from "./view";
-import PreloaderDiv from "./view/div/preloader";
 import createMethods from "./createMethods";
 
 import { setOrientation } from "./state";
-import { elementFromDOMElement } from "./utilities/element";
+import { DIV_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
 import { getOrientation, onOrientationChange } from "./utilities/orientation";
-import { LOADING_DIV_SELECTOR, VIEW_DIV_SELECTOR } from "./selectors";
 
 const { renderStyles } = withStyle;
 
 renderStyles();
 
-const viewDOMElement = document.querySelector(VIEW_DIV_SELECTOR),
-      scheduler = null,
+const divDOMElement = document.querySelector(DIV_SELECTOR);
+
+divDOMElement.remove();
+
+const scheduler = null,
       model = null,
-      view = elementFromDOMElement(viewDOMElement, View); ///
+      view =
+
+        <View divDOMElement={divDOMElement} />
+
+      ;
 
 controller.assignMethods(createMethods, scheduler, model, view);
 
 const body = new Body(),
       loadingDiv = new Element(LOADING_DIV_SELECTOR);
 
-body.mount(
-
-  <PreloaderDiv/>
-
-);
-
 onOrientationChange((orientation) => {
   setOrientation(orientation);
-
-  view.update();
 });
 
 getOrientation((orientation) => {

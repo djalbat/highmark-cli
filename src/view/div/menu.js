@@ -11,14 +11,6 @@ import { getMenuDivZoom as getZoom, setMenuDivZoom as setZoom } from "../../stat
 import { borderColour, menuDivPadding, menuDivBackgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
-  invertColours() {
-    this.addClass("inverted-colours");
-  }
-
-  revertColours() {
-    this.removeClass("inverted-colours");
-  }
-
   zoomMenuOut() {
     let zoom = getZoom();
 
@@ -50,14 +42,14 @@ class MenuDiv extends Element {
     this.css(css);
   }
 
-  tap(top, left) {
-    this.tapButtonsDiv(top, left);
-  }
-
-  openMenu() {
+  show() {
     const display = GRID;
 
     this.display(display);
+  }
+
+  openMenu() {
+    this.show();
   }
 
   closeMenu() {
@@ -78,34 +70,18 @@ class MenuDiv extends Element {
           openMenu = this.openMenu.bind(this),
           closeMenu = this.closeMenu.bind(this),
           zoomMenuIn = this.zoomMenuIn.bind(this),
-          zoomMenuOut = this.zoomMenuOut.bind(this),
-          tapMenuDiv = this.tap.bind(this), ///
-          zoomMenuDiv = this.zoom.bind(this), ///
-          addMenuDivClass = this.addClass.bind(this), ///
-          getMenuDivHeight = this.getHeight.bind(this), ///
-          removeMenuDivClass = this.removeClass.bind(this), ///
-          isMenuDivDisplayed = this.isDisplayed.bind(this); ///
+          zoomMenuOut = this.zoomMenuOut.bind(this); ///
 
     return ({
       ...context,
       openMenu,
       closeMenu,
       zoomMenuIn,
-      zoomMenuOut,
-      tapMenuDiv,
-      zoomMenuDiv,
-      addMenuDivClass,
-      getMenuDivHeight,
-      removeMenuDivClass,
-      isMenuDivDisplayed
+      zoomMenuOut
     });
   }
 
   initialise() {
-    this.assignContext([
-      "tapButtonsDiv"
-    ]);
-
     this.hide();
   }
 
@@ -118,22 +94,13 @@ class MenuDiv extends Element {
 
 export default withStyle(MenuDiv)`
 
-  left: 0;
-  width: 100%;
-  height: fit-content;
-  filter: brightness(0.8);
-  bottom: 0;
   display: grid;
   padding: ${menuDivPadding};
-  position: fixed;
+  overflow: hidden;
   border-top: 1px solid ${borderColour};
   background-color: ${menuDivBackgroundColour};
   transform-origin: bottom left;
   grid-template-rows: auto;
   grid-template-columns: auto min-content;
-  
-  .inverted-colours {
-    filter: invert(1);
-  }
     
 `;

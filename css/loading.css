@@ -3,6 +3,10 @@
       display: none;
     }
 
+    div.overlay > div {
+        padding: 0 !important;;
+    }
+
     body > div.loading {
       width: 100vw;
       height: 100vh;
