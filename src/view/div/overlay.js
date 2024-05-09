@@ -5,14 +5,12 @@ import withStyle from "easy-with-style";  ///
 import { window } from "easy";
 import { keyCodes } from "necessary";
 
+import Div from "../div";
 import Element from "../element";
-import LeafDiv from "../div/leaf";
 import touchMixins from "../../mixins/touch";
 import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
-import { DIVS_SELECTOR } from "../../selectors";
-import { leafNodesFromNodeList } from "../../utilities/tree";
 import { elementsFromDOMElements } from "../../utilities/element";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted, areColoursInverted } from "../../state";
@@ -63,11 +61,11 @@ class OverlayDiv extends Element {
   }
 
   swipeRightCustomHandler = (event, element) => {
-    this.showLeftLeafDiv();
+    this.showLeftDiv();
   }
 
   swipeLeftCustomHandler = (event, element) => {
-    this.showRightLeftDiv();
+    this.showRightDiv();
   }
 
   swipeDownCustomHandler = (event, element, top, left, speed) => {
@@ -138,14 +136,14 @@ class OverlayDiv extends Element {
     switch (keyCode) {
       case ENTER_KEY_CODE:
       case ARROW_RIGHT_KEY_CODE: {
-        this.showRightLeftDiv();
+        this.showRightDiv();
 
         break;
       }
 
       case BACKSPACE_KEY_CODE:
       case ARROW_LEFT_KEY_CODE: {
-        this.showLeftLeafDiv();
+        this.showLeftDiv();
 
         break;
       }
@@ -157,13 +155,13 @@ class OverlayDiv extends Element {
       }
 
       case ARROW_UP_KEY_CODE: {
-        this.showFirstLeafDiv();
+        this.showFirstDiv();
 
         break;
       }
 
       case ARROW_DOWN_KEY_CODE: {
-        this.showLastLeafDiv();
+        this.showLastDiv();
 
         break;
       }
@@ -182,9 +180,9 @@ class OverlayDiv extends Element {
 
   updateZoom() {
     const zoom = getZoom(),
-          displayedLeafDiv = this.findDisplayedLeafDiv();
+          displayedDiv = this.findDisplayedDiv();
 
-    displayedLeafDiv.zoom(zoom);
+    displayedDiv.zoom(zoom);
   }
 
   scrollToTop() {
@@ -271,22 +269,37 @@ class OverlayDiv extends Element {
     this.enableCustomGestures();
   }
 
-  showFirstLeafDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(displayedLeafDiv),
+  showRightDiv() {
+    const displayedDiv = this.findDisplayedDiv(),
+          divs = this.getDivs(),
+          divsLength = divs.length,
+          index = divs.indexOf(displayedDiv),
+          nextIndex = index + 1,
+          previousIndex = index;  ///
+
+    if (nextIndex === divsLength) {
+      return;
+    }
+
+    this.showNextDiv(nextIndex, previousIndex);
+  }
+
+  showFirstDiv() {
+    const displayedDiv = this.findDisplayedDiv(),
+          divs = this.getDivs(),
+          index = divs.indexOf(displayedDiv),
           nextIndex = 0,
           previousIndex = (index === -1) ?
                             nextIndex : ///
                               index;  ///
 
-    this.showNextLeafDiv(nextIndex, previousIndex);
+    this.showNextDiv(nextIndex, previousIndex);
   }
 
-  showLeftLeafDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(displayedLeafDiv),
+  showLeftDiv() {
+    const displayedDiv = this.findDisplayedDiv(),
+          divs = this.getDivs(),
+          index = divs.indexOf(displayedDiv),
           nextIndex = index - 1,
           previousIndex = index;  ///
 
@@ -294,54 +307,39 @@ class OverlayDiv extends Element {
       return;
     }
 
-    this.showNextLeafDiv(nextIndex, previousIndex);
+    this.showNextDiv(nextIndex, previousIndex);
   }
 
-  showRightLeftDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          leafDivsLength = leafDivs.length,
-          index = leafDivs.indexOf(displayedLeafDiv),
-          nextIndex = index + 1,
-          previousIndex = index;  ///
-
-    if (nextIndex === leafDivsLength) {
-      return;
-    }
-
-    this.showNextLeafDiv(nextIndex, previousIndex);
-  }
-
-  showLastLeafDiv() {
-    const displayedLeafDiv = this.findDisplayedLeafDiv(),
-          leafDivs = this.getLeafDivs(),
-          index = leafDivs.indexOf(displayedLeafDiv),
-          leafDivsLength = leafDivs.length,
-          nextIndex = leafDivsLength - 1,
+  showLastDiv() {
+    const displayedDiv = this.findDisplayedDiv(),
+          divs = this.getDivs(),
+          index = divs.indexOf(displayedDiv),
+          divsLength = divs.length,
+          nextIndex = divsLength - 1,
           previousIndex = (index === -1) ?
                             nextIndex : ///
                               index;  ///
 
-    this.showNextLeafDiv(nextIndex, previousIndex);
+    this.showNextDiv(nextIndex, previousIndex);
   }
 
-  showNextLeafDiv(nextIndex, previousIndex) {
-    const leafDivs = this.getLeafDivs(),
-          nextLeafDiv = leafDivs[nextIndex],
-          previousLeafDiv = leafDivs[previousIndex],
-          backgroundColour = nextLeafDiv.getBackgroundColour();
+  showNextDiv(nextIndex, previousIndex) {
+    const divs = this.getDivs(),
+          nextDiv = divs[nextIndex],
+          previousDiv = divs[previousIndex],
+          backgroundColour = nextDiv.getBackgroundColour();
 
     let zoom;
 
     zoom = 1;
 
-    previousLeafDiv.zoom(zoom);
+    previousDiv.zoom(zoom);
 
     zoom = getZoom();
 
-    nextLeafDiv.zoom(zoom);
+    nextDiv.zoom(zoom);
 
-    previousLeafDiv.hide();
+    previousDiv.hide();
 
     this.setBackgroundColour(backgroundColour);
 
@@ -349,7 +347,7 @@ class OverlayDiv extends Element {
 
     this.scrollToTop();
 
-    nextLeafDiv.show();
+    nextDiv.show();
   }
 
   setBackgroundColour(backgroundColour) {
@@ -361,50 +359,24 @@ class OverlayDiv extends Element {
     this.css(css);
   }
 
-  hideAllLeafDivs() {
-    this.forEachLeafDiv((leafDiv) => {
-      leafDiv.hide();
-    });
-  }
-
-  findDisplayedLeafDiv() {
-    const leafDivs = this.getLeafDivs(),
-          displayedLeafDiv = leafDivs.find((leafDiv) => {
-            const displayed = leafDiv.isDisplayed();
+  findDisplayedDiv() {
+    const divs = this.getDivs(),
+          displayedDiv = divs.find((div) => {
+            const displayed = div.isDisplayed();
 
             if (displayed) {
               return true;
             }
           });
 
-    return displayedLeafDiv;
+    return displayedDiv;
   }
 
-  retrieveLeafDivs() {
-    const domElement = this.getDOMElement(),
-          divNodeList = domElement.querySelectorAll(DIVS_SELECTOR),
-          leafDivNodes = leafNodesFromNodeList(divNodeList),  ///
-          leafDivs = elementsFromDOMElements(leafDivNodes, LeafDiv);
+  getDivs() {
+    const childElements = this.getChildElements(),
+          divs = childElements; ///
 
-    return leafDivs;
-  }
-
-  forEachLeafDiv(callback) {
-    const leafDivs = this.getLeafDivs();
-
-    leafDivs.forEach(callback);
-  }
-
-  getLeafDivs() {
-    const { leafDivs } = this.getState();
-
-    return leafDivs;
-  }
-
-  setLeftDivs(leafDivs) {
-    this.updateState({
-      leafDivs
-    });
+    return divs;
   }
 
   getInterval() {
@@ -444,24 +416,15 @@ class OverlayDiv extends Element {
   }
 
   setInitialState() {
-    const leafDivs = this.retrieveLeafDivs(),
-          interval = null,
+    const interval = null,
           startZoom = null,
           startScrollTop = null;
 
     this.setState({
-      leafDivs,
       interval,
       startZoom,
       startScrollTop
     });
-  }
-
-  appendDivDOMElement() {
-    const { divDOMElement  } = this.properties,
-          domElement = this.getDOMElement();
-
-    domElement.append(divDOMElement);
   }
 
   didMount() {
@@ -482,17 +445,17 @@ class OverlayDiv extends Element {
     this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     this.enableFullScreen();
+
     this.enableTouch();
 
-    this.showFirstLeafDiv();
+    this.updateZoom();
 
     this.updateColours();
-
-    this.updateZoom();
   }
 
   willUnmount() {
     this.disableTouch();
+
     this.disableFullScreen();
 
     this.offCustomTap(this.tapCustomHandler);
@@ -510,6 +473,16 @@ class OverlayDiv extends Element {
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
     window.offKeyDown(this.keyDownHandler);
+  }
+
+  childElements() {
+    const { divDOMElements } = this.properties,
+          divs = elementsFromDOMElements(divDOMElements, Div),
+          childElements = [
+            ...divs
+          ];
+
+    return childElements;
   }
 
   parentContext() {
@@ -535,19 +508,15 @@ class OverlayDiv extends Element {
   initialise() {
     this.assignContext();
 
-    this.appendDivDOMElement();
-
     this.setInitialState();
 
-    this.suppressNativeGestures();
-
-    this.hideAllLeafDivs();
+    this.showFirstDiv();
   }
 
   static tagName = "div";
 
   static ignoredProperties = [
-    "divDOMElement"
+    "divDOMElements"
   ];
 
   static defaultProperties = {

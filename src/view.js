@@ -14,12 +14,12 @@ class View extends Element {
   }
 
   childElements() {
-    const { divDOMElement } = this.properties;
+    const { divDOMElements } = this.properties;
 
     return ([
 
       <PreloaderDiv/>,
-      <OverlayDiv divDOMElement={divDOMElement} />,
+      <OverlayDiv divDOMElements={divDOMElements} />,
       <MenuDiv/>
 
     ]);
@@ -34,7 +34,7 @@ class View extends Element {
   static tagName = "div";
 
   static ignoredProperties = [
-    "divDOMElement"
+    "divDOMElements"
   ];
 
   static defaultProperties = {

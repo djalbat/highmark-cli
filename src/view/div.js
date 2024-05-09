@@ -4,9 +4,9 @@ import withStyle from "easy-with-style";  ///
 
 import { Element } from "easy";
 
-import { BACKGROUND_COLOUR } from "../../constants";
+import { BACKGROUND_COLOUR } from "../constants";
 
-class LeafDiv extends Element {
+class Div extends Element {
   getBackgroundColour() {
     const backgroundColour = this.css(BACKGROUND_COLOUR) || null;
 
@@ -26,15 +26,12 @@ class LeafDiv extends Element {
   }
 
   static tagName = "div";
-
-  static defaultProperties = {
-    className: "leaf"
-  };
 }
 
-export default withStyle(LeafDiv)`
+export default withStyle(Div)`
 
   width: 100%;
+  display: none;
   min-height: 100%;
   pointer-events: none;
   transform-origin: top left;

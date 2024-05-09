@@ -11,22 +11,24 @@ import View from "./view";
 import createMethods from "./createMethods";
 
 import { setOrientation } from "./state";
-import { DIV_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
+import { DIVS_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
 import { getOrientation, onOrientationChange } from "./utilities/orientation";
 
 const { renderStyles } = withStyle;
 
 renderStyles();
 
-const divDOMElement = document.querySelector(DIV_SELECTOR);
+const divDOMElements = [ ...document.querySelectorAll(DIVS_SELECTOR) ];  ///
 
-divDOMElement.remove();
+divDOMElements.forEach((divDOMElement) => {
+  divDOMElement.remove();
+});
 
 const scheduler = null,
       model = null,
       view =
 
-        <View divDOMElement={divDOMElement} />
+        <View divDOMElements={divDOMElements} />
 
       ;
 
