@@ -10,13 +10,16 @@ function importer(filePath, context) {
   if (content !== null) {
     const className = classNameFromFilePath(filePath),
           tokens = tokensFromContent(content),
-          node = nodeFromTokens(tokens);
+          node = nodeFromTokens(tokens),
+          importedNode = node,  ///
+          importedTokens = tokens,  ///
+          importedClassName = className;  ///
 
     if (node !== null) {
       Object.assign(context, {
-        node,
-        tokens,
-        className
+        importedNode,
+        importedTokens,
+        importedClassName
       });
     }
   }

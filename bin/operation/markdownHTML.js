@@ -36,25 +36,47 @@ function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
+  const divisionClassName = className,  ///
+        divisionMarkdownNode = node,  ///
+        divisionMarkdownNodes = [];
+
   Object.assign(context, {
     tokens,
-    importer
+    importer,
+    divisionMarkdownNodes
   });
 
-  const parentNode = null,
-        divisionClassName = className,  ///
-        divisionMarkdownNode = node;  ///
+  const ignored = divisionMarkdownNode.isIgnored();
+
+  if (!ignored) {
+    divisionMarkdownNodes.push(divisionMarkdownNode);
+  }
 
   divisionMarkdownNode.setDivisionClassName(divisionClassName);
 
-  divisionMarkdownNode.resolveImports(parentNode, context);
+  divisionMarkdownNode.resolveImports(context);
 
-  divisionMarkdownNode.createContents(context);
+  divisionMarkdownNodes.forEach((divisionMarkdownNode) => {
+    divisionMarkdownNode.createFootnotes(context);
+  });
 
-  divisionMarkdownNode.createFootnotes(context);
+  divisionMarkdownNodes.some((divisionMarkdownNode) => {
+    const contentsCreated = divisionMarkdownNode.createContents(context);
 
-  const html = divisionMarkdownNode.asHTML(context),
-        markdownHTML = html;  ///
+    if (contentsCreated) {
+      return true;
+    }
+  });
+
+  const markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode) => {
+    const html = divisionMarkdownNode.asHTML(context);
+
+    markdownHTML = (markdownHTML === null) ?
+                     html :  ///
+                      `${markdownHTML}${html}`;
+
+    return markdownHTML;
+  }, null);
 
   Object.assign(context, {
     markdownHTML
