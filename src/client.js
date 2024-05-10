@@ -6,6 +6,7 @@ import withStyle from "easy-with-style";  ///
 
 import { controller } from "sufficient";
 import { Body, Element } from "easy";
+import { onFragmentChange } from "fragmented";
 
 import View from "./view";
 import createMethods from "./createMethods";
@@ -14,8 +15,7 @@ import { setOrientation } from "./state";
 import { DIVS_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
 import { getOrientation, onOrientationChange } from "./utilities/orientation";
 
-const { renderStyles } = withStyle,
-      { onFragmentChange } = fragment;
+const { renderStyles } = withStyle;
 
 renderStyles();
 
@@ -44,7 +44,9 @@ onOrientationChange((orientation) => {
   view.updateZoom();
 });
 
-
+onFragmentChange(() => {
+  debugger
+});
 
 getOrientation((orientation) => {
   setOrientation(orientation);
