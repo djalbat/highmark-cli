@@ -56,14 +56,16 @@ export default function createMethods(scheduler, model, view) {
 
   function exitFullScreen() {
     view.exitFullScreen();
-
-    view.updateFullScreenCheckboxDiv();
   }
 
   function enterFullScreen() {
-    view.enterFullScreen(() => {
-      view.updateFullScreenCheckboxDiv();
-    });
+    view.enterFullScreen();
+  }
+
+  function updateFullScreen() {
+    view.closeMenu();
+
+    view.updateFullScreenCheckboxDiv();
   }
 
   function restoreNativeGestures() {
@@ -96,6 +98,7 @@ export default function createMethods(scheduler, model, view) {
     revertColours,
     exitFullScreen,
     enterFullScreen,
+    updateFullScreen,
     restoreNativeGestures,
     suppressNativeGestures
   });

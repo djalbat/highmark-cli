@@ -26,7 +26,7 @@ const { first } = arrayUtilities,
 
 class OverlayDiv extends Element {
   fullScreenChangeCustomHandler = (event, element) => {
-    controller.closeMenu();
+    controller.updateFullScreen();
 
     this.updateOverlayZoom();
   }
@@ -211,8 +211,8 @@ class OverlayDiv extends Element {
     this.setInterval(interval);
   }
 
-  enterFullScreen(callback) {
-    this.requestFullScreen(callback);
+  enterFullScreen() {
+    this.requestFullScreen();
   }
 
   updateOverlayZoom() {
@@ -233,15 +233,15 @@ class OverlayDiv extends Element {
   }
 
   updateNativeGestures() {
-    // const nativeGesturesRestored = areNativeGesturesRestored();
-    //
-    // nativeGesturesRestored ?
-    //   this.addClass("native-gestures") :
-    //     this.removeClass("native-gestures");
-    //
-    // nativeGesturesRestored ?
-    //   this.disableCustomGestures() :
-    //     this.enableCustomGestures();
+    const nativeGesturesRestored = areNativeGesturesRestored();
+
+    nativeGesturesRestored ?
+      this.addClass("native-gestures") :
+        this.removeClass("native-gestures");
+
+    nativeGesturesRestored ?
+      this.disableCustomGestures() :
+        this.enableCustomGestures();
   }
 
   areNativeGesturesRestored() {

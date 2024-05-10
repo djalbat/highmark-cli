@@ -44,8 +44,8 @@ onOrientationChange((orientation) => {
   view.updateZoom();
 });
 
-onFragmentChange(() => {
-  debugger
+onFragmentChange((event, fragment) => {
+
 });
 
 getOrientation((orientation) => {
