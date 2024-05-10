@@ -30,7 +30,7 @@ export default class NativeGesturesCheckboxDiv extends CheckboxDiv {
   }
 
   static message = `Native gestures
-(tap to toggle)`;
+(double tap to toggle)`;
 
   static defaultProperties = {
     className: "native-gestures"

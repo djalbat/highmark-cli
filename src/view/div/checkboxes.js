@@ -14,8 +14,8 @@ class CheckboxesDiv extends Element {
     return ([
 
       <InvertColoursCheckboxDiv/>,
-      <NativeGesturesCheckboxDiv/>,
-      <FullScreenCheckboxDiv/>
+      <FullScreenCheckboxDiv/>,
+      <NativeGesturesCheckboxDiv/>
 
     ]);
   }

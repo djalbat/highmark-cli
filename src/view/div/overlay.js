@@ -35,9 +35,18 @@ class OverlayDiv extends Element {
   doubleTapCustomHandler = (event, element, top, left) => {
     const fullScreen = isFullScreen();
 
-    fullScreen ?
-      controller.exitFullScreen() :
-        controller.enterFullScreen();
+    if (fullScreen) {
+      controller.exitFullScreen();
+
+      return;
+    }
+
+    const nativeGesturesRestored = areNativeGesturesRestored();
+
+    nativeGesturesRestored ?
+      controller.suppressNativeGestures() :
+        controller.restoreNativeGestures();
+
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -111,15 +120,7 @@ class OverlayDiv extends Element {
 
     if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
       controller.openMenu();
-
-      return;
     }
-
-    const nativeGesturesRestored = areNativeGesturesRestored();
-
-    nativeGesturesRestored ?
-      controller.suppressNativeGestures() :
-        controller.restoreNativeGestures();
   }
 
   keyDownHandler = (event, element) => {

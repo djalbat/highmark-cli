@@ -30,7 +30,7 @@ export default class FullScreenCheckboxDiv extends CheckboxDiv {
   }
 
   static message = `Full screen
-(double tap to toggle)`;
+(double tap to exit)`;
 
   static defaultProperties = {
     className: "full-screen"
