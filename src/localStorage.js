@@ -15,10 +15,12 @@ const menuZoom = {
         [LANDSCAPE_ORIENTATION]: 1
       },
       coloursInverted = false,
+      nativeGesturesRestored = false,
       defaultPersistentState = {
         menuZoom,
         overlayZoom,
         fullScreenOverlayZoom,
+        nativeGesturesRestored,
         coloursInverted
       };
 

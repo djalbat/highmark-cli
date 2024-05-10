@@ -2,6 +2,8 @@
 
 import CheckboxDiv from "../../div/checkbox";
 
+import { isFullScreen } from "../../../utilities/fullScreen";
+
 export default class FullScreenCheckboxDiv extends CheckboxDiv {
   changeHandler = (event, element) => {
     const checkboxChecked = this.isCheckboxChecked();
@@ -11,13 +13,19 @@ export default class FullScreenCheckboxDiv extends CheckboxDiv {
         controller.exitFullScreen();
   }
 
+  update() {
+    const fullScreen = isFullScreen();
+
+    fullScreen ?
+      this.checkCheckbox() :
+        this.uncheckCheckbox();
+  }
+
   parentContext() {
-    const checkFullScreenCheckbox = this.checkCheckbox.bind(this), ///
-          uncheckFullScreenCheckbox = this.uncheckCheckbox.bind(this); ///
+    const updateFullScreenCheckboxDiv = this.update.bind(this); ///
 
     return ({
-      checkFullScreenCheckbox,
-      uncheckFullScreenCheckbox
+      updateFullScreenCheckboxDiv
     });
   }
 

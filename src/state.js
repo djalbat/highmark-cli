@@ -8,6 +8,18 @@ const orientation = null,
         orientation
       };
 
+export function getOrientation() {
+  const { orientation } = state;
+
+  return orientation;
+}
+
+export function setOrientation(orientation) {
+  Object.assign(state, {
+    orientation
+  });
+}
+
 export function getMenuZoom() {
   stateFromPersistentState();
 
@@ -80,16 +92,22 @@ export function setOverlayZoom(overlayZoom) {
   stateToPersistentState();
 }
 
-export function getOrientation() {
-  const { orientation } = state;
+export function areNativeGesturesRestored() {
+  stateFromPersistentState();
 
-  return orientation;
+  const { nativeGesturesRestored } = state;
+
+  return nativeGesturesRestored;
 }
 
-export function setOrientation(orientation) {
+export function setNativeGesturesRestored(nativeGesturesRestored) {
+  stateFromPersistentState();
+
   Object.assign(state, {
-    orientation
+    nativeGesturesRestored
   });
+
+  stateToPersistentState();
 }
 
 export function areColoursInverted() {
@@ -111,11 +129,12 @@ export function setColoursInverted(coloursInverted) {
 }
 
 function stateToPersistentState() {
-  const { overlayZoom, menuZoom, fullScreenOverlayZoom, coloursInverted } = state,
+  const { menuZoom, overlayZoom, fullScreenOverlayZoom, nativeGesturesRestored, coloursInverted } = state,
         persistentState = {
-          overlayZoom,
           menuZoom,
+          overlayZoom,
           fullScreenOverlayZoom,
+          nativeGesturesRestored,
           coloursInverted
         };
 

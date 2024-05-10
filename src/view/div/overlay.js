@@ -12,7 +12,7 @@ import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
 import { elementsFromDOMElements } from "../../utilities/element";
-import { getOverlayZoom as getZoom, areColoursInverted } from "../../state";
+import { getOverlayZoom as getZoom, areColoursInverted, areNativeGesturesRestored } from "../../state";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 
 const { first } = arrayUtilities,
@@ -114,7 +114,7 @@ class OverlayDiv extends Element {
       return;
     }
 
-    const nativeGesturesRestored = this.areNativeGesturesRestored();
+    const nativeGesturesRestored = areNativeGesturesRestored();
 
     nativeGesturesRestored ?
       controller.suppressNativeGestures() :
@@ -211,8 +211,8 @@ class OverlayDiv extends Element {
     this.setInterval(interval);
   }
 
-  enterFullScreen() {
-    this.requestFullScreen();
+  enterFullScreen(callback) {
+    this.requestFullScreen(callback);
   }
 
   updateOverlayZoom() {
@@ -232,22 +232,22 @@ class OverlayDiv extends Element {
     this.updateOverlayZoom();
   }
 
-  restoreNativeGestures() {
-    this.addClass("native-gestures");
+  updateNativeGestures() {
+    const nativeGesturesRestored = areNativeGesturesRestored();
 
-    this.disableCustomGestures();
+    nativeGesturesRestored ?
+      this.addClass("native-gestures") :
+        this.removeClass("native-gestures");
+
+    nativeGesturesRestored ?
+      this.disableCustomGestures() :
+        this.enableCustomGestures();
   }
 
   areNativeGesturesRestored() {
     const nativeGesturesRestored = this.hasClass("native-gestures");
 
     return nativeGesturesRestored;
-  }
-
-  suppressNativeGestures() {
-    this.removeClass("native-gestures");
-
-    this.enableCustomGestures();
   }
 
   showRightDiv() {
@@ -435,10 +435,6 @@ class OverlayDiv extends Element {
     this.enableFullScreen();
 
     this.enableTouch();
-
-    this.updateOverlayZoom();
-
-    this.updateOverlayColours();
   }
 
   willUnmount() {
@@ -475,16 +471,14 @@ class OverlayDiv extends Element {
           enterFullScreen = this.enterFullScreen.bind(this),
           updateOverlayZoom = this.updateOverlayZoom.bind(this),
           updateOverlayColours = this.updateOverlayColours.bind(this),
-          restoreNativeGestures = this.restoreNativeGestures.bind(this),
-          suppressNativeGestures = this.suppressNativeGestures.bind(this);
+          updateNativeGestures = this.updateNativeGestures.bind(this);
 
     return ({
       exitFullScreen,
       enterFullScreen,
       updateOverlayZoom,
       updateOverlayColours,
-      restoreNativeGestures,
-      suppressNativeGestures
+      updateNativeGestures
     });
   }
 

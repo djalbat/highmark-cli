@@ -2,6 +2,8 @@
 
 import CheckboxDiv from "../../div/checkbox";
 
+import { areNativeGesturesRestored } from "../../../state";
+
 export default class NativeGesturesCheckboxDiv extends CheckboxDiv {
   changeHandler = (event, element) => {
     const checkboxChecked = this.isCheckboxChecked();
@@ -11,13 +13,19 @@ export default class NativeGesturesCheckboxDiv extends CheckboxDiv {
         controller.suppressNativeGestures();
   }
 
+  update() {
+    const nativeGesturesRestored = areNativeGesturesRestored();
+
+    nativeGesturesRestored ?
+      this.checkCheckbox() :
+        this.uncheckCheckbox();
+  }
+
   parentContext() {
-    const checkNativeGesturesCheckbox = this.checkCheckbox.bind(this), ///
-          uncheckNativeGesturesCheckbox = this.uncheckCheckbox.bind(this); ///
+    const updateNativeGesturesCheckboxDiv = this.update.bind(this); ///
 
     return ({
-      checkNativeGesturesCheckbox,
-      uncheckNativeGesturesCheckbox
+      updateNativeGesturesCheckboxDiv
     });
   }
 

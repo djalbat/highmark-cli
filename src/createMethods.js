@@ -1,7 +1,7 @@
 "use strict";
 
 import { MENU_ZOOM_RATIO } from "./constants";
-import { getMenuZoom, setMenuZoom, setOverlayZoom, setColoursInverted } from "./state";
+import { getMenuZoom, setMenuZoom, setOverlayZoom, setColoursInverted, setNativeGesturesRestored } from "./state";
 
 export default function createMethods(scheduler, model, view) {
   function openMenu() {
@@ -57,25 +57,33 @@ export default function createMethods(scheduler, model, view) {
   function exitFullScreen() {
     view.exitFullScreen();
 
-    view.uncheckFullScreenCheckbox();
+    view.updateFullScreenCheckboxDiv();
   }
 
   function enterFullScreen() {
-    view.enterFullScreen();
-
-    view.checkFullScreenCheckbox();
+    view.enterFullScreen(() => {
+      view.updateFullScreenCheckboxDiv();
+    });
   }
 
   function restoreNativeGestures() {
-    view.restoreNativeGestures();
+    const nativeGesturesRestored = true;
 
-    view.checkNativeGesturesCheckbox();
+    setNativeGesturesRestored(nativeGesturesRestored);
+
+    view.updateNativeGestures();
+
+    view.updateNativeGesturesCheckboxDiv();
   }
 
   function suppressNativeGestures() {
-    view.suppressNativeGestures();
+    const nativeGesturesRestored = false;
 
-    view.uncheckNativeGesturesCheckbox();
+    setNativeGesturesRestored(nativeGesturesRestored);
+
+    view.updateNativeGestures();
+
+    view.updateNativeGesturesCheckboxDiv();
   }
 
   return ({

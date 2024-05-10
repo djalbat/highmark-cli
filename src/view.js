@@ -13,6 +13,20 @@ class View extends Element {
     this.updateOverlayZoom();
   }
 
+  didMount() {
+    this.updateMenuZoom();
+    this.updateOverlayZoom();
+    this.updateOverlayColours();
+    this.updateNativeGestures();
+    this.updateFullScreenCheckboxDiv();
+    this.updateInvertColoursCheckboxDiv();
+    this.updateNativeGesturesCheckboxDiv();
+  }
+
+  willUnmount() {
+    ///
+  }
+
   childElements() {
     const { divDOMElements } = this.properties;
 

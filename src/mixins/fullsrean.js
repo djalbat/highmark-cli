@@ -16,13 +16,12 @@ function exitFullScreen() {
   document.exitFullscreen();
 }
 
-function requestFullScreen() {
+function requestFullScreen(callback) {
   const domElement = this.getDOMElement();
 
   domElement.requestFullscreen()
-    .catch((error) => {
-      alert(error);
-    });
+    .then(callback)
+    .catch(alert);
 }
 
 function onFullscreenchange(fullscreenchangeHandler) {

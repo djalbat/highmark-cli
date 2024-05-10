@@ -13,7 +13,7 @@ export default class InvertColoursCheckboxDiv extends CheckboxDiv {
         controller.revertColours();
   }
 
-  didMount() {
+  update() {
     const coloursInverted = areColoursInverted();
 
     coloursInverted ?
@@ -21,8 +21,12 @@ export default class InvertColoursCheckboxDiv extends CheckboxDiv {
         this.uncheckCheckbox();
   }
 
-  willUnmount() {
-    ///
+  parentContext() {
+    const updateInvertColoursCheckboxDiv = this.update.bind(this);
+
+    return ({
+      updateInvertColoursCheckboxDiv
+    });
   }
 
   static message = "Invert colours";
