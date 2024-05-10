@@ -1,5 +1,8 @@
 "use strict";
 
+import { MENU_ZOOM_RATIO } from "./constants";
+import { getMenuZoom, setMenuZoom, setOverlayZoom, setColoursInverted } from "./state";
+
 export default function createMethods(scheduler, model, view) {
   function openMenu() {
     view.openMenu();
@@ -10,43 +13,69 @@ export default function createMethods(scheduler, model, view) {
   }
 
   function zoomMenuIn() {
-    view.zoomMenuIn();
+    let menuZoom = getMenuZoom();
+
+    menuZoom *= MENU_ZOOM_RATIO;
+
+    setMenuZoom(menuZoom);
+
+    view.updateMenuZoom();
   }
 
   function zoomMenuOut() {
-    view.zoomMenuOut();
+    let menuZoom = getMenuZoom();
+
+    menuZoom /= MENU_ZOOM_RATIO;
+
+    setMenuZoom(menuZoom);
+
+    view.updateMenuZoom();
+  }
+
+  function zoomOverlay(overlayZoom) {
+    setOverlayZoom(overlayZoom);
+
+    view.updateOverlayZoom();
   }
 
   function invertColours() {
-    view.invertColours();
+    const coloursInverted = true;
+
+    setColoursInverted(coloursInverted);
+
+    view.updateOverlayColours();
   }
 
   function revertColours() {
-    view.revertColours();
+    const coloursInverted = false;
+
+    setColoursInverted(coloursInverted);
+
+    view.updateOverlayColours();
   }
 
   function exitFullScreen() {
     view.exitFullScreen();
+
+    view.uncheckFullScreenCheckbox();
   }
 
   function enterFullScreen() {
     view.enterFullScreen();
+
+    view.checkFullScreenCheckbox();
   }
 
   function restoreNativeGestures() {
     view.restoreNativeGestures();
+
+    view.checkNativeGesturesCheckbox();
   }
 
   function suppressNativeGestures() {
     view.suppressNativeGestures();
-  }
 
-  function checkRestoreNativeGesturesCheckbox(checked) {
-    view.checkRestoreNativeGesturesCheckbox(checked);
-  }
-
-  function uncheckRestoreNativeGesturesCheckbox(checked) {
-    view.uncheckRestoreNativeGesturesCheckbox(checked);
+    view.uncheckNativeGesturesCheckbox();
   }
 
   return ({
@@ -54,13 +83,12 @@ export default function createMethods(scheduler, model, view) {
     closeMenu,
     zoomMenuIn,
     zoomMenuOut,
+    zoomOverlay,
     invertColours,
     revertColours,
     exitFullScreen,
     enterFullScreen,
     restoreNativeGestures,
-    suppressNativeGestures,
-    checkRestoreNativeGesturesCheckbox,
-    uncheckRestoreNativeGesturesCheckbox
+    suppressNativeGestures
   });
 }

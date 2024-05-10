@@ -12,8 +12,8 @@ import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
 import { elementsFromDOMElements } from "../../utilities/element";
+import { getOverlayZoom as getZoom, areColoursInverted } from "../../state";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
-import { getViewZoom as getZoom, setViewZoom as setZoom, setColoursInverted, areColoursInverted } from "../../state";
 
 const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
@@ -27,21 +27,15 @@ class OverlayDiv extends Element {
   fullScreenChangeCustomHandler = (event, element) => {
     controller.closeMenu();
 
-    this.updateZoom();
+    this.updateOverlayZoom();
   }
 
   doubleTapCustomHandler = (event, element, top, left) => {
     const fullScreen = isFullScreen();
 
-    if (fullScreen) {
-      controller.exitFullScreen();
-
-      return;
-    }
-
-    this.restoreNativeGestures();
-
-    controller.checkRestoreNativeGesturesCheckbox();
+    fullScreen ?
+      controller.exitFullScreen() :
+        controller.enterFullScreen();
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -53,11 +47,9 @@ class OverlayDiv extends Element {
 
   pinchMoveCustomHandler = (event, element, ratio) => {
     const startZoom = this.getStartZoom(),
-          zoom = startZoom * Math.sqrt(ratio);
+          overlayZoom = startZoom * Math.sqrt(ratio);  ///
 
-    setZoom(zoom);
-
-    this.updateZoom();
+    controller.zoomOverlay(overlayZoom);
   }
 
   swipeRightCustomHandler = (event, element) => {
@@ -112,22 +104,20 @@ class OverlayDiv extends Element {
   }
 
   tapCustomHandler = (event, element, top, left) => {
-    const fullScreen = isFullScreen();
+    const height = this.getHeight(),
+          bottom = height - top;
 
-    if (!fullScreen) {
-      const height = this.getHeight(),
-            bottom = height - top;
+    if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
+      controller.openMenu();
 
-      if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
-        controller.openMenu();
-
-        return;
-      }
+      return;
     }
 
-    this.suppressNativeGestures();
+    const nativeGesturesRestored = this.areNativeGesturesRestored();
 
-    controller.uncheckRestoreNativeGesturesCheckbox();
+    nativeGesturesRestored ?
+      controller.suppressNativeGestures() :
+        controller.restoreNativeGestures();
   }
 
   keyDownHandler = (event, element) => {
@@ -149,7 +139,7 @@ class OverlayDiv extends Element {
       }
 
       case ESCAPE_KEY_CODE: {
-        ///
+        controller.exitFullScreen();
 
         break;
       }
@@ -166,23 +156,6 @@ class OverlayDiv extends Element {
         break;
       }
     }
-  }
-
-  updateColours() {
-    const coloursInverted = areColoursInverted();
-
-    coloursInverted ?
-      this.addClass("inverted-colours") :
-        this.removeClass("inverted-colours");
-
-    this.updateZoom();
-  }
-
-  updateZoom() {
-    const zoom = getZoom(),
-          displayedDiv = this.findDisplayedDiv();
-
-    displayedDiv.zoom(zoom);
   }
 
   scrollToTop() {
@@ -237,30 +210,37 @@ class OverlayDiv extends Element {
     this.setInterval(interval);
   }
 
-  invertColours() {
-    const coloursInverted = true;
-
-    setColoursInverted(coloursInverted);
-
-    this.updateColours();
-  }
-
-  revertColours() {
-    const coloursInverted = false;
-
-    setColoursInverted(coloursInverted);
-
-    this.updateColours();
-  }
-
   enterFullScreen() {
     this.requestFullScreen();
+  }
+
+  updateOverlayZoom() {
+    const zoom = getZoom(),
+          displayedDiv = this.findDisplayedDiv();
+
+    displayedDiv.zoom(zoom);
+  }
+
+  updateOverlayColours() {
+    const coloursInverted = areColoursInverted();
+
+    coloursInverted ?
+      this.addClass("inverted-colours") :
+        this.removeClass("inverted-colours");
+
+    this.updateOverlayZoom();
   }
 
   restoreNativeGestures() {
     this.addClass("native-gestures");
 
     this.disableCustomGestures();
+  }
+
+  areNativeGesturesRestored() {
+    const nativeGesturesRestored = this.hasClass("native-gestures");
+
+    return nativeGesturesRestored;
   }
 
   suppressNativeGestures() {
@@ -448,9 +428,9 @@ class OverlayDiv extends Element {
 
     this.enableTouch();
 
-    this.updateZoom();
+    this.updateOverlayZoom();
 
-    this.updateColours();
+    this.updateOverlayColours();
   }
 
   willUnmount() {
@@ -486,20 +466,18 @@ class OverlayDiv extends Element {
   }
 
   parentContext() {
-    const invertColours = this.invertColours.bind(this),
-          revertColours = this.revertColours.bind(this),
-          exitFullScreen = this.exitFullScreen.bind(this),
+    const exitFullScreen = this.exitFullScreen.bind(this),
           enterFullScreen = this.enterFullScreen.bind(this),
-          updateOverlayDivZoom = this.updateZoom.bind(this),  ///
+          updateOverlayZoom = this.updateOverlayZoom.bind(this),
+          updateOverlayColours = this.updateOverlayColours.bind(this),
           restoreNativeGestures = this.restoreNativeGestures.bind(this),
           suppressNativeGestures = this.suppressNativeGestures.bind(this);
 
     return ({
-      invertColours,
-      revertColours,
       exitFullScreen,
       enterFullScreen,
-      updateOverlayDivZoom,
+      updateOverlayZoom,
+      updateOverlayColours,
       restoreNativeGestures,
       suppressNativeGestures
     });

@@ -9,8 +9,8 @@ import PreloaderDiv from "./view/div/preloader";
 
 class View extends Element {
   updateZoom() {
-    this.updateMenuDivZoom();
-    this.updateOverlayDivZoom();
+    this.updateMenuZoom();
+    this.updateOverlayZoom();
   }
 
   childElements() {

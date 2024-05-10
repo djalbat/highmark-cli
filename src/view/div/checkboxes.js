@@ -3,8 +3,9 @@
 import withStyle from "easy-with-style";  ///
 
 import Element from "../element";
+import FullScreenCheckboxDiv from "./checkbox/fullScreen";
 import InvertColoursCheckboxDiv from "./checkbox/invertColours";
-import RestoreNativeGesturesCheckboxDiv from "./checkbox/restoreNativeGestures";
+import NativeGesturesCheckboxDiv from "./checkbox/nativeGestures";
 
 import { checkboxesDivGap } from "../../styles";
 
@@ -13,7 +14,8 @@ class CheckboxesDiv extends Element {
     return ([
 
       <InvertColoursCheckboxDiv/>,
-      <RestoreNativeGesturesCheckboxDiv/>
+      <NativeGesturesCheckboxDiv/>,
+      <FullScreenCheckboxDiv/>
 
     ]);
   }

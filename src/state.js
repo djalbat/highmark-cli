@@ -2,80 +2,79 @@
 
 import { isFullScreen } from "./utilities/fullScreen";
 import { getPersistentState, setPersistentState } from "./localStorage";
-import {PORTRAIT_ORIENTATION} from "./constants";
 
 const orientation = null,
       state = {
         orientation
       };
 
-export function getViewZoom() {
+export function getMenuZoom() {
   stateFromPersistentState();
 
-  const fullScreen = isFullScreen(),
-        orientation = getOrientation();
+  let menuZoom;
 
-  let viewZoom;
+  ({ menuZoom } = state);
 
-  if (fullScreen) {
-    ({ fullScreenViewZoom: viewZoom } = state);
-  } else {
-    ({ viewZoom } = state);
-  }
+  const { orientation } = state,
+        orientedMenuZoom = menuZoom[orientation]; ///
 
-  const orientedViewZoom = viewZoom[orientation]; ///
+  menuZoom = orientedMenuZoom;  ///
 
-  viewZoom = orientedViewZoom;  ///
-
-  return viewZoom;
+  return menuZoom;
 }
 
-export function setViewZoom(viewZoom) {
+export function setMenuZoom(menuZoom) {
   stateFromPersistentState();
 
-  const fullScreen = isFullScreen(),
-        orientation = getOrientation();
+  const { orientation } = state,
+        orientedMenuZoom = menuZoom;  ///
 
-  const orientedViewZoom = viewZoom;  ///
+  ({ menuZoom } = state);
 
-  if (fullScreen) {
-    ({ fullScreenViewZoom: viewZoom } = state);
-  } else {
-    ({ viewZoom } = state);
-  }
-
-  Object.assign(viewZoom, {
-    [orientation]: orientedViewZoom
+  Object.assign(menuZoom, {
+    [orientation]: orientedMenuZoom
   });
 
   stateToPersistentState();
 }
 
-export function getMenuDivZoom() {
+export function getOverlayZoom() {
   stateFromPersistentState();
 
-  let menuDivZoom;
+  const fullScreen = isFullScreen(),
+        orientation = getOrientation();
 
-  ({ menuDivZoom } = state);
+  let overlayZoom;
 
-  const { orientation } = state,
-        orientedMenuDivZoom = menuDivZoom[orientation]; ///
+  if (fullScreen) {
+    ({ fullScreenOverlayZoom: overlayZoom } = state);
+  } else {
+    ({ overlayZoom } = state);
+  }
 
-  menuDivZoom = orientedMenuDivZoom;  ///
+  const orientedOverlayZoom = overlayZoom[orientation]; ///
 
-  return menuDivZoom;
+  overlayZoom = orientedOverlayZoom;  ///
+
+  return overlayZoom;
 }
 
-export function setMenuDivZoom(menuDivZoom) {
+export function setOverlayZoom(overlayZoom) {
   stateFromPersistentState();
 
-  const { orientation } = state,
-        orientedMenuDivZoom = menuDivZoom;  ///
+  const fullScreen = isFullScreen(),
+        orientation = getOrientation();
 
-  ({ menuDivZoom } = state);
+  const orientedOverlayZoom = overlayZoom;  ///
 
-  Object.assign(menuDivZoom, {
-    [orientation]: orientedMenuDivZoom
+  if (fullScreen) {
+    ({ fullScreenOverlayZoom: overlayZoom } = state);
+  } else {
+    ({ overlayZoom } = state);
+  }
+
+  Object.assign(overlayZoom, {
+    [orientation]: orientedOverlayZoom
   });
 
   stateToPersistentState();
@@ -112,11 +111,11 @@ export function setColoursInverted(coloursInverted) {
 }
 
 function stateToPersistentState() {
-  const { viewZoom, menuDivZoom, fullScreenViewZoom, coloursInverted } = state,
+  const { overlayZoom, menuZoom, fullScreenOverlayZoom, coloursInverted } = state,
         persistentState = {
-          viewZoom,
-          menuDivZoom,
-          fullScreenViewZoom,
+          overlayZoom,
+          menuZoom,
+          fullScreenOverlayZoom,
           coloursInverted
         };
 

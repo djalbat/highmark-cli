@@ -2,23 +2,23 @@
 
 import { STATE_KEY, LANDSCAPE_ORIENTATION, PORTRAIT_ORIENTATION } from "./constants";
 
-const viewZoom = {
+const menuZoom = {
         [PORTRAIT_ORIENTATION]: 1,
         [LANDSCAPE_ORIENTATION]: 1
       },
-      menuDivZoom = {
+      overlayZoom = {
         [PORTRAIT_ORIENTATION]: 1,
         [LANDSCAPE_ORIENTATION]: 1
       },
-      fullScreenViewZoom = {
+      fullScreenOverlayZoom = {
         [PORTRAIT_ORIENTATION]: 1,
         [LANDSCAPE_ORIENTATION]: 1
       },
       coloursInverted = false,
       defaultPersistentState = {
-        viewZoom,
-        menuDivZoom,
-        fullScreenViewZoom,
+        menuZoom,
+        overlayZoom,
+        fullScreenOverlayZoom,
         coloursInverted
       };
 
@@ -46,3 +46,4 @@ export function setPersistentState(persistentState) {
 
   localStorage.setItem(key, value);
 }
+
