@@ -42,7 +42,6 @@ class Div extends Element {
 export default withStyle(Div)`
 
   width: 100%;
-  pointer-events: none;
   transform-origin: top left;
   
 `;

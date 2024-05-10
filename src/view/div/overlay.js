@@ -233,15 +233,15 @@ class OverlayDiv extends Element {
   }
 
   updateNativeGestures() {
-    const nativeGesturesRestored = areNativeGesturesRestored();
-
-    nativeGesturesRestored ?
-      this.addClass("native-gestures") :
-        this.removeClass("native-gestures");
-
-    nativeGesturesRestored ?
-      this.disableCustomGestures() :
-        this.enableCustomGestures();
+    // const nativeGesturesRestored = areNativeGesturesRestored();
+    //
+    // nativeGesturesRestored ?
+    //   this.addClass("native-gestures") :
+    //     this.removeClass("native-gestures");
+    //
+    // nativeGesturesRestored ?
+    //   this.disableCustomGestures() :
+    //     this.enableCustomGestures();
   }
 
   areNativeGesturesRestored() {

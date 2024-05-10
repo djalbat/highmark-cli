@@ -14,7 +14,8 @@ import { setOrientation } from "./state";
 import { DIVS_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
 import { getOrientation, onOrientationChange } from "./utilities/orientation";
 
-const { renderStyles } = withStyle;
+const { renderStyles } = withStyle,
+      { onFragmentChange } = fragment;
 
 renderStyles();
 
@@ -42,6 +43,8 @@ onOrientationChange((orientation) => {
 
   view.updateZoom();
 });
+
+
 
 getOrientation((orientation) => {
   setOrientation(orientation);
