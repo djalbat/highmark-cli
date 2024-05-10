@@ -2,6 +2,7 @@
 
 export const { PI } = Math;
 
+export const HASH = "#";
 export const GRID = "grid";
 export const STATE_KEY = "state";
 export const TAP_DELAY = 250;
@@ -18,5 +19,5 @@ export const BACKGROUND_COLOUR = "background-color"; ///
 export const MINIMUM_SWIPE_SPEED = 1;
 export const PORTRAIT_ORIENTATION = "portrait";
 export const LANDSCAPE_ORIENTATION = "landscape";
-export const OPEN_MENU_TAP_AREA_HEIGHT = 256;
+export const OPEN_MENU_TAP_AREA_HEIGHT = 128;
 export const ORIENTATION_PORTRAIT_QUERY = "(orientation: portrait)";

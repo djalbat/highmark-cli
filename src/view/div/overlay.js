@@ -11,6 +11,7 @@ import touchMixins from "../../mixins/touch";
 import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
+import { resetFragment } from "../../utilities/fragment";
 import { elementsFromDOMElements } from "../../utilities/element";
 import { scrollToAnchor, findDivByAnchorId } from "../../utilities/element";
 import { getOverlayZoom as getZoom, areColoursInverted, areNativeGesturesRestored } from "../../state";
@@ -140,7 +141,13 @@ class OverlayDiv extends Element {
       }
 
       case ESCAPE_KEY_CODE: {
-        controller.exitFullScreen();
+        const fullScreen = isFullScreen();
+
+        if (fullScreen) {
+          controller.exitFullScreen();
+        }
+
+        controller.closeMenu();
 
         break;
       }
@@ -312,8 +319,6 @@ class OverlayDiv extends Element {
     }
 
     this.showNextDiv(nextIndex, previousIndex);
-
-    setFragment("");
   }
 
   showFirstDiv() {
@@ -333,6 +338,8 @@ class OverlayDiv extends Element {
   }
 
   showNextDiv(nextIndex, previousIndex, done = () => {}) {
+    resetFragment();
+
     const divs = this.getDivs();
 
     if (previousIndex !== -1) {
