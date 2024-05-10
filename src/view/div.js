@@ -13,12 +13,23 @@ class Div extends Element {
     return backgroundColour;
   }
 
+  isAdded() {
+    const domElement = this.getDOMElement(),
+          { parentNode } = domElement,
+          added = (parentNode !== null);
+
+    return added;
+  }
+
   zoom(zoom) {
-    const width = `${100/zoom}%`,
+    const zoomRatio = 100 / zoom,
+          width = `${zoomRatio}%`,
+          minHeight = `${zoomRatio}%`,
           transform = `scale(${zoom})`;
 
     const css = {
       width,
+      minHeight,
       transform
     };
 
@@ -31,8 +42,6 @@ class Div extends Element {
 export default withStyle(Div)`
 
   width: 100%;
-  display: none;
-  min-height: 100%;
   pointer-events: none;
   transform-origin: top left;
   

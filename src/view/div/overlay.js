@@ -3,7 +3,7 @@
 import withStyle from "easy-with-style";  ///
 
 import { window } from "easy";
-import { keyCodes } from "necessary";
+import { keyCodes, arrayUtilities } from "necessary";
 
 import Div from "../div";
 import Element from "../element";
@@ -15,7 +15,8 @@ import { elementsFromDOMElements } from "../../utilities/element";
 import { getOverlayZoom as getZoom, areColoursInverted } from "../../state";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 
-const { ENTER_KEY_CODE,
+const { first } = arrayUtilities,
+      { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
         BACKSPACE_KEY_CODE,
         ARROW_UP_KEY_CODE,
@@ -215,10 +216,10 @@ class OverlayDiv extends Element {
   }
 
   updateOverlayZoom() {
-    const zoom = getZoom(),
-          displayedDiv = this.findDisplayedDiv();
+    const div = this.findDiv(),
+          zoom = getZoom();
 
-    displayedDiv.zoom(zoom);
+    div.zoom(zoom);
   }
 
   updateOverlayColours() {
@@ -250,10 +251,10 @@ class OverlayDiv extends Element {
   }
 
   showRightDiv() {
-    const displayedDiv = this.findDisplayedDiv(),
+    const div = this.findDiv(),
           divs = this.getDivs(),
           divsLength = divs.length,
-          index = divs.indexOf(displayedDiv),
+          index = divs.indexOf(div),
           nextIndex = index + 1,
           previousIndex = index;  ///
 
@@ -264,22 +265,10 @@ class OverlayDiv extends Element {
     this.showNextDiv(nextIndex, previousIndex);
   }
 
-  showFirstDiv() {
-    const displayedDiv = this.findDisplayedDiv(),
-          divs = this.getDivs(),
-          index = divs.indexOf(displayedDiv),
-          nextIndex = 0,
-          previousIndex = (index === -1) ?
-                            nextIndex : ///
-                              index;  ///
-
-    this.showNextDiv(nextIndex, previousIndex);
-  }
-
   showLeftDiv() {
-    const displayedDiv = this.findDisplayedDiv(),
+    const div = this.findDiv(),
           divs = this.getDivs(),
-          index = divs.indexOf(displayedDiv),
+          index = divs.indexOf(div),
           nextIndex = index - 1,
           previousIndex = index;  ///
 
@@ -291,9 +280,9 @@ class OverlayDiv extends Element {
   }
 
   showLastDiv() {
-    const displayedDiv = this.findDisplayedDiv(),
+    const div = this.findDiv(),
           divs = this.getDivs(),
-          index = divs.indexOf(displayedDiv),
+          index = divs.indexOf(div),
           divsLength = divs.length,
           nextIndex = divsLength - 1,
           previousIndex = (index === -1) ?
@@ -304,30 +293,42 @@ class OverlayDiv extends Element {
   }
 
   showNextDiv(nextIndex, previousIndex) {
-    const divs = this.getDivs(),
+    const zoom = getZoom(),
+          divs = this.getDivs(),
           nextDiv = divs[nextIndex],
-          previousDiv = divs[previousIndex],
-          backgroundColour = nextDiv.getBackgroundColour();
-
-    let zoom;
-
-    zoom = 1;
-
-    previousDiv.zoom(zoom);
-
-    zoom = getZoom();
-
-    nextDiv.zoom(zoom);
-
-    previousDiv.hide();
-
-    this.setBackgroundColour(backgroundColour);
+          previousDiv = divs[previousIndex];
 
     this.stopScrolling();
 
     this.scrollToTop();
 
-    nextDiv.show();
+    this.remove(previousDiv);
+
+    this.add(nextDiv);
+
+    nextDiv.zoom(zoom);
+
+    setTimeout(() => {
+      const backgroundColour = nextDiv.getBackgroundColour();
+
+      this.setBackgroundColour(backgroundColour);
+    }, 0);
+  }
+
+  showFirstDiv() {
+    const zoom = getZoom(),
+          divs = this.getDivs(),
+          firstDiv = first(divs);
+
+    this.add(firstDiv);
+
+    firstDiv.zoom(zoom);
+
+    setTimeout(() => {
+      const backgroundColour = firstDiv.getBackgroundColour();
+
+      this.setBackgroundColour(backgroundColour);
+    }, 0);
   }
 
   setBackgroundColour(backgroundColour) {
@@ -339,24 +340,29 @@ class OverlayDiv extends Element {
     this.css(css);
   }
 
-  findDisplayedDiv() {
+  findDiv() {
     const divs = this.getDivs(),
-          displayedDiv = divs.find((div) => {
-            const displayed = div.isDisplayed();
+          div = divs.find((div) => {
+            const added = div.isAdded();
 
-            if (displayed) {
+            if (added) {
               return true;
             }
           });
 
-    return displayedDiv;
+    return div;
   }
 
   getDivs() {
-    const childElements = this.getChildElements(),
-          divs = childElements; ///
+    const { divs } = this.getState();
 
     return divs;
+  }
+
+  setDivs(divs) {
+    this.updateState({
+      divs
+    });
   }
 
   getInterval() {
@@ -396,11 +402,13 @@ class OverlayDiv extends Element {
   }
 
   setInitialState() {
-    const interval = null,
+    const divs = this.createDivs(),
+          interval = null,
           startZoom = null,
           startScrollTop = null;
 
     this.setState({
+      divs,
       interval,
       startZoom,
       startScrollTop
@@ -455,14 +463,11 @@ class OverlayDiv extends Element {
     window.offKeyDown(this.keyDownHandler);
   }
 
-  childElements() {
+  createDivs() {
     const { divDOMElements } = this.properties,
-          divs = elementsFromDOMElements(divDOMElements, Div),
-          childElements = [
-            ...divs
-          ];
+          divs = elementsFromDOMElements(divDOMElements, Div);
 
-    return childElements;
+    return divs;
   }
 
   parentContext() {
