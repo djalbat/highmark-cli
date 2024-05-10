@@ -13,14 +13,6 @@ class Div extends Element {
     return backgroundColour;
   }
 
-  isAdded() {
-    const domElement = this.getDOMElement(),
-          { parentNode } = domElement,
-          added = (parentNode !== null);
-
-    return added;
-  }
-
   zoom(zoom) {
     const zoomRatio = 100 / zoom,
           width = `${zoomRatio}%`,
@@ -34,6 +26,14 @@ class Div extends Element {
     };
 
     this.css(css);
+  }
+
+  didMount() {
+    this.hide();
+  }
+
+  willUnmount() {
+    ///
   }
 
   static tagName = "div";

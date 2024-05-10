@@ -11,6 +11,7 @@ import { onFragmentChange } from "fragmented";
 import View from "./view";
 import createMethods from "./createMethods";
 
+import { EMPTY_STRING } from "./constants";
 import { setOrientation } from "./state";
 import { DIVS_SELECTOR, LOADING_DIV_SELECTOR } from "./selectors";
 import { getOrientation, onOrientationChange } from "./utilities/orientation";
@@ -45,13 +46,25 @@ onOrientationChange((orientation) => {
 });
 
 onFragmentChange((event, fragment) => {
+  const anchorId = `${fragment}`;
 
+  (anchorId === EMPTY_STRING) ?
+    view.showFirstDiv() :
+      view.scrollToAnchor(anchorId);
 });
 
 getOrientation((orientation) => {
   setOrientation(orientation);
 
+  loadingDiv.hide();
+
   body.mount(view);
 
-  loadingDiv.hide();
+  const anchorId = `${fragment}`;
+
+  (anchorId === EMPTY_STRING) ?
+    view.showFirstDiv() :
+      view.scrollToAnchor(anchorId);
+
+  view.updateZoom();
 });

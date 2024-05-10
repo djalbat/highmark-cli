@@ -14,8 +14,8 @@ class View extends Element {
   }
 
   didMount() {
-    this.updateMenuZoom();
-    this.updateOverlayZoom();
+    this.show();
+
     this.updateOverlayColours();
     this.updateNativeGestures();
     this.updateFullScreenCheckboxDiv();
@@ -41,8 +41,6 @@ class View extends Element {
 
   initialise() {
     this.assignContext();
-
-    this.show();
   }
 
   static tagName = "div";

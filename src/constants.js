@@ -6,6 +6,7 @@ export const GRID = "grid";
 export const STATE_KEY = "state";
 export const TAP_DELAY = 250;
 export const PI_OVER_TWO = PI / 2;
+export const EMPTY_STRING = "";
 export const SCROLL_DELAY = 10;
 export const DECELERATION = 0.0333333;
 export const UP_DIRECTION = +1;

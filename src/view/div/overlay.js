@@ -3,7 +3,7 @@
 import withStyle from "easy-with-style";  ///
 
 import { window } from "easy";
-import { keyCodes, arrayUtilities } from "necessary";
+import { keyCodes } from "necessary";
 
 import Div from "../div";
 import Element from "../element";
@@ -12,11 +12,11 @@ import fullScreenMixins from "../../mixins/fullsrean";
 
 import { isFullScreen } from "../../utilities/fullScreen";
 import { elementsFromDOMElements } from "../../utilities/element";
+import { scrollToAnchor, findDivByAnchorId } from "../../utilities/element";
 import { getOverlayZoom as getZoom, areColoursInverted, areNativeGesturesRestored } from "../../state";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 
-const { first } = arrayUtilities,
-      { ENTER_KEY_CODE,
+const { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
         BACKSPACE_KEY_CODE,
         ARROW_UP_KEY_CODE,
@@ -159,6 +159,26 @@ class OverlayDiv extends Element {
     }
   }
 
+  scrollToAnchor(anchorId) {
+    let div;
+
+    div = findDivByAnchorId(anchorId);
+
+    const nextDiv = div;  ///
+
+    div = this.findDiv();
+
+    const previousDiv = div;  ///
+
+    const divs = this.getDivs(),
+          nextIndex = divs.indexOf(nextDiv),  ///
+          previousIndex = divs.indexOf(previousDiv);  ///
+
+    this.showNextDiv(nextIndex, previousIndex, () => {
+      scrollToAnchor(anchorId);
+    });
+  }
+
   scrollToTop() {
     const scrollTop = 0;
 
@@ -228,8 +248,6 @@ class OverlayDiv extends Element {
     coloursInverted ?
       this.addClass("inverted-colours") :
         this.removeClass("inverted-colours");
-
-    this.updateOverlayZoom();
   }
 
   updateNativeGestures() {
@@ -282,53 +300,65 @@ class OverlayDiv extends Element {
   showLastDiv() {
     const div = this.findDiv(),
           divs = this.getDivs(),
-          index = divs.indexOf(div),
           divsLength = divs.length,
+          index = (div === null) ?
+                    -1 :
+                      divs.indexOf(div),
           nextIndex = divsLength - 1,
-          previousIndex = (index === -1) ?
-                            nextIndex : ///
-                              index;  ///
+          previousIndex = index;  ///
+
+    if (nextIndex === previousIndex) {
+      return;
+    }
+
+    this.showNextDiv(nextIndex, previousIndex);
+
+    setFragment("");
+  }
+
+  showFirstDiv() {
+    const div = this.findDiv(),
+          divs = this.getDivs(),
+          index = (div === null) ?
+                    -1 :
+                      divs.indexOf(div),
+          nextIndex = 0,
+          previousIndex = index;  ///
+
+    if (nextIndex === previousIndex) {
+      return;
+    }
 
     this.showNextDiv(nextIndex, previousIndex);
   }
 
-  showNextDiv(nextIndex, previousIndex) {
+  showNextDiv(nextIndex, previousIndex, done = () => {}) {
+    const divs = this.getDivs();
+
+    if (previousIndex !== -1) {
+      const previousDiv = divs[previousIndex];
+
+      previousDiv.hide();
+    }
+
     const zoom = getZoom(),
-          divs = this.getDivs(),
-          nextDiv = divs[nextIndex],
-          previousDiv = divs[previousIndex];
+          nextDiv = divs[nextIndex];
 
     this.stopScrolling();
 
     this.scrollToTop();
 
-    this.remove(previousDiv);
-
-    this.add(nextDiv);
-
     nextDiv.zoom(zoom);
 
-    setTimeout(() => {
+    nextDiv.show();
+
+    defer(() => {
       const backgroundColour = nextDiv.getBackgroundColour();
 
       this.setBackgroundColour(backgroundColour);
-    }, 0);
-  }
 
-  showFirstDiv() {
-    const zoom = getZoom(),
-          divs = this.getDivs(),
-          firstDiv = first(divs);
-
-    this.add(firstDiv);
-
-    firstDiv.zoom(zoom);
-
-    setTimeout(() => {
-      const backgroundColour = firstDiv.getBackgroundColour();
-
-      this.setBackgroundColour(backgroundColour);
-    }, 0);
+      done();
+    });
   }
 
   setBackgroundColour(backgroundColour) {
@@ -343,26 +373,21 @@ class OverlayDiv extends Element {
   findDiv() {
     const divs = this.getDivs(),
           div = divs.find((div) => {
-            const added = div.isAdded();
+            const showing = div.isShowing();
 
-            if (added) {
+            if (showing) {
               return true;
             }
-          });
+          }) || null;
 
     return div;
   }
 
   getDivs() {
-    const { divs } = this.getState();
+    const childElements = this.getChildElements(),
+          divs = childElements; ///
 
     return divs;
-  }
-
-  setDivs(divs) {
-    this.updateState({
-      divs
-    });
   }
 
   getInterval() {
@@ -402,13 +427,11 @@ class OverlayDiv extends Element {
   }
 
   setInitialState() {
-    const divs = this.createDivs(),
-          interval = null,
+    const interval = null,
           startZoom = null,
           startScrollTop = null;
 
     this.setState({
-      divs,
       interval,
       startZoom,
       startScrollTop
@@ -459,21 +482,28 @@ class OverlayDiv extends Element {
     window.offKeyDown(this.keyDownHandler);
   }
 
-  createDivs() {
+  childElements() {
     const { divDOMElements } = this.properties,
-          divs = elementsFromDOMElements(divDOMElements, Div);
+          divs = elementsFromDOMElements(divDOMElements, Div),
+          childElements = [
+            ...divs
+          ];
 
-    return divs;
+    return childElements;
   }
 
   parentContext() {
-    const exitFullScreen = this.exitFullScreen.bind(this),
+    const showFirstDiv = this.showFirstDiv.bind(this),
+          scrollToAnchor = this.scrollToAnchor.bind(this),
+          exitFullScreen = this.exitFullScreen.bind(this),
           enterFullScreen = this.enterFullScreen.bind(this),
           updateOverlayZoom = this.updateOverlayZoom.bind(this),
           updateOverlayColours = this.updateOverlayColours.bind(this),
           updateNativeGestures = this.updateNativeGestures.bind(this);
 
     return ({
+      showFirstDiv,
+      scrollToAnchor,
       exitFullScreen,
       enterFullScreen,
       updateOverlayZoom,
@@ -486,8 +516,6 @@ class OverlayDiv extends Element {
     this.assignContext();
 
     this.setInitialState();
-
-    this.showFirstDiv();
   }
 
   static tagName = "div";
@@ -522,3 +550,7 @@ export default withStyle(OverlayDiv)`
   }
     
 `;
+
+function defer(func) {
+  setTimeout(func, 0);
+}
