@@ -3,7 +3,7 @@
 const express = require("express");
 
 const { ERROR } = require("../constants"),
-      { createStaticRouter } = require("../router/static"),
+      { directoryPathFromFilePath } = require("../utilities/path"),
       { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
@@ -21,8 +21,9 @@ function serverOperation(proceed, abort, context) {
     server
   });
 
-  const { port } = context,
-        staticRouter = createStaticRouter(context);
+  const { port, outputFilePath } = context,
+        outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
+        staticRouter = express.static(outputDirectoryPath);
 
   server.use(staticRouter);
 
