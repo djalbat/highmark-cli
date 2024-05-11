@@ -2,9 +2,8 @@
 
 const express = require("express");
 
-const { createStaticRouter } = require("../router/static"),
-      { createLiveReloadHandler } = require("../handler/liveReload"),
-      { ERROR, LIVE_RELOAD_PATH } = require("../constants"),
+const { ERROR } = require("../constants"),
+      { createStaticRouter } = require("../router/static"),
       { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
@@ -18,16 +17,14 @@ function serverOperation(proceed, abort, context) {
 
   server = express(); ///
 
-  const { port, watch } = context,
+  Object.assign(context, {
+    server
+  });
+
+  const { port } = context,
         staticRouter = createStaticRouter(context);
 
   server.use(staticRouter);
-
-  if (watch) {
-    const liveReloadHandler = createLiveReloadHandler(context);
-
-    server.get(LIVE_RELOAD_PATH, liveReloadHandler);
-  }
 
   const listener = server.listen(port, () => {
     console.log(`Server listening on port ${port}...`);

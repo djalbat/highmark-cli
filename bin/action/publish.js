@@ -1,6 +1,7 @@
 "use strict";
 
 const htmlOperation = require("../operation/html"),
+      watchOperation = require("../operation/watch"),
       serverOperation = require("../operation/server"),
       copyFontsOperation = require("../operation/copyFonts"),
       copyClientOperation = require("../operation/copyClient"),
@@ -19,7 +20,8 @@ function publishAction(port, watch, server, quietly, copyFonts, copyClient, inpu
           copyClientOperation,
           copyFontsOperation,
           htmlOperation,
-          serverOperation
+          serverOperation,
+          watchOperation
         ],
         context = {
           port,
