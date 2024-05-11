@@ -54,9 +54,11 @@ function markdownHTMLOperation(proceed, abort, context) {
 
   divisionMarkdownNode.setDivisionClassName(divisionClassName);
 
-  divisionMarkdownNode.resolveImports(context);
+  divisionMarkdownNode.resolveIncludes(context);
 
   divisionMarkdownNodes.forEach((divisionMarkdownNode) => {
+    divisionMarkdownNode.resolveEmbeddings(context);
+
     divisionMarkdownNode.createFootnotes(context);
   });
 
