@@ -47,15 +47,31 @@ function main(command, argument, options) {
   }
 
   switch (command) {
-    case HELP_COMMAND: helpAction(); break;
-    case SERVER_COMMAND: serverAction(port, watch, server, quietly, outputFilePath); break;
-    case VERSION_COMMAND: versionAction(); break;
-    case PUBLISH_COMMAND: publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath); break;
+    case HELP_COMMAND: {
+      helpAction();
 
-    default :
+      break;
+    }
+
+    case SERVER_COMMAND: {
+      const server = true;
+
+      serverAction(port, watch, server, quietly, outputFilePath);
+
+      break;
+    }
+
+    case VERSION_COMMAND: {
+      versionAction();
+
+      break;
+    }
+
+    default: {
       publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath);
 
       break;
+    }
   }
 }
 
