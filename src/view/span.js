@@ -13,9 +13,7 @@ class Span extends Element {
 export default withStyle(Span)`
 
   color: ${spanColour};
-  display: inline-block;
   font-size: ${spanFontSize};
-  line-height: 1;
   white-space: pre;
   font-family: serif;
   
