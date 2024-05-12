@@ -1,8 +1,11 @@
 "use strict";
 
+import { eventTypes } from "easy";
+
 import { isFullScreen } from "../utilities/fullScreen";
-import { FULLSCREENCHANGE_EVENT_TYPE } from "../eventTypes";
 import { FULL_SCREEN_CHANGE_CUSTOM_EVENT_TYPE } from "../customEventTypes";
+
+const { FULLSCREENCHANGE_EVENT_TYPE } = eventTypes;
 
 function enableFullScreen() {
   this.onFullscreenchange(this.fullscreenchangeHandler);

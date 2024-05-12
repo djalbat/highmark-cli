@@ -1,11 +1,10 @@
 "use strict";
 
-import { window } from "easy";
 import { arrayUtilities } from "necessary";
+import { window, eventTypes } from "easy";
 
 import RelativePosition from "../position/relative";
 
-import { TOUCHSTART_EVENT_TYPE, TOUCHMOVE_EVENT_TYPE, TOUCHEND_EVENT_TYPE } from "../eventTypes";
 import { PI, TAP_DELAY, PI_OVER_TWO, MAXIMUM_TAP_TIME, MINIMUM_SWIPE_SPEED, MAXIMUM_SPREAD } from "../constants";
 import { sortPositions, matchPositions, filterPositions, positionsFromMouseEvent, positionsFromTouchEvent } from "../utilities/positions";
 import { TAP_CUSTOM_EVENT_TYPE,
@@ -23,7 +22,8 @@ import { TAP_CUSTOM_EVENT_TYPE,
          PINCH_START_CUSTOM_EVENT_TYPE,
          DOUBLE_TAP_CUSTOM_EVENT_TYPE } from "../customEventTypes";
 
-const { push, first, second } = arrayUtilities;
+const { push, first, second } = arrayUtilities,
+      { TOUCHSTART_EVENT_TYPE, TOUCHMOVE_EVENT_TYPE, TOUCHEND_EVENT_TYPE } = eventTypes;
 
 function enableTouch() {
   const tapInterval = null,
