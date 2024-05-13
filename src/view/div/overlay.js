@@ -308,7 +308,6 @@ class OverlayDiv extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
-    this.offCustomSingleTap(this.singleTapCustomHandler);
 
     nativeGesturedEnabled = false;
 
@@ -523,6 +522,8 @@ class OverlayDiv extends Element {
     this.disableFullScreen();
 
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
+
+    this.offCustomSingleTap(this.singleTapCustomHandler);
 
     window.offKeyDown(this.keyDownHandler);
   }
