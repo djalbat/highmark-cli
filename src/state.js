@@ -1,7 +1,10 @@
 "use strict";
 
-import { isFullScreen } from "./utilities/fullScreen";
+import { fullScreenUtilities } from "easy-mobile";
+
 import { getPersistentState, setPersistentState } from "./localStorage";
+
+const { isFullScreen } = fullScreenUtilities;
 
 const orientation = null,
       state = {

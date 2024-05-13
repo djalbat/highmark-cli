@@ -4,20 +4,19 @@ import withStyle from "easy-with-style";  ///
 
 import { window } from "easy";
 import { keyCodes } from "necessary";
+import { touchMixins, fullScreenMixins, fullScreenUtilities } from "easy-mobile";
 
 import Div from "../div";
 import Element from "../element";
-import touchMixins from "../../mixins/touch";
-import fullScreenMixins from "../../mixins/fullsrean";
 
-import { isFullScreen } from "../../utilities/fullScreen";
 import { resetFragment } from "../../utilities/fragment";
 import { elementsFromDOMElements } from "../../utilities/element";
 import { scrollToAnchor, findDivByAnchorId } from "../../utilities/element";
 import { getOverlayZoom as getZoom, areColoursInverted, areNativeGesturesRestored } from "../../state";
 import { SCROLL_DELAY, UP_DIRECTION, DECELERATION, DOWN_DIRECTION, OPEN_MENU_TAP_AREA_HEIGHT } from "../../constants";
 
-const { ENTER_KEY_CODE,
+const { isFullScreen } = fullScreenUtilities,
+      { ENTER_KEY_CODE,
         ESCAPE_KEY_CODE,
         BACKSPACE_KEY_CODE,
         ARROW_UP_KEY_CODE,
@@ -46,7 +45,6 @@ class OverlayDiv extends Element {
     nativeGesturesRestored ?
       controller.suppressNativeGestures() :
         controller.restoreNativeGestures();
-
   }
 
   pinchStartCustomHandler = (event, element) => {
@@ -63,11 +61,11 @@ class OverlayDiv extends Element {
     controller.zoomOverlay(overlayZoom);
   }
 
-  swipeRightCustomHandler = (event, element) => {
+  swipeRightCustomHandler = (event, element, top, left, spped) => {
     this.showLeftDiv();
   }
 
-  swipeLeftCustomHandler = (event, element) => {
+  swipeLeftCustomHandler = (event, element, top, left, spped) => {
     this.showRightDiv();
   }
 
