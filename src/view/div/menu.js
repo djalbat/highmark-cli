@@ -8,7 +8,7 @@ import CheckboxesDiv from "../div/checkboxes";
 
 import { GRID } from "../../constants";
 import { getMenuZoom as getZoom } from "../../state";
-import { borderColour, menuDivPadding, backgroundColour } from "../../styles";
+import { menuDivGap, borderColour, menuDivPadding, backgroundColour } from "../../styles";
 
 class MenuDiv extends Element {
   show() {
@@ -73,6 +73,7 @@ class MenuDiv extends Element {
 
 export default withStyle(MenuDiv)`
 
+  gap: ${menuDivGap};
   left: 0;
   bottom: 0;
   display: grid;

@@ -3,6 +3,7 @@
 export const svgFill = "#fff";
 export const buttonSize = "64px";
 export const spanColour = "#fff";
+export const menuDivGap = "32px";
 export const borderWidth = "4px";
 export const borderRadius = "8px"
 export const borderColour = "#fff";

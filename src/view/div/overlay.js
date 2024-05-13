@@ -268,6 +268,53 @@ class OverlayDiv extends Element {
         this.enableCustomGestures();
   }
 
+  enableCustomGestures() {
+    let nativeGesturedEnabled = this.areNativeGesturesEnabled();
+
+    if (nativeGesturedEnabled) {
+      return;
+    }
+
+    this.onCustomDragUp(this.dragUpCustomHandler);
+    this.onCustomDragDown(this.dragDownCustomHandler);
+    this.onCustomDragStart(this.dragStartCustomHandler);
+    this.onCustomSwipeUp(this.swipeUpCustomHandler);
+    this.onCustomSwipeDown(this.swipeDownCustomHandler);
+    this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
+    this.onCustomSwipeRight(this.swipeRightCustomHandler);
+    this.onCustomPinchMove(this.pinchMoveCustomHandler);
+    this.onCustomPinchStart(this.pinchStartCustomHandler);
+    this.onCustomDoubleTap(this.doubleTapCustomHandler);
+
+    nativeGesturedEnabled = true;
+
+    this.setNativeGesturesEnabled(nativeGesturedEnabled);
+  }
+
+  disableCustomGestures() {
+    let nativeGesturedEnabled = this.areNativeGesturesEnabled();
+
+    if (!nativeGesturedEnabled) {
+      return;
+    }
+
+    this.offCustomDragUp(this.dragUpCustomHandler);
+    this.offCustomDragDown(this.dragDownCustomHandler);
+    this.offCustomDragStart(this.dragStartCustomHandler);
+    this.offCustomSwipeUp(this.swipeUpCustomHandler);
+    this.offCustomSwipeDown(this.swipeDownCustomHandler);
+    this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
+    this.offCustomSwipeRight(this.swipeRightCustomHandler);
+    this.offCustomPinchMove(this.pinchMoveCustomHandler);
+    this.offCustomPinchStart(this.pinchStartCustomHandler);
+    this.offCustomDoubleTap(this.doubleTapCustomHandler);
+    this.offCustomSingleTap(this.singleTapCustomHandler);
+
+    nativeGesturedEnabled = false;
+
+    this.setNativeGesturesEnabled(nativeGesturedEnabled);
+  }
+
   areNativeGesturesRestored() {
     const nativeGesturesRestored = this.hasClass("native-gestures");
 
@@ -432,32 +479,36 @@ class OverlayDiv extends Element {
     });
   }
 
+  areNativeGesturesEnabled() {
+    const { nativeGesturesEnabled } = this.getState();
+
+    return nativeGesturesEnabled;
+  }
+
+  setNativeGesturesEnabled(nativeGesturesEnabled) {
+    this.updateState({
+      nativeGesturesEnabled
+    });
+  }
+
   setInitialState() {
     const interval = null,
           startZoom = null,
-          startScrollTop = null;
+          startScrollTop = null,
+          nativeGesturesEnabled = false;
 
     this.setState({
       interval,
       startZoom,
-      startScrollTop
+      startScrollTop,
+      nativeGesturesEnabled
     });
   }
 
   didMount() {
     window.onKeyDown(this.keyDownHandler);
 
-    this.onCustomDragUp(this.dragUpCustomHandler);
-    this.onCustomDragDown(this.dragDownCustomHandler);
-    this.onCustomDragStart(this.dragStartCustomHandler);
-    this.onCustomSwipeUp(this.swipeUpCustomHandler);
-    this.onCustomSwipeDown(this.swipeDownCustomHandler);
-    this.onCustomSwipeLeft(this.swipeLeftCustomHandler);
-    this.onCustomSwipeRight(this.swipeRightCustomHandler);
-    this.onCustomPinchMove(this.pinchMoveCustomHandler);
-    this.onCustomPinchStart(this.pinchStartCustomHandler);
     this.onCustomSingleTap(this.singleTapCustomHandler);
-    this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
     this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
@@ -470,18 +521,6 @@ class OverlayDiv extends Element {
     this.disableTouch();
 
     this.disableFullScreen();
-
-    this.offCustomDragUp(this.dragUpCustomHandler);
-    this.offCustomDragDown(this.dragDownCustomHandler);
-    this.offCustomDragStart(this.dragStartCustomHandler);
-    this.offCustomSwipeUp(this.swipeUpCustomHandler);
-    this.offCustomSwipeDown(this.swipeDownCustomHandler);
-    this.offCustomSwipeLeft(this.swipeLeftCustomHandler);
-    this.offCustomSwipeRight(this.swipeRightCustomHandler);
-    this.offCustomPinchMove(this.pinchMoveCustomHandler);
-    this.offCustomPinchStart(this.pinchStartCustomHandler);
-    this.offCustomDoubleTap(this.doubleTapCustomHandler);
-    this.offCustomSingleTap(this.singleTapCustomHandler);
 
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 

@@ -4,7 +4,7 @@ import { STATE_KEY, LANDSCAPE_ORIENTATION, PORTRAIT_ORIENTATION } from "./consta
 
 const menuZoom = {
         [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 1
+        [LANDSCAPE_ORIENTATION]: 0.5
       },
       overlayZoom = {
         [PORTRAIT_ORIENTATION]: 1,
