@@ -31,6 +31,15 @@ class OverlayDiv extends Element {
     this.updateOverlayZoom();
   }
 
+  singleTapCustomHandler = (event, element, top, left) => {
+    const height = this.getHeight(),
+          bottom = height - top;
+
+    if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
+      controller.openMenu();
+    }
+  }
+
   doubleTapCustomHandler = (event, element, top, left) => {
     const fullScreen = isFullScreen();
 
@@ -110,15 +119,6 @@ class OverlayDiv extends Element {
     const scrollTop = startScrollTop - top;
 
     this.setScrollTop(scrollTop);
-  }
-
-  tapCustomHandler = (event, element, top, left) => {
-    const height = this.getHeight(),
-          bottom = height - top;
-
-    if (bottom < OPEN_MENU_TAP_AREA_HEIGHT) {
-      controller.openMenu();
-    }
   }
 
   keyDownHandler = (event, element) => {
@@ -447,7 +447,6 @@ class OverlayDiv extends Element {
   didMount() {
     window.onKeyDown(this.keyDownHandler);
 
-    this.onCustomTap(this.tapCustomHandler);
     this.onCustomDragUp(this.dragUpCustomHandler);
     this.onCustomDragDown(this.dragDownCustomHandler);
     this.onCustomDragStart(this.dragStartCustomHandler);
@@ -457,6 +456,7 @@ class OverlayDiv extends Element {
     this.onCustomSwipeRight(this.swipeRightCustomHandler);
     this.onCustomPinchMove(this.pinchMoveCustomHandler);
     this.onCustomPinchStart(this.pinchStartCustomHandler);
+    this.onCustomSingleTap(this.singleTapCustomHandler);
     this.onCustomDoubleTap(this.doubleTapCustomHandler);
 
     this.onCustomFullScreenChange(this.fullScreenChangeCustomHandler);
@@ -471,7 +471,6 @@ class OverlayDiv extends Element {
 
     this.disableFullScreen();
 
-    this.offCustomTap(this.tapCustomHandler);
     this.offCustomDragUp(this.dragUpCustomHandler);
     this.offCustomDragDown(this.dragDownCustomHandler);
     this.offCustomDragStart(this.dragStartCustomHandler);
@@ -482,6 +481,7 @@ class OverlayDiv extends Element {
     this.offCustomPinchMove(this.pinchMoveCustomHandler);
     this.offCustomPinchStart(this.pinchStartCustomHandler);
     this.offCustomDoubleTap(this.doubleTapCustomHandler);
+    this.offCustomSingleTap(this.singleTapCustomHandler);
 
     this.offCustomFullScreenChange(this.fullScreenChangeCustomHandler);
 
