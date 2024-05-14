@@ -132,8 +132,9 @@ export function setColoursInverted(coloursInverted) {
 }
 
 function stateToPersistentState() {
-  const { menuZoom, overlayZoom, fullScreenOverlayZoom, nativeGesturesRestored, coloursInverted } = state,
+  const { version, menuZoom, overlayZoom, fullScreenOverlayZoom, nativeGesturesRestored, coloursInverted } = state,
         persistentState = {
+          version,
           menuZoom,
           overlayZoom,
           fullScreenOverlayZoom,

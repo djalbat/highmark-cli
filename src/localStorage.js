@@ -1,51 +1,40 @@
 "use strict";
 
-import { STATE_KEY, LANDSCAPE_ORIENTATION, PORTRAIT_ORIENTATION } from "./constants";
+import { STATE_KEY } from "./constants";
+import { createState } from "./state/version_1";
+import { migrateState } from "./migrate";
 
-const menuZoom = {
-        [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 0.5
-      },
-      overlayZoom = {
-        [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 1
-      },
-      fullScreenOverlayZoom = {
-        [PORTRAIT_ORIENTATION]: 1,
-        [LANDSCAPE_ORIENTATION]: 1
-      },
-      coloursInverted = false,
-      nativeGesturesRestored = false,
-      defaultPersistentState = {
-        menuZoom,
-        overlayZoom,
-        fullScreenOverlayZoom,
-        nativeGesturesRestored,
-        coloursInverted
-      };
+const state = createState(),
+      defaultState = state; ///
 
 export function getPersistentState() {
-  let persistentState;
+  let persistentState,
+      state;
 
   const key = STATE_KEY,
         value = localStorage.getItem(key);
 
   if (value === null) {
-    persistentState = defaultPersistentState; ///
+    state = defaultState; ///
   } else {
-    const persistentStateString = value;  ///
+    const jsonString = value,  ///
+          json = JSON.parse(jsonString);
 
-    persistentState = JSON.parse(persistentStateString);
+    state = json; ///
+
+    state = migrateState(state);
   }
+
+  persistentState = state;  ///
 
   return persistentState;
 }
 
 export function setPersistentState(persistentState) {
-  const persistentStateString = JSON.stringify(persistentState),
+  const json = persistentState, ///
+        jsonString = JSON.stringify(json),
         key = STATE_KEY,
-        value = persistentStateString;  ///
+        value = jsonString;  ///
 
   localStorage.setItem(key, value);
 }
-
