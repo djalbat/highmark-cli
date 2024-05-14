@@ -45,7 +45,7 @@ onOrientationChange((orientation) => {
   view.updateZoom();
 });
 
-onFragmentChange((event, fragment) => {
+onFragmentChange((event, element, fragment) => {
   const anchorId = `${fragment}`;
 
   (anchorId === EMPTY_STRING) ?

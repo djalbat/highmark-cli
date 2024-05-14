@@ -4,12 +4,12 @@ import withStyle from "easy-with-style";  ///
 
 import { window } from "easy";
 import { keyCodes } from "necessary";
+import { resetFragment } from "fragmented";
 import { touchMixins, fullScreenMixins, fullScreenUtilities } from "easy-mobile";
 
 import Div from "../div";
 import Element from "../element";
 
-import { resetFragment } from "../../utilities/fragment";
 import { elementsFromDOMElements } from "../../utilities/element";
 import { scrollToAnchor, findDivByAnchorId } from "../../utilities/element";
 import { getOverlayZoom as getZoom, areColoursInverted, areNativeGesturesRestored } from "../../state";
