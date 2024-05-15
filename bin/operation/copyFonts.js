@@ -1,9 +1,9 @@
 "use strict";
 
-const { copyFonts: copyFontsAsync } = require("highmark-client");
+const { pathUtilities } = require("necessary"),
+      { copyFonts: copyFontsAsync } = require("highmark-client");
 
-const { FONT } = require("../constants"),
-      { directoryPathFromFilePath } = require("../utilities/path");
+const { FONT } = require("../constants");
 
 const { concatenatePaths } = pathUtilities;
 
@@ -16,8 +16,7 @@ function copyFontsOperation(proceed, abort, context) {
     return;
   }
 
-  const { outputFilePath } = context,
-        outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
+  const { outputDirectoryPath } = context,
         fontDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
 
   copyFontsAsync(fontDirectoryPath);

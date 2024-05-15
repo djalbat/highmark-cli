@@ -2,8 +2,7 @@
 
 const { createLiveReloadHandler } = require("lively-cli");
 
-const { LIVE_RELOAD_PATH } = require("../constants"),
-      { directoryPathFromFilePath } = require("../utilities/path");
+const { LIVE_RELOAD_PATH } = require("../constants");
 
 function watchOperation(proceed, abort, context) {
   const { watch } = context;
@@ -22,8 +21,7 @@ function watchOperation(proceed, abort, context) {
     return;
   }
 
-  const { quietly, outputFilePath } = context,
-        outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
+  const { quietly, outputDirectoryPath } = context,
         watchPattern = outputDirectoryPath, ///
         liveReloadHandler = createLiveReloadHandler(watchPattern, quietly);
 

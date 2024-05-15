@@ -4,9 +4,8 @@ const htmlOperation = require("../operation/html"),
       watchOperation = require("../operation/watch"),
       serverOperation = require("../operation/server"),
       copyFontsOperation = require("../operation/copyFonts"),
-      copyClientOperation = require("../operation/copyClient"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
-      copyCheckmarkOperation = require("../operation/copyCheckmark"),
+      copyClientFilesOperation = require("../operation/copyClientFiles"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
 
 const { executeOperations } = require("../utilities/operation"),
@@ -14,10 +13,9 @@ const { executeOperations } = require("../utilities/operation"),
 
 function publishAction(port, watch, server, quietly, copyFonts, inputFilePath, copyClientFiles, outputDirectoryPath) {
   const operations = [
-          markdownStylesCSSOperation,
           markdownHTMLOperation,
-          copyCheckmarkOperation,
-          copyClientOperation,
+          markdownStylesCSSOperation,
+          copyClientFilesOperation,
           copyFontsOperation,
           htmlOperation,
           serverOperation,
