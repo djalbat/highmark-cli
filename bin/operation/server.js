@@ -6,15 +6,15 @@ const { ERROR } = require("../constants"),
       { UNABLE_TO_START_SERVER_MESSAGE } = require("../messages");
 
 function serverOperation(proceed, abort, context) {
-  let { server } = context;
+  let { startServer } = context;
 
-  if (!server) {
+  if (!startServer) {
     proceed();
 
     return;
   }
 
-  server = express(); ///
+  const server = express(); ///
 
   Object.assign(context, {
     server

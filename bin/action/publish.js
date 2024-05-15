@@ -1,9 +1,9 @@
 "use strict";
 
-const htmlOperation = require("../operation/html"),
-      watchOperation = require("../operation/watch"),
+const watchOperation = require("../operation/watch"),
       serverOperation = require("../operation/server"),
       copyFontsOperation = require("../operation/copyFonts"),
+      indexHTMLOperation = require("../operation/indexHTML"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
       copyClientFilesOperation = require("../operation/copyClientFiles"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
@@ -11,22 +11,22 @@ const htmlOperation = require("../operation/html"),
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
-function publishAction(port, watch, server, quietly, copyFonts, inputFilePath, copyClientFiles, outputDirectoryPath) {
+function publishAction(port, watch, quietly, copyFonts, startServer, inputFilePath, copyClientFiles, outputDirectoryPath) {
   const operations = [
           markdownHTMLOperation,
           markdownStylesCSSOperation,
           copyClientFilesOperation,
           copyFontsOperation,
-          htmlOperation,
+          indexHTMLOperation,
           serverOperation,
           watchOperation
         ],
         context = {
           port,
           watch,
-          server,
           quietly,
           copyFonts,
+          startServer,
           inputFilePath,
           copyClientFiles,
           outputDirectoryPath

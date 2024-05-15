@@ -9,9 +9,9 @@ const { HELP_OPTION, SERVER_OPTION, VERSION_OPTION } = require("./options"),
       { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_WATCH,
-        DEFAULT_SERVER,
         DEFAULT_QUIETLY,
         DEFAULT_COPY_FONTS,
+        DEFAULT_START_SERVER,
         DEFAULT_INPUT_FILE_PATH,
         DEFAULT_COPY_CLIENT_FILES,
         DEFAULT_OUTPUT_DIRECTORY_PATH } = require("./defaults");
@@ -23,9 +23,9 @@ function main(command, argument, options) {
         versionOptionPresent = options.hasOwnProperty(VERSION_OPTION),
         { port = DEFAULT_PORT,
           watch = DEFAULT_WATCH,
-          server = DEFAULT_SERVER,
           quietly = DEFAULT_QUIETLY,
           copyFonts = DEFAULT_COPY_FONTS,
+          startServer = DEFAULT_START_SERVER,
           inputFilePath = DEFAULT_INPUT_FILE_PATH,
           copyClientFiles = DEFAULT_COPY_CLIENT_FILES,
           outputDirectoryPath = DEFAULT_OUTPUT_DIRECTORY_PATH } = options;
@@ -52,9 +52,9 @@ function main(command, argument, options) {
     }
 
     case SERVER_COMMAND: {
-      const server = true;
+      const startServer = true;
 
-      serverAction(port, watch, server, quietly, outputDirectoryPath);
+      serverAction(port, watch, quietly, startServer, outputDirectoryPath);
 
       break;
     }
@@ -66,7 +66,7 @@ function main(command, argument, options) {
     }
 
     default: {
-      publishAction(port, watch, server, quietly, copyFonts, inputFilePath, copyClientFiles, outputDirectoryPath);
+      publishAction(port, watch, quietly, copyFonts, startServer, inputFilePath, copyClientFiles, outputDirectoryPath);
 
       break;
     }

@@ -6,7 +6,7 @@ const watchOperation = require("../operation/watch"),
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_SERVER_MESSAGE, FAILED_SERVER_MESSAGE } = require("../messages");
 
-function serverAction(port, watch, server, quietly, outputDirectoryPath) {
+function serverAction(port, watch, quietly, startServer, outputDirectoryPath) {
   const operations = [
           serverOperation,
           watchOperation
@@ -14,8 +14,8 @@ function serverAction(port, watch, server, quietly, outputDirectoryPath) {
         context = {
           port,
           watch,
-          server,
           quietly,
+          startServer,
           outputDirectoryPath
         };
 

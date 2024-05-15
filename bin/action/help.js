@@ -23,9 +23,9 @@ Options:
 
   --watch|-w                                 Watch for changes to the client file and in the output directory 
 
-  --server|-s                                Start a server to view the output file
-
   --copy-fonts|-f                            Copy the fonts to a fonts folder next to the output file
+
+  --start-server|-s                          Start a server to view the output file
 
   --input-file-path|-i                       The input file path, the default being 'default.md'
 
