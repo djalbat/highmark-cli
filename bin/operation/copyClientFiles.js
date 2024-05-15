@@ -7,10 +7,9 @@ function copyClientFilesOperation(proceed, abort, context) {
 
   if (copyClientFiles) {
     const { markdownHTML, markdownStylesCSS, outputDirectoryPath } = context,
-          targetDirectoryPath = outputDirectoryPath, ///
-          includeFonts = false;
+          targetDirectoryPath = outputDirectoryPath; ///
 
-    copyClientFilesAsync(markdownHTML, markdownStylesCSS, targetDirectoryPath, includeFonts);
+    copyClientFilesAsync(markdownHTML, markdownStylesCSS, targetDirectoryPath);
   }
 
   proceed();

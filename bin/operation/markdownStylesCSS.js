@@ -7,14 +7,14 @@ const { mediaTypeNames } = require("highmark-markdown"),
 const { classNameFromFilePath } = require("../utilities/division"),
       { readFile, readDirectory } = require("../utilities/fileSystem"),
       { directoryPathFromFilePath } = require("../utilities/path"),
-      { CLIENT_SELECTOR_STRING, RAW_HTML_SELECTOR_STRING } = require("../constants");
+      { DIVS_SELECTOR_STRING, CLIENT_DIVS_SELECTOR_STRING } = require("../constants");
 
 const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
       { cssFromMarkdownStyleMediaTypeNameAndSelectorString } = cssUtilities,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
-  const { copyClient, inputFilePath } = context,
+  const { inputFilePath, copyClientFiles } = context,
         inputDirectoryPath = directoryPathFromFilePath(inputFilePath),
         markdownStyleFilePaths = [];
 
@@ -31,9 +31,9 @@ function markdownStylesCSSOperation(proceed, abort, context) {
     }
   });
 
-  const selectorString = copyClient ?
-                           CLIENT_SELECTOR_STRING :
-                             RAW_HTML_SELECTOR_STRING,
+  const selectorString = copyClientFiles ?
+                           CLIENT_DIVS_SELECTOR_STRING :
+                             DIVS_SELECTOR_STRING,
         markdownStyle = defaultMarkdownStyle, ///
         mediaTypeName = WEB_MEDIA_TYPE_NAME,
         defaultCSS = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString);
@@ -41,7 +41,7 @@ function markdownStylesCSSOperation(proceed, abort, context) {
   let markdownStylesCSS = defaultCSS; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
-    const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClient),
+    const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClientFiles),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
           css = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString, markdownStylesCSS);  ///
 
@@ -65,10 +65,10 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   return markdownStyle;
 }
 
-function selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClient) {
-  let selectorString = copyClient ?
-                         CLIENT_SELECTOR_STRING :
-                           RAW_HTML_SELECTOR_STRING;
+function selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClientFiles) {
+  let selectorString = copyClientFiles ?
+                         CLIENT_DIVS_SELECTOR_STRING :
+                           DIVS_SELECTOR_STRING;
 
   const filePath = markdownStyleFilePath,  ///
         className = classNameFromFilePath(filePath);
