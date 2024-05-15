@@ -27,11 +27,11 @@ Options:
 
   --copy-fonts|-f                            Copy the fonts to a fonts folder next to the output file
 
-  --copy-client|-c                           Copy the bundled client file next to the output file
-
   --input-file-path|-i                       The input file path, the default being 'default.md'
 
-  --output-file-path|-o                      The output file path, the default being 'index.html'
+  --copy-client-files|-c                     Copy the bundled client files next to the output file
+
+  --output-directory-path|-o                 The output directory path. The default is the current directory.
 
 Further information:
 

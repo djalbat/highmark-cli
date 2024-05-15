@@ -7,10 +7,9 @@ const HELP_OPTION = "help",
       VERSION_OPTION = "version",
       QUIETLY_OPTION = "quietly",
       COPY_FONTS_OPTION = "copy-fonts",
-      COPY_CLIENT_OPTION = "copy-client",
       INPUT_FILE_PATH_OPTION = "input-file-path",
-      OUTPUT_FILE_PATH_OPTION = "output-file-path",
-      TEMPLATE_FILE_PATH_OPTION = "output-file-path";
+      COPY_CLIENT_FILES_OPTION = "copy-client-files",
+      OUTPUT_DIRECTORY_PATH_OPTION = "output-directory-path";
 
 module.exports = {
   HELP_OPTION,
@@ -20,8 +19,7 @@ module.exports = {
   VERSION_OPTION,
   QUIETLY_OPTION,
   COPY_FONTS_OPTION,
-  COPY_CLIENT_OPTION,
   INPUT_FILE_PATH_OPTION,
-  OUTPUT_FILE_PATH_OPTION,
-  TEMPLATE_FILE_PATH_OPTION
+  COPY_CLIENT_FILES_OPTION,
+  OUTPUT_DIRECTORY_PATH_OPTION
 };

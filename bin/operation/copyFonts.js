@@ -1,11 +1,9 @@
 "use strict";
 
-const { pathUtilities } = require("necessary"),
-      { getFontDirectoryPath } = require("highmark-fonts");
+const { copyFonts: copyFontsAsync } = require("highmark-client");
 
 const { FONT } = require("../constants"),
-      { copyFile, readDirectory, createDirectory } = require("../utilities/fileSystem"),
-      { fileNameFromFilePath, directoryPathFromFilePath } = require("../utilities/path");
+      { directoryPathFromFilePath } = require("../utilities/path");
 
 const { concatenatePaths } = pathUtilities;
 
@@ -18,27 +16,11 @@ function copyFontsOperation(proceed, abort, context) {
     return;
   }
 
-  let fontDirectoryPath;
-
   const { outputFilePath } = context,
-        outputDirectoryPath = directoryPathFromFilePath(outputFilePath);
+        outputDirectoryPath = directoryPathFromFilePath(outputFilePath),
+        fontDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
 
-  fontDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
-
-  createDirectory(fontDirectoryPath);
-
-  fontDirectoryPath = getFontDirectoryPath();
-
-  const recursive = false,
-        targetDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
-
-  readDirectory(fontDirectoryPath, (filePath) => {
-    const fileName = fileNameFromFilePath(filePath),
-          sourceFilePath = filePath,  ///
-          targetFilePath = concatenatePaths(targetDirectoryPath, fileName); ///
-
-    copyFile(sourceFilePath, targetFilePath);
-  }, recursive);
+  copyFontsAsync(fontDirectoryPath);
 
   proceed();
 }

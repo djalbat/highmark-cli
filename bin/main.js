@@ -6,16 +6,15 @@ const helpAction = require("./action/help"),
       publishAction = require("./action/publish");
 
 const { HELP_OPTION, SERVER_OPTION, VERSION_OPTION } = require("./options"),
-      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND } = require("./commands"),
+      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_WATCH,
         DEFAULT_SERVER,
         DEFAULT_QUIETLY,
         DEFAULT_COPY_FONTS,
-        DEFAULT_COPY_CLIENT,
         DEFAULT_INPUT_FILE_PATH,
-        DEFAULT_OUTPUT_FILE_PATH,
-        DEFAULT_TEMPLATE_FILE_PATH } = require("./defaults");
+        DEFAULT_COPY_CLIENT_FILES,
+        DEFAULT_OUTPUT_DIRECTORY_PATH } = require("./defaults");
 
 function main(command, argument, options) {
   const commandMissing = (command === null),
@@ -27,10 +26,9 @@ function main(command, argument, options) {
           server = DEFAULT_SERVER,
           quietly = DEFAULT_QUIETLY,
           copyFonts = DEFAULT_COPY_FONTS,
-          copyClient = DEFAULT_COPY_CLIENT,
           inputFilePath = DEFAULT_INPUT_FILE_PATH,
-          outputFilePath = DEFAULT_OUTPUT_FILE_PATH,
-          templateFilePath = DEFAULT_TEMPLATE_FILE_PATH } = options;
+          copyClientFiles = DEFAULT_COPY_CLIENT_FILES,
+          outputDirectoryPath = DEFAULT_OUTPUT_DIRECTORY_PATH } = options;
 
   if (false) {
     ///
@@ -56,7 +54,7 @@ function main(command, argument, options) {
     case SERVER_COMMAND: {
       const server = true;
 
-      serverAction(port, watch, server, quietly, outputFilePath);
+      serverAction(port, watch, server, quietly, outputDirectoryPath);
 
       break;
     }
@@ -68,7 +66,7 @@ function main(command, argument, options) {
     }
 
     default: {
-      publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath);
+      publishAction(port, watch, server, quietly, copyFonts, inputFilePath, copyClientFiles, outputDirectoryPath);
 
       break;
     }

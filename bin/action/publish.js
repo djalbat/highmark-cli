@@ -12,7 +12,7 @@ const htmlOperation = require("../operation/html"),
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
-function publishAction(port, watch, server, quietly, copyFonts, copyClient, inputFilePath, outputFilePath, templateFilePath) {
+function publishAction(port, watch, server, quietly, copyFonts, inputFilePath, copyClientFiles, outputDirectoryPath) {
   const operations = [
           markdownStylesCSSOperation,
           markdownHTMLOperation,
@@ -29,10 +29,9 @@ function publishAction(port, watch, server, quietly, copyFonts, copyClient, inpu
           server,
           quietly,
           copyFonts,
-          copyClient,
           inputFilePath,
-          outputFilePath,
-          templateFilePath
+          copyClientFiles,
+          outputDirectoryPath
         };
 
   executeOperations(operations, (completed) => {

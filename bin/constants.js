@@ -9,12 +9,10 @@ const FONT = "font",
       CLIENT_FILE_NAME = "client.js",
       LIVE_RELOAD_PATH = "/live-reload",
       CHECKMARK_FILE_NAME = "checkmark.svg",
-      LOADING_CSS_FILE_PATH = "css/loading.css",
       CLIENT_SELECTOR_STRING = "body > div.view > div.overlay > div",
       RAW_HTML_SELECTOR_STRING = "body > div",
+      INDEX_TEMPLATE_FILE_PATH = "template/index.html",
       CLIENT_TEMPLATE_FILE_PATH = "template/client.html",
-      DEFAULT_TEMPLATE_FILE_PATH = "template/default.html",
-      LOADING_TEMPLATE_FILE_PATH = "template/loading.html",
       DEFAULT_DIVISION_IDENTIFIER = "default";
 
 module.exports = {
@@ -27,11 +25,9 @@ module.exports = {
   CLIENT_FILE_NAME,
   LIVE_RELOAD_PATH,
   CHECKMARK_FILE_NAME,
-  LOADING_CSS_FILE_PATH,
   CLIENT_SELECTOR_STRING,
   RAW_HTML_SELECTOR_STRING,
+  INDEX_TEMPLATE_FILE_PATH,
   CLIENT_TEMPLATE_FILE_PATH,
-  DEFAULT_TEMPLATE_FILE_PATH,
-  LOADING_TEMPLATE_FILE_PATH,
   DEFAULT_DIVISION_IDENTIFIER
 };
