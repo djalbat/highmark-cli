@@ -1,6 +1,6 @@
 "use strict";
 
-const { copyClientFiles: copyClientFilesAsync } = require("highmark-client");
+const { copyFiles: copyClientFilesAsync } = require("highmark-client");
 
 function copyClientFilesOperation(proceed, abort, context) {
   const { copyClientFiles } = context;

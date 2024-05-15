@@ -1,17 +1,15 @@
 "use strict";
 
-const { pathUtilities, templateUtilities, fileSystemUtilities } = require("necessary");
+const { pathUtilities, fileSystemUtilities } = require("necessary");
 
 const { isEntryNameHiddenName } = require("../utilities/path"),
       { UNABLE_TO_COPY_FILE_MESSAGE,
         UNABLE_TO_READ_FILE_MESSAGE,
         UNABLE_TO_WRITE_FILE_MESSAGE,
         UNABLE_TO_READ_DIRECTORY_MESSAGE,
-        UNABLE_TO_CREATE_DIRECTORY_MESSAGE,
-        UNABLE_TO_PARSE_TEMPLATE_FILE_MESSAGE } = require("../messages");
+        UNABLE_TO_CREATE_DIRECTORY_MESSAGE } = require("../messages");
 
-const { parseFile } = templateUtilities,
-      { concatenatePaths } = pathUtilities,
+const { concatenatePaths } = pathUtilities,
       { isEntryFile,
         checkEntryExists,
         copyFile: copyFileAsync,
@@ -144,35 +142,10 @@ function createDirectory(directoryPath) {
   }
 }
 
-function parseTemplateFile(templateFilePath, args) {
-  let content = null;
-
-  try {
-    const filePath = templateFilePath;  ///
-
-    content = parseFile(filePath, args);
-
-    console.log(`Parse template file '${filePath}'.`);
-  } catch (error) {
-    let message;
-
-    message = UNABLE_TO_PARSE_TEMPLATE_FILE_MESSAGE;
-
-    console.log(message);
-
-    ({ message } = error);
-
-    console.log(message);
-  }
-
-  return content;
-}
-
 module.exports = {
   copyFile,
   readFile,
   writeFile,
   readDirectory,
-  createDirectory,
-  parseTemplateFile
+  createDirectory
 };

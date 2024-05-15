@@ -31,7 +31,7 @@ Options:
 
   --copy-client-files|-c                     Copy the bundled client files next to the output file
 
-  --output-directory-path|-o                 The output directory path. The default is the current directory.
+  --output-directory-path|-o                 The output directory path. The default is the current directory
 
 Further information:
 
