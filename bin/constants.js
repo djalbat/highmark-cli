@@ -9,7 +9,7 @@ const FONT = "font",
       DIVS_SELECTOR_STRING = "body > div",
       INDEX_TEMPLATE_FILE_PATH = "template/index.html",
       CLIENT_TEMPLATE_FILE_PATH = "template/client.html",
-      CLIENT_DIVS_SELECTOR_STRING = "body > div.view > div.overlay > div",
+      CLIENT_DIVS_SELECTOR_STRING = "body > div.view > div.divisions > div",
       DEFAULT_DIVISION_IDENTIFIER = "default";
 
 module.exports = {
