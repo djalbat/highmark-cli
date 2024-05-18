@@ -12,10 +12,10 @@ function copyHTMLOperation(proceed, abort, context) {
   }
 
   const { markdownHTML, markdownStylesCSS, outputDirectoryPath } = context,
-        noClient = true,
-        targetDirectoryPath = outputDirectoryPath;  ///
+        targetDirectoryPath = outputDirectoryPath,  ///
+        noClient = true;
 
-  copyHTML(markdownHTML, markdownStylesCSS, noClient, targetDirectoryPath);
+  copyHTML(markdownHTML, markdownStylesCSS, targetDirectoryPath, noClient);
 
   proceed();
 }
