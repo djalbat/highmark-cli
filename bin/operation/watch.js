@@ -1,11 +1,13 @@
 "use strict";
 
-const { pathUtilities } = require("necessary"),
+const { constants } = require("highmark-client"),
+      { pathUtilities } = require("necessary"),
       { createLiveReloadHandler } = require("lively-cli");
 
-const { LIVE_RELOAD_PATH, INDEX_HTML_FILE_NAME } = require("../constants");
+const { LIVE_RELOAD_PATH } = require("../constants");
 
-const { concatenatePaths } = pathUtilities;
+const { concatenatePaths } = pathUtilities,
+      { INDEX_HTML_FILE_NAME } = constants;
 
 function watchOperation(proceed, abort, context) {
   const { startServer } = context;

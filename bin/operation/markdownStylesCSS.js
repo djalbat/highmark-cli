@@ -1,15 +1,17 @@
 "use strict";
 
-const { mediaTypeNames } = require("highmark-markdown"),
+const { constants } = require("highmark-client"),
+      { mediaTypeNames } = require("highmark-markdown"),
       { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
 const { classNameFromFilePath } = require("../utilities/division"),
       { readFile, readDirectory } = require("../utilities/fileSystem"),
       { directoryPathFromFilePath } = require("../utilities/path"),
-      { DIVS_SELECTOR_STRING, CLIENT_DIVS_SELECTOR_STRING } = require("../constants");
+      { DIVS_SELECTOR_STRING } = require("../constants");
 
 const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
+      { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
       { cssFromMarkdownStyleMediaTypeNameAndSelectorString } = cssUtilities,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
