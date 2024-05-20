@@ -23,7 +23,7 @@ All of the other packages are likely only of interest to prospective developers.
 - [Highmark-CLI](https://github.com/djalbat/highmark-cli) Highmark's CLI tool.
 - [Highmark Yapp](https://github.com/djalbat/highmark-yapp) Highmark with Yapp listings.
 - [Highmark Fonts](https://github.com/djalbat/highmark-fonts) Computer Modern fonts for Highmark. 
-- [Highmark Client](https://github.com/djalbat/highmark-clieet) Highmark's client for viewing HTML.
+- [Highmark Client](https://github.com/djalbat/highmark-clieet) Highmark's bundled client for viewing HTML.
 - [Highmark Markdown](https://github.com/djalbat/highmark-markdown) Highmark's Markdown and Markdown Style languages.
 
 ## Installation
