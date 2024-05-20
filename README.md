@@ -1,6 +1,10 @@
 # Highmark-CLI
 
-Extensible, styleable Markdown.
+Highmark's CLI tool.
+
+This tool enables the creation of HTML from Markdown and Markdown style documents as well as providing a small server to view the HTML in a browser.
+It can make use of Highmark's client in order to improve the reading experience, or the HTML can be viewed directly.
+If you are not a developer and just want to install the package for immediate use then see the usage section below.
 
 ### Contents
 
@@ -11,7 +15,15 @@ Extensible, styleable Markdown.
 
 ## Introduction
 
-To come...
+Highmark is a document preparation system inspired by [Markdown](https://en.wikipedia.org/wiki/Markdown) and [TeX](https://en.wikipedia.org/wiki/TeX).
+There are several packages in the distribution, of which only the CLI tool is needed by end users.
+All the other packages are likely only of interest to prospective developers.
+
+- [Highmark CLI](https://github.com/djalbat/highmark-cli)
+- [Highmark Yapp](https://github.com/djalbat/highmark-yapp)
+- [Highmark Fonts](https://github.com/djalbat/highmark-fonts)
+- [Highmark Client](https://github.com/djalbat/highmark-clinet)
+- [Highmark Markdown](https://github.com/djalbat/highmark-markdown)
 
 ## Installation
 
@@ -23,7 +35,16 @@ If you would like to contribute or would simply like to have a look at the code,
 
     npm install
 
+
 ## Usage
+
+The tool should be installed globally:
+
+```
+npm install --global highmark-cli@latest
+```
+
+Dependening on your setup you may need to prepend `sudo` to the above.
 
 These are the commands and options:
 
