@@ -2,8 +2,9 @@
 
 Highmark's CLI tool.
 
-This tool enables the creation of HTML from Markdown and Markdown style documents as well as providing a small server to view the HTML in a browser.
-It can make use of Highmark's client in order to improve the reading experience, or the HTML can be viewed directly.
+This tool enables the creation of HTML from Markdown and Markdown Style documents as well as providing a small server to view the HTML in a browser.
+It can make use of Highmark's client in order to improve the reading experience, otherwise the HTML can be viewed directly.
+
 If you are not a developer and just want to install the package for immediate use then see the usage section below.
 
 ### Contents
@@ -17,13 +18,13 @@ If you are not a developer and just want to install the package for immediate us
 
 Highmark is a document preparation system inspired by [Markdown](https://en.wikipedia.org/wiki/Markdown) and [TeX](https://en.wikipedia.org/wiki/TeX).
 There are several packages in the distribution, of which only the CLI tool is needed by end users.
-All the other packages are likely only of interest to prospective developers.
+All of the other packages are likely only of interest to prospective developers.
 
-- [Highmark CLI](https://github.com/djalbat/highmark-cli)
-- [Highmark Yapp](https://github.com/djalbat/highmark-yapp)
-- [Highmark Fonts](https://github.com/djalbat/highmark-fonts)
-- [Highmark Client](https://github.com/djalbat/highmark-clinet)
-- [Highmark Markdown](https://github.com/djalbat/highmark-markdown)
+- [Highmark-CLI](https://github.com/djalbat/highmark-cli) Highmark's CLI tool.
+- [Highmark Yapp](https://github.com/djalbat/highmark-yapp) Highmark with Yapp listings.
+- [Highmark Fonts](https://github.com/djalbat/highmark-fonts) Computer Modern fonts for Highmark. 
+- [Highmark Client](https://github.com/djalbat/highmark-clieet) Highmark's client for viewing HTML.
+- [Highmark Markdown](https://github.com/djalbat/highmark-markdown) Highmark's Markdown and Markdown Style languages.
 
 ## Installation
 
