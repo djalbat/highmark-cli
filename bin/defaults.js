@@ -1,8 +1,10 @@
 "use strict";
 
-const DEFAULT_PORT = 8888,
+const DEFAULT_HELP = false,
+      DEFAULT_PORT = 8888,
       DEFAULT_WATCH = false,
       DEFAULT_QUIETLY = false,
+      DEFAULT_VERSION = false,
       DEFAULT_COPY_FONTS = false,
       DEFAULT_START_SERVER = false,
       DEFAULT_INPUT_FILE_PATH = "default.md",
@@ -10,9 +12,11 @@ const DEFAULT_PORT = 8888,
       DEFAULT_OUTPUT_DIRECTORY_PATH = ".";
 
 module.exports = {
+  DEFAULT_HELP,
   DEFAULT_PORT,
   DEFAULT_WATCH,
   DEFAULT_QUIETLY,
+  DEFAULT_VERSION,
   DEFAULT_COPY_FONTS,
   DEFAULT_START_SERVER,
   DEFAULT_INPUT_FILE_PATH,
