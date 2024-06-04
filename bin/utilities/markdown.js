@@ -14,7 +14,9 @@ function tokensFromContent(content) {
 }
 
 function nodeFromTokens(tokens) {
-  const node = markdownParser.parse(tokens);
+  const startOfContent = true,
+        startRule = markdownParser.getStartRule(),
+        node = markdownParser.parse(tokens, startRule, startOfContent);
 
   if (node === null) {
     const message = UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE;
