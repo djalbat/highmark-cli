@@ -1,6 +1,8 @@
 "use strict";
 
-const FAILED_SERVER_MESSAGE = "Failed to serve.",
+const NO_COMMAND_GIVEN_MESSAGE = "No command has been given.",
+      COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.",
+      FAILED_SERVER_MESSAGE = "Failed to serve.",
       FAILED_PUBLISH_MESSAGE = "Failed to publish.",
       SUCCESSFUL_SERVER_MESSAGE = "Served successfully.",
       SUCCESSFUL_PUBLISH_MESSAGE = "Published successfully.",
@@ -11,10 +13,13 @@ const FAILED_SERVER_MESSAGE = "Failed to serve.",
       UNABLE_TO_READ_DIRECTORY_MESSAGE = "Unable to read the directory.",
       UNABLE_TO_CREATE_DIRECTORY_MESSAGE = "Unable to create the directory.",
       UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE = "Unable to parse the markdown file.",
+      CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE = "There is no configuration file. Run 'highmark initialise' to create one.",
       UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE = "Unable to convert Markdown to HTML.",
       UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE = "Unable to convert Markdown styles to CSS.";
 
 module.exports = {
+  NO_COMMAND_GIVEN_MESSAGE,
+  COMMAND_NOT_RECOGNISED_MESSAGE,
   FAILED_SERVER_MESSAGE,
   FAILED_PUBLISH_MESSAGE,
   SUCCESSFUL_SERVER_MESSAGE,
@@ -26,6 +31,7 @@ module.exports = {
   UNABLE_TO_READ_DIRECTORY_MESSAGE,
   UNABLE_TO_CREATE_DIRECTORY_MESSAGE,
   UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE,
+  CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE,
   UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE,
   UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE
 };

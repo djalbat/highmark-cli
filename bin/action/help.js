@@ -3,7 +3,7 @@
 function helpAction() {
   console.log(`Usage: 
   
-  highmark [<command>] [<argument>]          
+  highmark [<options>] [<command>] [<argument>]
 
 Commands:
 
@@ -22,6 +22,8 @@ Options:
   --port|-p                                  The server port, the default being 8888
 
   --watch|-w                                 Watch for changes to the client file and in the output directory 
+
+  --quietly|-q                               Run with almost no console logging
 
   --copy-fonts|-f                            Copy the fonts to a fonts folder next to the output file
 
