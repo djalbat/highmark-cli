@@ -10,3 +10,7 @@ function createConfiguration() {
 
   return configuration;
 }
+
+module.exports = {
+  createConfiguration
+};

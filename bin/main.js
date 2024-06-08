@@ -3,40 +3,43 @@
 const helpAction = require("./action/help"),
       serverAction = require("./action/server"),
       versionAction = require("./action/version"),
-      publishAction = require("./action/publish");
+      publishAction = require("./action/publish"),
+      initialiseAction = require("./action/initialise");
 
 const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
-      { HELP_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, START_SERVER_COMMAND } = require("./commands"),
+      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, INITIALISE_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_WATCH,
         DEFAULT_QUIETLY,
         DEFAULT_COPY_FONTS,
-        DEFAULT_START_SERVER,
-        DEFAULT_INPUT_FILE_PATH,
-        DEFAULT_COPY_CLIENT_FILES,
-        DEFAULT_OUTPUT_DIRECTORY_PATH } = require("./defaults");
+        DEFAULT_INPUT_FILE_NAME,
+        DEFAULT_COPY_CLIENT_FILES } = require("./defaults");
 
 function main(command, argument, options) {
   const { port = DEFAULT_PORT,
           watch = DEFAULT_WATCH,
           quietly = DEFAULT_QUIETLY,
           copyFonts = DEFAULT_COPY_FONTS,
-          startServer = DEFAULT_START_SERVER,
-          inputFilePath = DEFAULT_INPUT_FILE_PATH,
-          copyClientFiles = DEFAULT_COPY_CLIENT_FILES,
-          outputDirectoryPath = DEFAULT_OUTPUT_DIRECTORY_PATH } = options;
+          inputFileName = DEFAULT_INPUT_FILE_NAME,
+          copyClientFiles = DEFAULT_COPY_CLIENT_FILES } = options;
 
   switch (command) {
     case null: {
       console.log(NO_COMMAND_GIVEN_MESSAGE);
-
-      process.exit(1);
 
       break;
     }
 
     case HELP_COMMAND:  {
       helpAction();
+
+      break;
+    }
+
+    case SERVER_COMMAND: {
+      const projectDirectoryName = argument;  ///
+
+      serverAction(port, watch, quietly, projectDirectoryName);
 
       break;
     }
@@ -48,23 +51,21 @@ function main(command, argument, options) {
     }
 
     case PUBLISH_COMMAND: {
-      publishAction(port, watch, quietly, copyFonts, startServer, inputFilePath, copyClientFiles, outputDirectoryPath);
+      const projectDirectoryName = argument;  ///
+
+      publishAction(port, watch, quietly, copyFonts, inputFileName, copyClientFiles, projectDirectoryName);
 
       break;
     }
 
-    case START_SERVER_COMMAND: {
-      const startServer = true;
-
-      serverAction(port, watch, quietly, startServer, outputDirectoryPath);
+    case INITIALISE_COMMAND: {
+      initialiseAction();
 
       break;
     }
 
     default: {
       console.log(COMMAND_NOT_RECOGNISED_MESSAGE);
-
-      process.exit(1);
 
       break;
     }

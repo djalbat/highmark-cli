@@ -16,8 +16,8 @@ function copyFontsOperation(proceed, abort, context) {
     return;
   }
 
-  const { outputDirectoryPath } = context,
-        fontDirectoryPath = concatenatePaths(outputDirectoryPath, FONT);
+  const { projectDirectoryPath } = context,
+        fontDirectoryPath = concatenatePaths(projectDirectoryPath, FONT);
 
   copyFontsAsync(fontDirectoryPath);
 

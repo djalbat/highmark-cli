@@ -1,5 +1,7 @@
 "use strict";
 
+const { pathUtilities } = require("necessary");
+
 const importer = require("../importer");
 
 const { readFile } = require("../utilities/fileSystem"),
@@ -7,8 +9,11 @@ const { readFile } = require("../utilities/fileSystem"),
       { nodeFromTokens, tokensFromContent } = require("../utilities/markdown"),
       { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
+const { concatenatePaths } = pathUtilities;
+
 function markdownHTMLOperation(proceed, abort, context) {
-  const { inputFilePath } = context,
+  const { inputFileName, projectDirectoryName } = context,
+        inputFilePath = concatenatePaths(projectDirectoryName, inputFileName),
         filePath = inputFilePath, ///
         content = readFile(filePath);
 

@@ -2,7 +2,6 @@
 
 const FONT = "font",
       ERROR = "error",
-      PERIOD = ".",
       HIGHMARK = "highmark",
       DOUBLE_DOTS = "..",
       HIGHMARK_CLI = "Highmark-CLI",
@@ -13,7 +12,6 @@ const FONT = "font",
 module.exports = {
   FONT,
   ERROR,
-  PERIOD,
   HIGHMARK,
   DOUBLE_DOTS,
   HIGHMARK_CLI,

@@ -5,10 +5,9 @@ const { constants } = require("highmark-client"),
       { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
-const { classNameFromFilePath } = require("../utilities/division"),
-      { readFile, readDirectory } = require("../utilities/fileSystem"),
-      { directoryPathFromFilePath } = require("../utilities/path"),
-      { DIVS_SELECTOR_STRING } = require("../constants");
+const { DIVS_SELECTOR_STRING } = require("../constants"),
+      { classNameFromFilePath } = require("../utilities/division"),
+      { readFile, readDirectory } = require("../utilities/fileSystem");
 
 const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
       { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
@@ -16,11 +15,11 @@ const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
-  const { inputFilePath, copyClientFiles } = context,
-        inputDirectoryPath = directoryPathFromFilePath(inputFilePath),
+  const { copyClientFiles, projectDirectoryName } = context,
+        projectDirectoryPath = projectDirectoryName,  ///
         markdownStyleFilePaths = [];
 
-  readDirectory(inputDirectoryPath, (filePath) => {
+  readDirectory(projectDirectoryPath, (filePath) => {
     const filePathMarkdownStyleFilePath = isFilePathMarkdownStyleFilePath(filePath);
 
     if (filePathMarkdownStyleFilePath) {

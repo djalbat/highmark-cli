@@ -6,10 +6,10 @@ function copyClientFilesOperation(proceed, abort, context) {
   const { copyClientFiles } = context;
 
   if (copyClientFiles) {
-    const { markdownHTML, markdownStylesCSS, outputDirectoryPath } = context,
-          targetDirectoryPath = outputDirectoryPath; ///
+    const { projectDirectoryName } = context,
+          targetDirectoryPath = projectDirectoryName; ///
 
-    copyClientFilesAsync(markdownHTML, markdownStylesCSS, targetDirectoryPath);
+    copyClientFilesAsync(targetDirectoryPath);
   }
 
   proceed();
