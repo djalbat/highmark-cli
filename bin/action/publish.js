@@ -3,8 +3,8 @@
 const watchOperation = require("../operation/watch"),
       copyFontsOperation = require("../operation/copyFonts"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
-      copyClientHTMLOperation = require("../operation/copyClientHTML"),
       copyClientFilesOperation = require("../operation/copyClientFiles"),
+      createClientHTMLOperation = require("../operation/createClientHTML"),
       markdownStylesCSSOperation = require("../operation/markdownStylesCSS");
 
 const { executeOperations } = require("../utilities/operation"),
@@ -14,8 +14,8 @@ function publishAction(port, watch, quietly, copyFonts, inputFileName, copyClien
   const operations = [
           markdownHTMLOperation,
           markdownStylesCSSOperation,
+          createClientHTMLOperation,
           copyClientFilesOperation,
-          copyClientHTMLOperation,
           copyFontsOperation,
           watchOperation
         ],

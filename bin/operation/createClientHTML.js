@@ -1,13 +1,20 @@
 "use strict";
 
-const { createHTML: createClientHTML } = require("highmark-client");
+const { pathUtilities } = require("necessary"),
+      { constants, createHTML } = require("highmark-client");
+
+const { writeFile } = require("../utilities/fileSystem");
+
+const { concatenatePaths } = pathUtilities,
+      { INDEX_HTML_FILE_NAME } = constants;
 
 function createClientHTMLOperation(proceed, abort, context) {
   const { markdownHTML, markdownStylesCSS, projectDirectoryName } = context,
-        targetDirectoryPath = projectDirectoryName,  ///
-        noClient = true;
+        html = createHTML(markdownHTML, markdownStylesCSS),
+        content = html, ///
+        filePath = concatenatePaths(projectDirectoryName, INDEX_HTML_FILE_NAME);
 
-  createClientHTML(markdownHTML, markdownStylesCSS, targetDirectoryPath, noClient);
+  writeFile(filePath, content);
 
   proceed();
 }
