@@ -3,8 +3,8 @@
 const { versionUtilities, configurationUtilities } = require("necessary");
 
 const { HIGHMARK } = require("./constants"),
-      { VERSION_1_0 } = require("./versions"),
-      { createConfiguration } = require("./configuration/version_1_0"),
+      { VERSION_1_0, VERSION_1_1 } = require("./versions"),
+      { createConfiguration, migrateToVersion1_1 } = require("./configuration/version_1_1"),
       { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages");
 
 const { rc } = configurationUtilities,
@@ -14,6 +14,13 @@ const { rc } = configurationUtilities,
 const rcBaseExtension = HIGHMARK; ///
 
 setRCBaseExtension(rcBaseExtension);
+
+function getContentsDepth() {
+  const configuration = readConfigurationFile(),
+        { contentsDepth } = configuration;
+
+  return contentsDepth;
+}
 
 function createConfigurationFile() {
   const configuration = createConfiguration(),
@@ -27,8 +34,10 @@ function migrateConfigurationFile() {
 
   let json = readRCFile();
 
-  const migrationMap = {},
-        latestVersion = VERSION_1_0;
+  const migrationMap = {
+          [VERSION_1_0]: migrateToVersion1_1
+        },
+        latestVersion = VERSION_1_1;
 
   json = migrate(json, migrationMap, latestVersion);
 
@@ -53,6 +62,7 @@ function assertConfigurationFileExists() {
 }
 
 module.exports = {
+  getContentsDepth,
   createConfigurationFile,
   migrateConfigurationFile,
   checkConfigurationFileExists,

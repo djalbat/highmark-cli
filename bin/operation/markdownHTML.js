@@ -5,6 +5,7 @@ const { pathUtilities } = require("necessary");
 const importer = require("../importer");
 
 const { readFile } = require("../utilities/fileSystem"),
+      { getContentsDepth } = require("../configuration"),
       { classNameFromFilePath } = require("../utilities/division"),
       { nodeFromTokens, tokensFromContent } = require("../utilities/markdown"),
       { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
@@ -41,13 +42,15 @@ function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  const divisionClassName = className,  ///
+  const contentsDepth = getContentsDepth(),
+        divisionClassName = className,  ///
         divisionMarkdownNode = node,  ///
         divisionMarkdownNodes = [];
 
   Object.assign(context, {
     tokens,
     importer,
+    contentsDepth,
     divisionMarkdownNodes
   });
 
