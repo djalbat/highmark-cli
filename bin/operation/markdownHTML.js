@@ -78,7 +78,13 @@ function markdownHTMLOperation(proceed, abort, context) {
     }
   });
 
-  const markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode) => {
+  const markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode, index) => {
+    const pageNumber = index + 1;
+
+    Object.assign(context, {
+      pageNumber
+    });
+
     const html = divisionMarkdownNode.asHTML(context);
 
     markdownHTML = (markdownHTML === null) ?
