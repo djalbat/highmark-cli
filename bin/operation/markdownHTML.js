@@ -1,6 +1,7 @@
 "use strict";
 
 const { pathUtilities } = require("necessary");
+const { markdownUtilities } = require("highmark-markdown");
 
 const importer = require("../importer");
 
@@ -10,7 +11,8 @@ const { readFile } = require("../utilities/fileSystem"),
       { nodeFromTokens, tokensFromContent } = require("../utilities/markdown"),
       { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
-const { concatenatePaths } = pathUtilities;
+const { postprocess } = markdownUtilities,
+      { concatenatePaths } = pathUtilities;
 
 function markdownHTMLOperation(proceed, abort, context) {
   const { inputFileName, projectDirectoryName } = context,
@@ -44,55 +46,31 @@ function markdownHTMLOperation(proceed, abort, context) {
 
   const contentsDepth = getContentsDepth(),
         divisionClassName = className,  ///
-        divisionMarkdownNode = node,  ///
-        divisionMarkdownNodes = [];
+        divisionMarkdownNode = node;  ///
 
   Object.assign(context, {
     tokens,
     importer,
     contentsDepth,
-    divisionMarkdownNodes
+    divisionClassName
   });
 
-  const ignored = divisionMarkdownNode.isIgnored();
+  const divisionMarkdownNodes = postprocess(divisionMarkdownNode, context),
+        markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode, index) => {
+          const pageNumber = index + 1;
 
-  if (!ignored) {
-    divisionMarkdownNodes.push(divisionMarkdownNode);
-  }
+          Object.assign(context, {
+            pageNumber
+          });
 
-  divisionMarkdownNode.setDivisionClassName(divisionClassName);
+          const html = divisionMarkdownNode.asHTML(context);
 
-  divisionMarkdownNode.resolveIncludes(context);
+          markdownHTML = (markdownHTML === null) ?
+                           html :  ///
+                            `${markdownHTML}${html}`;
 
-  divisionMarkdownNodes.forEach((divisionMarkdownNode) => {
-    divisionMarkdownNode.resolveEmbeddings(context);
-
-    divisionMarkdownNode.createFootnotes(context);
-  });
-
-  divisionMarkdownNodes.some((divisionMarkdownNode) => {
-    const contentsCreated = divisionMarkdownNode.createContents(context);
-
-    if (contentsCreated) {
-      return true;
-    }
-  });
-
-  const markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode, index) => {
-    const pageNumber = index + 1;
-
-    Object.assign(context, {
-      pageNumber
-    });
-
-    const html = divisionMarkdownNode.asHTML(context);
-
-    markdownHTML = (markdownHTML === null) ?
-                     html :  ///
-                      `${markdownHTML}${html}`;
-
-    return markdownHTML;
-  }, null);
+          return markdownHTML;
+        }, null);
 
   Object.assign(context, {
     markdownHTML
