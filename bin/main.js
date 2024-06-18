@@ -11,6 +11,7 @@ const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./
       { DEFAULT_PORT,
         DEFAULT_WATCH,
         DEFAULT_QUIETLY,
+        DEFAULT_NO_CLIENT,
         DEFAULT_COPY_FONTS,
         DEFAULT_INPUT_FILE_NAME,
         DEFAULT_COPY_CLIENT_FILES } = require("./defaults");
@@ -19,6 +20,7 @@ function main(command, argument, options) {
   const { port = DEFAULT_PORT,
           watch = DEFAULT_WATCH,
           quietly = DEFAULT_QUIETLY,
+          noClient = DEFAULT_NO_CLIENT,
           copyFonts = DEFAULT_COPY_FONTS,
           inputFileName = DEFAULT_INPUT_FILE_NAME,
           copyClientFiles = DEFAULT_COPY_CLIENT_FILES } = options;
@@ -53,7 +55,7 @@ function main(command, argument, options) {
     case PUBLISH_COMMAND: {
       const projectDirectoryName = argument;  ///
 
-      publishAction(port, watch, quietly, copyFonts, inputFileName, copyClientFiles, projectDirectoryName);
+      publishAction(port, watch, quietly, noClient, copyFonts, inputFileName, copyClientFiles, projectDirectoryName);
 
       break;
     }

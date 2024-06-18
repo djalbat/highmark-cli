@@ -6,6 +6,7 @@ const HELP_OPTION = "help",
       SERVER_OPTION = "server",
       VERSION_OPTION = "version",
       QUIETLY_OPTION = "quietly",
+      NO_CLIENT_OPTION = "no-client",
       COPY_FONTS_OPTION = "copy-fonts",
       INPUT_FILE_NAME_OPTION = "input-file-name",
       COPY_CLIENT_FILES_OPTION = "copy-client-files";
@@ -17,6 +18,7 @@ module.exports = {
   SERVER_OPTION,
   VERSION_OPTION,
   QUIETLY_OPTION,
+  NO_CLIENT_OPTION,
   COPY_FONTS_OPTION,
   INPUT_FILE_NAME_OPTION,
   COPY_CLIENT_FILES_OPTION

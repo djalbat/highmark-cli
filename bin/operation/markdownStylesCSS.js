@@ -42,7 +42,7 @@ function markdownStylesCSSOperation(proceed, abort, context) {
   let markdownStylesCSS = defaultCSS; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
-    const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClientFiles),
+    const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClientFiles(markdownStyleFilePath, copyClientFiles),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
           css = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString, markdownStylesCSS);  ///
 
@@ -66,7 +66,7 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   return markdownStyle;
 }
 
-function selectorStringFromMarkdownStyleFilePathAndCopyClient(markdownStyleFilePath, copyClientFiles) {
+function selectorStringFromMarkdownStyleFilePathAndCopyClientFiles(markdownStyleFilePath, copyClientFiles) {
   let selectorString = copyClientFiles ?
                          CLIENT_DIVS_SELECTOR_STRING :
                            DIVS_SELECTOR_STRING;

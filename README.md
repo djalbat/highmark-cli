@@ -59,6 +59,10 @@ Commands:
   
   version                                    Show the version
   
+  server                                     Run a server to view the output file
+
+  initialise                                 Create a configuration file
+
   [publish]                                  Publish the input Markdown file to the output HTML file
 
 Options:
@@ -71,17 +75,17 @@ Options:
 
   --watch|-w                                 Watch for changes to the client file and in the output directory 
 
+  --server|-s                                Run a server to view the output file
+
   --quietly|-q                               Run with almost no console logging
+
+  --no-client|-n                             Do not include references to the client files in the output file
 
   --copy-fonts|-f                            Copy the fonts to a fonts folder next to the output file
 
-  --start-server|-s                          Start a server to view the output file
+  --input-file-name|-i                       The input file name, the default being 'default.md'
 
-  --input-file-path|-i                       The input file path, the default being 'default.md'
-
-  --copy-client-files|-c                     Copy the bundled client files next to the output file
-
-  --output-directory-path|-o                 The output directory path. The default is the current directory
+  --copy-client-files|-c                     Copy the client files next to the output file
 ```
 
 ## Contact

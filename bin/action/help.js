@@ -31,11 +31,13 @@ Options:
 
   --quietly|-q                               Run with almost no console logging
 
+  --no-client|-n                             Do not include references to the client files in the output file
+
   --copy-fonts|-f                            Copy the fonts to a fonts folder next to the output file
 
   --input-file-name|-i                       The input file name, the default being 'default.md'
 
-  --copy-client-files|-c                     Copy the bundled client files next to the output file
+  --copy-client-files|-c                     Copy the client files next to the output file
 
 Further information:
 
