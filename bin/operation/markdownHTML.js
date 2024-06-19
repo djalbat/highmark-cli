@@ -1,7 +1,7 @@
 "use strict";
 
 const { pathUtilities } = require("necessary");
-const { markdownUtilities } = require("highmark-markdown");
+const { processingUtilities } = require("highmark-markdown");
 
 const importer = require("../importer");
 
@@ -11,7 +11,7 @@ const { readFile } = require("../utilities/fileSystem"),
       { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages"),
       { getLinesPerPage, getContentsDepth, getCharactersPerLine } = require("../configuration");
 
-const { postprocess } = markdownUtilities,
+const { postprocess } = processingUtilities,
       { concatenatePaths } = pathUtilities;
 
 function markdownHTMLOperation(proceed, abort, context) {
