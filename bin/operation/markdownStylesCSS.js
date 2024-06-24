@@ -1,7 +1,6 @@
 "use strict";
 
 const { constants } = require("highmark-client"),
-      { mediaTypeNames } = require("highmark-markdown"),
       { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
@@ -9,9 +8,8 @@ const { DIVS_SELECTOR_STRING } = require("../constants"),
       { classNameFromFilePath } = require("../utilities/division"),
       { readFile, readDirectory } = require("../utilities/fileSystem");
 
-const { WEB_MEDIA_TYPE_NAME } = mediaTypeNames,
-      { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
-      { cssFromMarkdownStyleMediaTypeNameAndSelectorString } = cssUtilities,
+const { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
+      { cssFromMarkdownStyleAndSelectorString } = cssUtilities,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
@@ -36,15 +34,14 @@ function markdownStylesCSSOperation(proceed, abort, context) {
                            CLIENT_DIVS_SELECTOR_STRING :
                              DIVS_SELECTOR_STRING,
         markdownStyle = defaultMarkdownStyle, ///
-        mediaTypeName = WEB_MEDIA_TYPE_NAME,
-        defaultCSS = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString);
+        defaultCSS = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString);
 
   let markdownStylesCSS = defaultCSS; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
     const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClientFiles(markdownStyleFilePath, copyClientFiles),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-          css = cssFromMarkdownStyleMediaTypeNameAndSelectorString(markdownStyle, mediaTypeName, selectorString, markdownStylesCSS);  ///
+          css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
 
     markdownStylesCSS = `${markdownStylesCSS}${css}`;
   });
