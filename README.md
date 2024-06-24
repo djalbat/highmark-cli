@@ -59,11 +59,13 @@ Commands:
   
   version                                    Show the version
   
+  [publish] <project-directory-name>         Publish the given project
+
   server                                     Run a server to view the output file
 
   initialise                                 Create a configuration file
 
-  [publish]                                  Publish the input Markdown file to the output HTML file
+  set-options                                Set options 
 
 Options:
 
