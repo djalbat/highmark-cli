@@ -8,11 +8,11 @@ const DEFAULT_HELP = false,
       DEFAULT_VERSION = false,
       DEFAULT_NO_CLIENT = false,
       DEFAULT_COPY_FONTS = false,
-      DEFAULT_LINES_PER_PAGE = 50,
+      DEFAULT_LINES_PER_PAGE = 40,
       DEFAULT_CONTENTS_DEPTH = 2,
       DEFAULT_INPUT_FILE_NAME = "default.md",
       DEFAULT_COPY_CLIENT_FILES = false,
-      DEFAULT_CHARACTERS_PER_LINE = 90;
+      DEFAULT_CHARACTERS_PER_LINE = 75;
 
 module.exports = {
   DEFAULT_HELP,
