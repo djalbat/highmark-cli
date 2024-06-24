@@ -3,10 +3,12 @@
 const { versionUtilities, configurationUtilities } = require("necessary");
 
 const { HIGHMARK } = require("./constants"),
-      { VERSION_1_0, VERSION_1_1, VERSION_1_2 } = require("./versions"),
       { migrateToVersion1_1 } = require("./configuration/version_1_1"),
-      { createConfiguration, migrateToVersion1_2 } = require("./configuration/version_1_2"),
-      { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages");
+      { migrateToVersion1_2 } = require("./configuration/version_1_2"),
+      { serialiseJSON, unserialiseJSON } = require("./utilities/json"),
+      { createConfiguration, migrateToVersion1_3 } = require("./configuration/version_1_3"),
+      { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages"),
+      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3 } = require("./versions");
 
 const { rc } = configurationUtilities,
       { migrate } = versionUtilities,
@@ -16,30 +18,25 @@ const rcBaseExtension = HIGHMARK; ///
 
 setRCBaseExtension(rcBaseExtension);
 
-function getLinesPerPage() {
-  const configuration = readConfigurationFile(),
-        { linesPerPage } = configuration;
-
-  return linesPerPage;
+function updateOptions(options) {
+  updateConfigurationFile({
+    options
+  });
 }
 
-function getContentsDepth() {
+function retrieveOptions() {
   const configuration = readConfigurationFile(),
-        { contentsDepth } = configuration;
+        { options } = configuration;
 
-  return contentsDepth;
-}
-
-function getCharactersPerLine() {
-  const configuration = readConfigurationFile(),
-        { charactersPerLine } = configuration;
-
-  return charactersPerLine;
+  return options;
 }
 
 function createConfigurationFile() {
-  const configuration = createConfiguration(),
-        json = configuration; ///
+  const configuration = createConfiguration();
+
+  let json = configuration; ///
+
+  json = serialiseJSON(json); ///
 
   writeRCFile(json);
 }
@@ -49,13 +46,18 @@ function migrateConfigurationFile() {
 
   let json = readRCFile();
 
+  json = unserialiseJSON(json); ///
+
   const migrationMap = {
           [VERSION_1_0]: migrateToVersion1_1,
-          [VERSION_1_1]: migrateToVersion1_2
+          [VERSION_1_1]: migrateToVersion1_2,
+          [VERSION_1_2]: migrateToVersion1_3
         },
-        latestVersion = VERSION_1_2;
+        latestVersion = VERSION_1_3;
 
   json = migrate(json, migrationMap, latestVersion);
+
+  json = serialiseJSON(json); ///
 
   writeRCFile(json);
 }
@@ -78,9 +80,8 @@ function assertConfigurationFileExists() {
 }
 
 module.exports = {
-  getLinesPerPage,
-  getContentsDepth,
-  getCharactersPerLine,
+  updateOptions,
+  retrieveOptions,
   createConfigurationFile,
   migrateConfigurationFile,
   checkConfigurationFileExists,
@@ -90,8 +91,11 @@ module.exports = {
 function readConfigurationFile() {
   assertConfigurationFileExists();
 
-  const json = readRCFile(),
-        configuration = json; ///
+  let json = readRCFile();
+
+  json = unserialiseJSON(json); ///
+
+  const configuration = json; ///
 
   return configuration;
 }
@@ -99,13 +103,21 @@ function readConfigurationFile() {
 function writeConfigurationFile(configuration) {
   assertConfigurationFileExists();
 
-  const json = configuration; ///
+  let json = configuration; ///
+
+  json = serialiseJSON(json); ///
 
   writeRCFile(json);
 }
 
 function updateConfigurationFile(addedConfiguration, ...deleteConfigurationNames) {
   assertConfigurationFileExists();
+
+  let json = addedConfiguration;  ///
+
+  json = serialiseJSON(json); ///
+
+  addedConfiguration = json;  ///
 
   const addedProperties = addedConfiguration, ///
         deletedPropertyNames = deleteConfigurationNames;  ///

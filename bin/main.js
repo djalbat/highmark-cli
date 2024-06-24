@@ -4,10 +4,11 @@ const helpAction = require("./action/help"),
       serverAction = require("./action/server"),
       versionAction = require("./action/version"),
       publishAction = require("./action/publish"),
-      initialiseAction = require("./action/initialise");
+      initialiseAction = require("./action/initialise"),
+      setOptionsAction = require("./action/setOptions");
 
 const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
-      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, INITIALISE_COMMAND } = require("./commands"),
+      { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, INITIALISE_COMMAND, SET_OPTIONS_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_WATCH,
         DEFAULT_QUIETLY,
@@ -62,6 +63,12 @@ function main(command, argument, options) {
 
     case INITIALISE_COMMAND: {
       initialiseAction();
+
+      break;
+    }
+
+    case SET_OPTIONS_COMMAND: {
+      setOptionsAction();
 
       break;
     }

@@ -6,10 +6,10 @@ const { processingUtilities } = require("highmark-markdown");
 const importer = require("../importer");
 
 const { readFile } = require("../utilities/fileSystem"),
+      { retrieveOptions } = require("../configuration"),
       { classNameFromFilePath } = require("../utilities/division"),
       { nodeFromTokens, tokensFromContent } = require("../utilities/markdown"),
-      { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages"),
-      { getLinesPerPage, getContentsDepth, getCharactersPerLine } = require("../configuration");
+      { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } = require("../messages");
 
 const { postprocess } = processingUtilities,
       { concatenatePaths } = pathUtilities;
@@ -44,9 +44,10 @@ function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  const linesPerPage = getLinesPerPage(),
-        contentsDepth = getContentsDepth(),
-        charactersPerLine = getCharactersPerLine(),
+  const options = retrieveOptions(),
+        { linesPerPage,
+          contentsDepth,
+          charactersPerLine } = options,
         divisionClassName = className,  ///
         divisionMarkdownNode = node;  ///
 
