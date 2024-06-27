@@ -1,6 +1,7 @@
 "use strict";
 
-const watchOperation = require("../operation/watch"),
+const indexOptions = require("../indexOptions"),
+      watchOperation = require("../operation/watch"),
       copyFontsOperation = require("../operation/copyFonts"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
       copyClientFilesOperation = require("../operation/copyClientFiles"),
@@ -25,6 +26,7 @@ function publishAction(port, watch, quietly, noClient, copyFonts, inputFileName,
           quietly,
           noClient,
           copyFonts,
+          indexOptions,
           inputFileName,
           copyClientFiles,
           projectDirectoryName

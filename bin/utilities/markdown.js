@@ -13,9 +13,12 @@ function tokensFromContent(content) {
   return tokens;
 }
 
-function nodeFromTokens(tokens) {
-  const startOfContent = true,
-        startRule = markdownParser.getStartRule(),
+function nodeFromTokens(tokens, startRuleName = null) {
+  const ruleMap = markdownParser.getRuleMap(),
+        startRule = (startRuleName !== null) ?
+                      ruleMap[startRuleName] :
+                        markdownParser.getStartRule(),
+        startOfContent = true,
         node = markdownParser.parse(tokens, startRule, startOfContent);
 
   if (node === null) {

@@ -1,7 +1,7 @@
 "use strict";
 
-const { pathUtilities } = require("necessary");
-const { processingUtilities } = require("highmark-markdown");
+const { pathUtilities } = require("necessary"),
+      { processingUtilities } = require("highmark-markdown");
 
 const importer = require("../importer");
 
@@ -56,6 +56,8 @@ function markdownHTMLOperation(proceed, abort, context) {
     importer,
     linesPerPage,
     contentsDepth,
+    nodeFromTokens,
+    tokensFromContent,
     charactersPerLine,
     divisionClassName
   });
