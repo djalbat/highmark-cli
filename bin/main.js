@@ -10,21 +10,19 @@ const helpAction = require("./action/help"),
 const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
       { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, INITIALISE_COMMAND, SET_OPTIONS_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
+        DEFAULT_FONTS,
         DEFAULT_WATCH,
+        DEFAULT_CLIENT,
         DEFAULT_QUIETLY,
-        DEFAULT_NO_CLIENT,
-        DEFAULT_COPY_FONTS,
-        DEFAULT_INPUT_FILE_NAME,
-        DEFAULT_COPY_CLIENT_FILES } = require("./defaults");
+        DEFAULT_INPUT_FILE_NAME } = require("./defaults");
 
 function main(command, argument, options) {
   const { port = DEFAULT_PORT,
+          fonts = DEFAULT_FONTS,
           watch = DEFAULT_WATCH,
+          client = DEFAULT_CLIENT,
           quietly = DEFAULT_QUIETLY,
-          noClient = DEFAULT_NO_CLIENT,
-          copyFonts = DEFAULT_COPY_FONTS,
-          inputFileName = DEFAULT_INPUT_FILE_NAME,
-          copyClientFiles = DEFAULT_COPY_CLIENT_FILES } = options;
+          inputFileName = DEFAULT_INPUT_FILE_NAME } = options;
 
   switch (command) {
     case null: {
@@ -56,7 +54,7 @@ function main(command, argument, options) {
     case PUBLISH_COMMAND: {
       const projectDirectoryName = argument;  ///
 
-      publishAction(port, watch, quietly, noClient, copyFonts, inputFileName, copyClientFiles, projectDirectoryName);
+      publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName);
 
       break;
     }

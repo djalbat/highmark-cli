@@ -13,7 +13,7 @@ const { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
       { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
-  const { copyClientFiles, projectDirectoryName } = context,
+  const { client, projectDirectoryName } = context,
         projectDirectoryPath = projectDirectoryName,  ///
         markdownStyleFilePaths = [];
 
@@ -30,7 +30,7 @@ function markdownStylesCSSOperation(proceed, abort, context) {
     }
   });
 
-  const selectorString = copyClientFiles ?
+  const selectorString = client ?
                            CLIENT_DIVS_SELECTOR_STRING :
                              DIVS_SELECTOR_STRING,
         markdownStyle = defaultMarkdownStyle, ///
@@ -39,7 +39,7 @@ function markdownStylesCSSOperation(proceed, abort, context) {
   let markdownStylesCSS = defaultCSS; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
-    const selectorString = selectorStringFromMarkdownStyleFilePathAndCopyClientFiles(markdownStyleFilePath, copyClientFiles),
+    const selectorString = selectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
           css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
 
@@ -63,8 +63,8 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   return markdownStyle;
 }
 
-function selectorStringFromMarkdownStyleFilePathAndCopyClientFiles(markdownStyleFilePath, copyClientFiles) {
-  let selectorString = copyClientFiles ?
+function selectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client) {
+  let selectorString = client ?
                          CLIENT_DIVS_SELECTOR_STRING :
                            DIVS_SELECTOR_STRING;
 

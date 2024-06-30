@@ -2,24 +2,22 @@
 
 const HELP_OPTION = "help",
       PORT_OPTION = "port",
+      FONTS_OPTION = "fonts",
       WATCH_OPTION = "watch",
+      CLIENT_OPTION = "client",
       SERVER_OPTION = "server",
       VERSION_OPTION = "version",
       QUIETLY_OPTION = "quietly",
-      NO_CLIENT_OPTION = "no-client",
-      COPY_FONTS_OPTION = "copy-fonts",
-      INPUT_FILE_NAME_OPTION = "input-file-name",
-      COPY_CLIENT_FILES_OPTION = "copy-client-files";
+      INPUT_FILE_NAME_OPTION = "input-file-name";
 
 module.exports = {
   HELP_OPTION,
   PORT_OPTION,
+  FONTS_OPTION,
   WATCH_OPTION,
+  CLIENT_OPTION,
   SERVER_OPTION,
   VERSION_OPTION,
   QUIETLY_OPTION,
-  NO_CLIENT_OPTION,
-  COPY_FONTS_OPTION,
-  INPUT_FILE_NAME_OPTION,
-  COPY_CLIENT_FILES_OPTION
+  INPUT_FILE_NAME_OPTION
 };

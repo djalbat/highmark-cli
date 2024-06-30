@@ -11,7 +11,7 @@ const indexOptions = require("../indexOptions"),
 const { executeOperations } = require("../utilities/operation"),
       { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } = require("../messages");
 
-function publishAction(port, watch, quietly, noClient, copyFonts, inputFileName, copyClientFiles, projectDirectoryName) {
+function publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName) {
   const operations = [
           markdownHTMLOperation,
           markdownStylesCSSOperation,
@@ -22,13 +22,12 @@ function publishAction(port, watch, quietly, noClient, copyFonts, inputFileName,
         ],
         context = {
           port,
+          fonts,
           watch,
+          client,
           quietly,
-          noClient,
-          copyFonts,
           indexOptions,
           inputFileName,
-          copyClientFiles,
           projectDirectoryName
         };
 

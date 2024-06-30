@@ -9,8 +9,8 @@ const { concatenatePaths } = pathUtilities,
       { INDEX_HTML_FILE_NAME } = constants;
 
 function createClientHTMLOperation(proceed, abort, context) {
-  const { noClient, markdownHTML, markdownStylesCSS, projectDirectoryName } = context,
-        html = createHTML(markdownHTML, markdownStylesCSS, noClient),
+  const { client, markdownHTML, markdownStylesCSS, projectDirectoryName } = context,
+        html = createHTML(markdownHTML, markdownStylesCSS, client),
         content = html, ///
         filePath = concatenatePaths(projectDirectoryName, INDEX_HTML_FILE_NAME);
 

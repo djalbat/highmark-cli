@@ -1,15 +1,15 @@
 "use strict";
 
-const { copyFiles } = require("highmark-client");
+const { copyFiles: copyClientFiles } = require("highmark-client");
 
 function copyClientFilesOperation(proceed, abort, context) {
-  const { copyClientFiles } = context;
+  const { client } = context;
 
-  if (copyClientFiles) {
+  if (client) {
     const { projectDirectoryName } = context,
           targetDirectoryPath = projectDirectoryName; ///
 
-    copyFiles(targetDirectoryPath);
+    copyClientFiles(targetDirectoryPath);
   }
 
   proceed();
