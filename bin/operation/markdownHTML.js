@@ -62,13 +62,13 @@ function markdownHTMLOperation(proceed, abort, context) {
     divisionClassName
   });
 
-  const divisionMarkdownNodes = postprocess(divisionMarkdownNode, context),
-        markdownHTML = divisionMarkdownNodes.reduce((markdownHTML, divisionMarkdownNode) => {
-          const html = divisionMarkdownNode.asHTML(context);
+  const markdownNodes = postprocess(divisionMarkdownNode, context),
+        markdownHTML = markdownNodes.reduce((markdownHTML, markdownNode) => {
+          const markdownNodeHTML = markdownNode.asHTML(context);
 
           markdownHTML = (markdownHTML === null) ?
-                           html :  ///
-                            `${markdownHTML}${html}`;
+                           markdownNodeHTML :  ///
+                            `${markdownHTML}${markdownNodeHTML}`;
 
           return markdownHTML;
         }, null);
