@@ -1,8 +1,8 @@
 "use strict";
 
-const indexOptions = require("../indexOptions"),
-      watchOperation = require("../operation/watch"),
+const watchOperation = require("../operation/watch"),
       copyFontsOperation = require("../operation/copyFonts"),
+      indexOptionsOperation = require("../operation/indexOptions"),
       markdownHTMLOperation = require("../operation/markdownHTML"),
       copyClientFilesOperation = require("../operation/copyClientFiles"),
       createClientHTMLOperation = require("../operation/createClientHTML"),
@@ -13,6 +13,7 @@ const { executeOperations } = require("../utilities/operation"),
 
 function publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName) {
   const operations = [
+          indexOptionsOperation,
           markdownHTMLOperation,
           markdownStylesCSSOperation,
           createClientHTMLOperation,
@@ -26,7 +27,6 @@ function publishAction(port, fonts, watch, client, quietly, inputFileName, proje
           watch,
           client,
           quietly,
-          indexOptions,
           inputFileName,
           projectDirectoryName
         };

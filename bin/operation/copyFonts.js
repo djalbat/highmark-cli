@@ -3,7 +3,7 @@
 const { copyFonts } = require("highmark-client"),
       { pathUtilities } = require("necessary");
 
-const { FONT } = require("../constants");
+const { FONT_DIRECTORY_NAME } = require("../constants");
 
 const { concatenatePaths } = pathUtilities;
 
@@ -17,7 +17,7 @@ function copyFontsOperation(proceed, abort, context) {
   }
 
   const { projectDirectoryPath } = context,
-        fontDirectoryPath = concatenatePaths(projectDirectoryPath, FONT);
+        fontDirectoryPath = concatenatePaths(projectDirectoryPath, FONT_DIRECTORY_NAME);
 
   copyFonts(fontDirectoryPath);
 
