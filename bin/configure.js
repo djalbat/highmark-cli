@@ -35,7 +35,7 @@ function configure(command, argument, options, main) {
   }
 
   if (directoryName !== null) {
-    if (command !== null) {
+    if (command === null) {
       command = PUBLISH_COMMAND;
     }
 
