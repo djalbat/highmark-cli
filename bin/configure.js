@@ -5,14 +5,12 @@ const { pathUtilities } = require("necessary");
 const { DOUBLE_DOTS } = require("./constants"),
       { DEFAULT_HELP, DEFAULT_VERSION, DEFAULT_SERVER } = require("./defaults"),
       { migrateConfigurationFile, checkConfigurationFileExists } = require("./configuration"),
-      { HELP_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, SERVER_COMMAND, INITIALISE_COMMAND } = require("./commands");
+      { HELP_COMMAND, VERSION_COMMAND, INITIALISE_COMMAND, PUBLISH_COMMAND, SERVER_COMMAND } = require("./commands");
 
 const { bottommostNameFromPath } = pathUtilities;
 
 function configure(command, argument, options, main) {
-  let configurationFileExists;
-
-  const { help = DEFAULT_HELP, version = DEFAULT_VERSION, server = DEFAULT_SERVER } = options;
+  const { help = DEFAULT_HELP, version = DEFAULT_VERSION } = options;
 
   if (false) {
     ///
@@ -20,10 +18,6 @@ function configure(command, argument, options, main) {
     command = HELP_COMMAND;
   } else if (version) {
     command = VERSION_COMMAND;
-  }else if (server) {
-    argument = command;
-
-    command = SERVER_COMMAND;
   }
 
   if ((command === HELP_COMMAND) || (command === VERSION_COMMAND)) {
@@ -32,7 +26,36 @@ function configure(command, argument, options, main) {
     return;
   }
 
-  configurationFileExists = checkConfigurationFileExists();
+  const directoryName = changeDirectory(command);
+
+  const { server = DEFAULT_SERVER } = options;
+
+  if (server) {
+    command = SERVER_COMMAND;
+  }
+
+  if (directoryName !== null) {
+    if (command !== null) {
+      command = PUBLISH_COMMAND;
+    }
+
+    argument = directoryName; ///
+  }
+
+  if (argument === null) {
+    argument = command; ///
+
+    command = PUBLISH_COMMAND;
+  }
+
+  main(command, argument, options);
+}
+
+module.exports = configure;
+
+function changeDirectory(command) {
+  let directoryName = null,
+    configurationFileExists = checkConfigurationFileExists();
 
   if (!configurationFileExists) {
     const currentWorkingDirectoryPath = process.cwd(); ///
@@ -46,11 +69,7 @@ function configure(command, argument, options, main) {
     if (configurationFileExists) {
       const bottommostOldCurrentWorkingDirectoryName = bottommostNameFromPath(oldCurrentWorkingDirectoryPath);
 
-      argument = bottommostOldCurrentWorkingDirectoryName; ///
-
-      if (command === null) {
-        command = PUBLISH_COMMAND;  ///
-      }
+      directoryName = bottommostOldCurrentWorkingDirectoryName; ///
     } else {
       process.chdir(oldCurrentWorkingDirectoryPath);
     }
@@ -60,7 +79,5 @@ function configure(command, argument, options, main) {
     migrateConfigurationFile();
   }
 
-  main(command, argument, options);
+  return directoryName;
 }
-
-module.exports = configure;
