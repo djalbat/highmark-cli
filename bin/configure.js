@@ -21,6 +21,8 @@ function configure(command, argument, options, main) {
   } else if (version) {
     command = VERSION_COMMAND;
   }else if (server) {
+    argument = command;
+
     command = SERVER_COMMAND;
   }
 
