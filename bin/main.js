@@ -7,7 +7,7 @@ const helpAction = require("./action/help"),
       initialiseAction = require("./action/initialise"),
       setOptionsAction = require("./action/setOptions");
 
-const { NO_COMMAND_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
+const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
       { HELP_COMMAND, SERVER_COMMAND, VERSION_COMMAND, PUBLISH_COMMAND, INITIALISE_COMMAND, SET_OPTIONS_COMMAND } = require("./commands"),
       { DEFAULT_PORT,
         DEFAULT_FONTS,
@@ -25,22 +25,8 @@ function main(command, argument, options) {
           inputFileName = DEFAULT_INPUT_FILE_NAME } = options;
 
   switch (command) {
-    case null: {
-      console.log(NO_COMMAND_GIVEN_MESSAGE);
-
-      break;
-    }
-
     case HELP_COMMAND:  {
       helpAction();
-
-      break;
-    }
-
-    case SERVER_COMMAND: {
-      const projectDirectoryName = argument;  ///
-
-      serverAction(port, watch, quietly, projectDirectoryName);
 
       break;
     }
@@ -51,16 +37,32 @@ function main(command, argument, options) {
       break;
     }
 
-    case PUBLISH_COMMAND: {
-      const projectDirectoryName = argument;  ///
-
-      publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName);
+    case INITIALISE_COMMAND: {
+      initialiseAction();
 
       break;
     }
 
-    case INITIALISE_COMMAND: {
-      initialiseAction();
+    case SERVER_COMMAND: {
+      if (argument === null) {
+        console.log(NO_ARGUMENT_GIVEN_MESSAGE);
+      } else {
+        const projectDirectoryName = argument;  ///
+
+        serverAction(port, watch, quietly, projectDirectoryName);
+      }
+
+      break;
+    }
+
+    case PUBLISH_COMMAND: {
+      if (argument === null) {
+        console.log(NO_ARGUMENT_GIVEN_MESSAGE);
+      } else {
+        const projectDirectoryName = argument;  ///
+
+        publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName);
+      }
 
       break;
     }

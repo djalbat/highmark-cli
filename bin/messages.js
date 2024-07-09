@@ -1,6 +1,6 @@
 "use strict";
 
-const NO_COMMAND_GIVEN_MESSAGE = "No command has been given.",
+const NO_ARGUMENT_GIVEN_MESSAGE = "No argument has been given.",
       COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.",
       INVALID_LINES_PER_PAGE_MESSAGE = "The lines per page must either be a number or left blank for the default of Infinity, which effectively suppresses pagination.",
       INVALID_CONTENTS_DEPTH_MESSAGE = "The contents depth must be a number between 1 and 4 inclusive, with 1 being primary headings only, 4 down to quaternary headings.",
@@ -25,7 +25,7 @@ const NO_COMMAND_GIVEN_MESSAGE = "No command has been given.",
       UNABLE_TO_CONVERT_MARKDOWN_STYLES_TO_CSS_MESSAGE = "Unable to convert Markdown styles to CSS.";
 
 module.exports = {
-  NO_COMMAND_GIVEN_MESSAGE,
+  NO_ARGUMENT_GIVEN_MESSAGE,
   COMMAND_NOT_RECOGNISED_MESSAGE,
   INVALID_LINES_PER_PAGE_MESSAGE,
   INVALID_CONTENTS_DEPTH_MESSAGE,
