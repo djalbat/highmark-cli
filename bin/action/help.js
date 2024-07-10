@@ -27,7 +27,7 @@ Options:
 
   --port|-p                                  The server port, the default being 8888
 
-  --fonts|-f                                 Copy the fonts to a fonts folder next to the output file
+  --fonts|-f                                 Copy CMU fonts to a font folder next to the output file
 
   --watch|-w                                 Watch for changes to the client file and in the output directory 
 
