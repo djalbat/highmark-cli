@@ -3,7 +3,12 @@
 const changeDirectory = require("./changeDirectory");
 
 const { DEFAULT_HELP, DEFAULT_VERSION, DEFAULT_SERVER } = require("./defaults"),
-      { HELP_COMMAND, VERSION_COMMAND, INITIALISE_COMMAND, PUBLISH_COMMAND, SERVER_COMMAND } = require("./commands");
+      { HELP_COMMAND,
+        SERVER_COMMAND,
+        VERSION_COMMAND,
+        PUBLISH_COMMAND,
+        INITIALISE_COMMAND,
+        SET_OPTIONS_COMMAND } = require("./commands");
 
 function prepare(command, argument, options, main) {
   const { help = DEFAULT_HELP, version = DEFAULT_VERSION } = options;
@@ -35,9 +40,11 @@ function prepare(command, argument, options, main) {
   }
 
   if (argument === null) {
-    argument = command; ///
+    if (command !== SET_OPTIONS_COMMAND) {
+      argument = command; ///
 
-    command = PUBLISH_COMMAND;
+      command = PUBLISH_COMMAND;
+    }
   }
 
   if (command === null) {
