@@ -1,16 +1,15 @@
 "use strict";
 
 const { constants } = require("highmark-client"),
-      { filePathUtilities } = require("occam-entities"),
       { cssUtilities, defaultMarkdownStyle } = require("highmark-markdown")
 
 const { DIVS_SELECTOR_STRING } = require("../constants"),
       { classNameFromFilePath } = require("../utilities/division"),
-      { readFile, readDirectory } = require("../utilities/fileSystem");
+      { readFile, readDirectory } = require("../utilities/fileSystem"),
+      { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = require("../utilities/filePath");
 
 const { DIVS_SELECTOR_STRING: CLIENT_DIVS_SELECTOR_STRING } = constants,
-      { cssFromMarkdownStyleAndSelectorString } = cssUtilities,
-      { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } = filePathUtilities;
+      { cssFromMarkdownStyleAndSelectorString } = cssUtilities;
 
 function markdownStylesCSSOperation(proceed, abort, context) {
   const { client, projectDirectoryName } = context,
