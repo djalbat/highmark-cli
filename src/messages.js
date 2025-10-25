@@ -1,0 +1,24 @@
+"use strict";
+
+export const NO_ARGUMENT_GIVEN_MESSAGE = "No argument has been given.";
+export const COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.";
+export const INVALID_LINES_PER_PAGE_MESSAGE = "The lines per page must either be a number or left blank for the default of Infinity; which effectively suppresses pagination.";
+export const INVALID_CONTENTS_DEPTH_MESSAGE = "The contents depth must be a number between 1 and 4 inclusive; with 1 being primary headings only; 4 down to quaternary headings.";
+export const INVALID_CHARACTERS_PER_LINE_MESSAGE = "The characters per line must a number.";
+export const FAILED_SERVER_MESSAGE = "Failed to serve.";
+export const FAILED_PUBLISH_MESSAGE = "Failed to publish.";
+export const FAILED_INITIALISE_MESSAGE = "Failed to create a configuration file because one is already present.";
+export const FAILED_SET_OPTIONS_MESSAGE = "Failed to set the options.";
+export const SUCCESSFUL_SERVER_MESSAGE = "Served successfully.";
+export const SUCCESSFUL_PUBLISH_MESSAGE = "Published successfully.";
+export const SUCCESSFUL_INITIALISE_MESSAGE = "The configuration file has been created successfully.";
+export const SUCCESSFUL_SET_OPTIONS_MESSAGE = "The options have been set successfully.";
+export const UNABLE_TO_COPY_FILE_MESSAGE = "Unable to copy the file.";
+export const UNABLE_TO_READ_FILE_MESSAGE = "Unable to read the file.";
+export const UNABLE_TO_WRITE_FILE_MESSAGE = "Unable to write the file.";
+export const UNABLE_TO_START_SERVER_MESSAGE = "Unable to start the server";
+export const UNABLE_TO_READ_DIRECTORY_MESSAGE = "Unable to read the directory.";
+export const UNABLE_TO_CREATE_DIRECTORY_MESSAGE = "Unable to create the directory.";
+export const UNABLE_TO_PARSE_MARKDOWN_FILE_MESSAGE = "Unable to parse the markdown file.";
+export const CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE = "There is no configuration file. Run 'highmark initialise' to create one.";
+export const UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE = "Unable to convert Markdown to HTML.";
