@@ -1,7 +1,6 @@
 "use strict";
 
 import { pathUtilities } from "necessary";
-import { processingUtilities } from "highmark-markdown";
 
 import importer from "../importer";
 
@@ -11,8 +10,7 @@ import { classNameFromFilePath } from "../utilities/division";
 import { nodeFromTokens, tokensFromContent } from "../utilities/markdown";
 import { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } from "../messages";
 
-const { postprocess } = processingUtilities,
-      { concatenatePaths } = pathUtilities;
+const { concatenatePaths } = pathUtilities;
 
 export default function markdownHTMLOperation(proceed, abort, context) {
   const { inputFileName, projectDirectoryName } = context,
