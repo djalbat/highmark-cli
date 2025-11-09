@@ -7,7 +7,7 @@ import { DEFAULT_DIVISION_IDENTIFIER } from "../constants";
 const { second } = arrayUtilities,
       { isPathName, bottommostNameFromPath } = pathUtilities;
 
-export default function classNameFromFilePath(filePath) {
+export function classNameFromFilePath(filePath) {
   const path = filePath,
         pathName = isPathName(path),
         name = pathName ?

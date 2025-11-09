@@ -1,12 +1,13 @@
 "use strict";
 
 import { pathUtilities } from "necessary";
+import { grammarUtilities } from "highmark-markdown";
 
 import { readFile } from "./utilities/fileSystem";
 import { classNameFromFilePath } from "./utilities/division";
-import { nodeFromTokens, tokensFromContent } from "./utilities/markdown";
 
-const { concatenatePaths } = pathUtilities;
+const { concatenatePaths } = pathUtilities,
+      { tokensFromMarkdown, markdownNodeFromTokens } = grammarUtilities;
 
 export default function importer(filePath, context) {
   const { projectDirectoryName } = context;
@@ -16,14 +17,17 @@ export default function importer(filePath, context) {
   const content = readFile(filePath);
 
   if (content !== null) {
-    const className = classNameFromFilePath(filePath),
-          tokens = tokensFromContent(content),
-          node = nodeFromTokens(tokens),
-          importedNode = node,  ///
-          importedTokens = tokens,  ///
-          importedClassName = className;  ///
+    const markdown = content, ///
+          tokens = tokensFromMarkdown(markdown),
+          markdownNode = markdownNodeFromTokens(tokens);
 
-    if (node !== null) {
+
+    if (markdownNode !== null) {
+      const className = classNameFromFilePath(filePath),
+            importedNode = markdownNode,  ///
+            importedTokens = tokens,  ///
+            importedClassName = className;  ///
+
       Object.assign(context, {
         importedNode,
         importedTokens,

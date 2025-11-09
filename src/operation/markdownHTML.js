@@ -1,75 +1,43 @@
 "use strict";
 
 import { pathUtilities } from "necessary";
+import { grammarUtilities } from "highmark-markdown";
 
 import importer from "../importer";
 
 import { readFile } from "../utilities/fileSystem";
 import { retrieveOptions } from "../configuration";
-import { classNameFromFilePath } from "../utilities/division";
-import { nodeFromTokens, tokensFromContent } from "../utilities/markdown";
 import { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } from "../messages";
 
-const { concatenatePaths } = pathUtilities;
+const { concatenatePaths } = pathUtilities,
+      { htmlFromMarkdownOptionsAndImporter } = grammarUtilities;
 
 export default function markdownHTMLOperation(proceed, abort, context) {
-  const { inputFileName, projectDirectoryName } = context,
+  const { indexOptions, inputFileName, projectDirectoryName } = context,
         inputFilePath = concatenatePaths(projectDirectoryName, inputFileName),
         filePath = inputFilePath, ///
-        content = readFile(filePath);
+        content = readFile(filePath),
+        markdown = content,
+        options = retrieveOptions(); ///
 
-  if (content === null) {
-    const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
-
-    console.log(message);
-
-    abort();
-
-    return;
-  }
-
-  const className = classNameFromFilePath(filePath),
-        tokens = tokensFromContent(content),
-        node = nodeFromTokens(tokens);
-
-  if (node === null) {
-    const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
-
-    console.log(message);
-
-    abort();
-
-    return;
-  }
-
-  const options = retrieveOptions(),
-        { linesPerPage,
-          contentsDepth,
-          charactersPerLine } = options,
-        divisionClassName = className,  ///
-        divisionMarkdownNode = node;  ///
-
-  Object.assign(context, {
-    tokens,
-    importer,
-    linesPerPage,
-    contentsDepth,
-    nodeFromTokens,
-    tokensFromContent,
-    charactersPerLine,
-    divisionClassName
+  Object.assign(options, {
+    ...indexOptions,
+    projectDirectoryName
   });
 
-  const markdownNodes = postprocess(divisionMarkdownNode, context),
-        markdownHTML = markdownNodes.reduce((markdownHTML, markdownNode) => {
-          const markdownNodeHTML = markdownNode.asHTML(context);
+  const html = htmlFromMarkdownOptionsAndImporter(markdown, options, importer);
 
-          markdownHTML = (markdownHTML === null) ?
-                           markdownNodeHTML :  ///
-                            `${markdownHTML}${markdownNodeHTML}`;
+  if (html === null) {
+    const message = UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE;
 
-          return markdownHTML;
-        }, null);
+    console.log(message);
+
+    abort();
+
+    return;
+  }
+
+  const markdownHTML = html;  ///
 
   Object.assign(context, {
     markdownHTML
