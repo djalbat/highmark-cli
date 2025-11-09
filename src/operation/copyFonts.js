@@ -1,11 +1,12 @@
 "use strict";
 
-import { copyFonts } from "highmark-client";
-import { pathUtilities } from "necessary";
+import { pathUtilities, packageUtilities } from "necessary";
 
+import { copyFiles } from "../utilities/fileSystem";
 import { FONT_DIRECTORY_NAME } from "../constants";
 
-const { concatenatePaths } = pathUtilities;
+const { getPackagePath } = packageUtilities,
+      { concatenatePaths } = pathUtilities;
 
 export default function copyFontsOperation(proceed, abort, context) {
   const { fonts } = context;
@@ -16,10 +17,15 @@ export default function copyFontsOperation(proceed, abort, context) {
     return;
   }
 
-  const { projectDirectoryPath } = context,
-        fontDirectoryPath = concatenatePaths(projectDirectoryPath, FONT_DIRECTORY_NAME);
+  const { projectDirectoryName } = context,
+        currentWorkingDirectoryPath = process.cwd(), ///
+        packagePath = getPackagePath(),
+        projectFontDirectoryPath = concatenatePaths(currentWorkingDirectoryPath, projectDirectoryName, FONT_DIRECTORY_NAME),
+        packageFontDirectoryPath = concatenatePaths(packagePath, FONT_DIRECTORY_NAME),
+        sourceDirectoryPath = packageFontDirectoryPath, ///
+        targetDirectoryPath = projectFontDirectoryPath;  ///
 
-  copyFonts(fontDirectoryPath);
+  copyFiles(sourceDirectoryPath, targetDirectoryPath);
 
   proceed();
 }

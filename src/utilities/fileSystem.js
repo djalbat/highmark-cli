@@ -4,10 +4,10 @@ import { pathUtilities, fileSystemUtilities } from "necessary";
 
 import { isEntryNameHiddenName } from "../utilities/path";
 import { UNABLE_TO_COPY_FILE_MESSAGE,
-        UNABLE_TO_READ_FILE_MESSAGE,
-        UNABLE_TO_WRITE_FILE_MESSAGE,
-        UNABLE_TO_READ_DIRECTORY_MESSAGE,
-        UNABLE_TO_CREATE_DIRECTORY_MESSAGE } from "../messages";
+         UNABLE_TO_READ_FILE_MESSAGE,
+         UNABLE_TO_WRITE_FILE_MESSAGE,
+         UNABLE_TO_READ_DIRECTORY_MESSAGE,
+         UNABLE_TO_CREATE_DIRECTORY_MESSAGE } from "../messages";
 
 const { concatenatePaths } = pathUtilities,
       { isEntryFile,
@@ -80,6 +80,26 @@ export function writeFile(filePath, content) {
   }
 }
 
+export function copyFiles(sourceDirectoryPath, targetDirectoryPath) {
+  let directoryPath;
+
+  directoryPath = targetDirectoryPath;  ///
+
+  createDirectory(directoryPath);
+
+  directoryPath = sourceDirectoryPath;  ///
+
+  const recursive = false;
+
+  readDirectory(directoryPath, (filePath) => {
+    const content = readFile(filePath);
+
+    filePath = adjustFilePath(filePath, sourceDirectoryPath, targetDirectoryPath);
+
+    writeFile(filePath, content);
+  }, recursive);
+}
+
 export function readDirectory(directoryPath, callback, recursive = true) {
   try {
     const entryNames = readDirectoryAsync(directoryPath);
@@ -140,4 +160,14 @@ export function createDirectory(directoryPath) {
 
     console.log(message);
   }
+}
+
+function adjustFilePath(filePath, sourceDirectoryPath, targetDirectoryPath) {
+  const sourceDirectoryPathLength = sourceDirectoryPath.length,
+        start = sourceDirectoryPathLength + 1,
+        fileName = filePath.substring(start);
+
+  filePath = concatenatePaths(targetDirectoryPath, fileName);
+
+  return filePath;
 }

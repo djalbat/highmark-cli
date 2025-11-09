@@ -30,17 +30,17 @@ export default function markdownStylesCSSOperation(proceed, abort, context) {
   });
 
   const cssSelectorString = client ?
-                           CLIENT_DIVS_CSS_SELECTORS_STRING :
-                             DIVS_CSS_SELECTORS_STRING,
+                              CLIENT_DIVS_CSS_SELECTORS_STRING :
+                                DIVS_CSS_SELECTORS_STRING,
         markdownStyle = defaultMarkdownStyle, ///
         css = cssFromMarkdownStyleAndCSSSelectorsString(markdownStyle, cssSelectorString);
 
   let markdownStylesCSS = css; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
-    const selectorString = selectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client),
+    const cssSelectorString = cssSelectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
-          css = cssFromMarkdownStyleAndSelectorString(markdownStyle, selectorString, markdownStylesCSS);  ///
+          css = cssFromMarkdownStyleAndCSSSelectorsString(markdownStyle, cssSelectorString);  ///
 
     markdownStylesCSS = `${markdownStylesCSS}${css}`;
   });
@@ -60,17 +60,17 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   return markdownStyle;
 }
 
-function selectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client) {
-  let selectorString = client ?
-                         CLIENT_DIVS_CSS_SELECTORS_STRING :
-                           DIVS_CSS_SELECTORS_STRING;
+function cssSelectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client) {
+  let cssSelectorString = client ?
+                            CLIENT_DIVS_CSS_SELECTORS_STRING :
+                              DIVS_CSS_SELECTORS_STRING;
 
   const filePath = markdownStyleFilePath,  ///
         className = classNameFromFilePath(filePath);
 
   if (className !== null) {
-    selectorString = `${selectorString}.${className}`;
+    cssSelectorString = `${cssSelectorString}.${className}`;
   }
 
-  return selectorString;
+  return cssSelectorString;
 }
