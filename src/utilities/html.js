@@ -1,11 +1,10 @@
 "use strict";
 
-const { liveReloadSnippet } = require("lively-cli"),
-      { computerModernStyle: computerModernStyleCSS } = require("highmark-fonts"),
-      { pathUtilities, templateUtilities, fileSystemUtilities } = require("necessary");
+import { liveReloadSnippet } from "lively-cli";
+import { pathUtilities, templateUtilities, fileSystemUtilities } from "necessary";
 
-const { getSourceDirectoryPath } = require("./utilities/directory"),
-      { LOADING_CSS_FILE_PATH, CLIENT_TEMPLATE_FILE_PATH, LOADING_TEMPLATE_FILE_PATH, INDEX_TEMPLATE_FILE_PATH } = require("./constants");
+import { getSourceDirectoryPath } from "./utilities/directory";
+import { LOADING_CSS_FILE_PATH, CLIENT_TEMPLATE_FILE_PATH, LOADING_TEMPLATE_FILE_PATH, INDEX_TEMPLATE_FILE_PATH } from "./constants";
 
 const { readFile } = fileSystemUtilities,
       { parseFile } = templateUtilities,

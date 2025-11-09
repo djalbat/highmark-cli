@@ -1,17 +1,17 @@
 "use strict";
 
 import { pathUtilities } from "necessary";
-import { constants, createHTML } from "highmark-client";
 
 import { writeFile } from "../utilities/fileSystem";
+import { createIndexHTML } from "../utilities/html";
+import { INDEX_HTML_FILE_NAME } from "../constants";
 
-const { concatenatePaths } = pathUtilities,
-      { INDEX_HTML_FILE_NAME } = constants;
+const { concatenatePaths } = pathUtilities;
 
 export default function createClientHTMLOperation(proceed, abort, context) {
   const { client, markdownHTML, markdownStylesCSS, projectDirectoryName } = context,
-        html = createHTML(markdownHTML, markdownStylesCSS, client),
-        content = html, ///
+        indexHTML = createIndexHTML(markdownHTML, markdownStylesCSS, client),
+        content = indexHTML, ///
         filePath = concatenatePaths(projectDirectoryName, INDEX_HTML_FILE_NAME);
 
   writeFile(filePath, content);

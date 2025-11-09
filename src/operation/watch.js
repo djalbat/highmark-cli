@@ -1,13 +1,11 @@
 "use strict";
 
-import { constants } from "highmark-client";
 import { pathUtilities } from "necessary";
 import { createLiveReloadHandler } from "lively-cli";
 
-import { LIVE_RELOAD_PATH } from "../constants";
+import { LIVE_RELOAD_PATH, INDEX_HTML_FILE_NAME } from "../constants";
 
-const { concatenatePaths } = pathUtilities,
-      { INDEX_HTML_FILE_NAME } = constants;
+const { concatenatePaths } = pathUtilities;
 
 export default function watchOperation(proceed, abort, context) {
   const { watch } = context;
