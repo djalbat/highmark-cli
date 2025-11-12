@@ -1,6 +1,5 @@
 "use strict";
 
-import watchOperation from "../operation/watch";
 import copyFontsOperation from "../operation/copyFonts";
 import indexOptionsOperation from "../operation/indexOptions";
 import copyClientFilesOperation from "../operation/copyClientFiles";
@@ -18,8 +17,7 @@ export default function publishAction(port, fonts, watch, client, quietly, input
           createHighmarkCSSOperation,
           createIndexHTMLOperation,
           copyClientFilesOperation,
-          copyFontsOperation,
-          watchOperation
+          copyFontsOperation
         ],
         context = {
           port,
