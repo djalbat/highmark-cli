@@ -1,17 +1,16 @@
 "use strict";
 
-import { constants } from "highmark-client";
+import { cssSelectorStrings } from "highmark-client";
 import { grammarUtilities, defaultMarkdownStyle } from "highmark-markdown";
 
 import { classNameFromFilePath } from "../utilities/division";
 import { readFile, readDirectory } from "../utilities/fileSystem";
-import { DIVS_CSS_SELECTORS_STRING } from "../constants";
 import { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } from "../utilities/filePath";
 
-const { DIVS_CSS_SELECTORS_STRING: CLIENT_DIVS_CSS_SELECTORS_STRING } = constants,
-      { cssFromMarkdownStyleAndCSSSelectorsString } = grammarUtilities;
+const { cssFromMarkdownStyleAndCSSSelectorsString } = grammarUtilities,
+      { DIVS_CSS_SELECTORS_STRING, CLIENT_DIVS_CSS_SELECTOR_STRING } = cssSelectorStrings;
 
-export default function markdownStylesCSSOperation(proceed, abort, context) {
+export default function createHighmarkCSSOperation(proceed, abort, context) {
   const { client, projectDirectoryName } = context,
         projectDirectoryPath = projectDirectoryName,  ///
         markdownStyleFilePaths = [];
@@ -30,23 +29,23 @@ export default function markdownStylesCSSOperation(proceed, abort, context) {
   });
 
   const cssSelectorString = client ?
-                              CLIENT_DIVS_CSS_SELECTORS_STRING :
+                              CLIENT_DIVS_CSS_SELECTOR_STRING :
                                 DIVS_CSS_SELECTORS_STRING,
         markdownStyle = defaultMarkdownStyle, ///
         css = cssFromMarkdownStyleAndCSSSelectorsString(markdownStyle, cssSelectorString);
 
-  let markdownStylesCSS = css; ///
+  let highmarkCSS = css; ///
 
   markdownStyleFilePaths.forEach((markdownStyleFilePath) => {
     const cssSelectorString = cssSelectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client),
           markdownStyle = markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath),
           css = cssFromMarkdownStyleAndCSSSelectorsString(markdownStyle, cssSelectorString);  ///
 
-    markdownStylesCSS = `${markdownStylesCSS}${css}`;
+    highmarkCSS = `${highmarkCSS}${css}`;
   });
 
   Object.assign(context, {
-    markdownStylesCSS
+    highmarkCSS
   });
 
   proceed();
@@ -62,7 +61,7 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
 
 function cssSelectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client) {
   let cssSelectorString = client ?
-                            CLIENT_DIVS_CSS_SELECTORS_STRING :
+                            CLIENT_DIVS_CSS_SELECTOR_STRING :
                               DIVS_CSS_SELECTORS_STRING;
 
   const filePath = markdownStyleFilePath,  ///

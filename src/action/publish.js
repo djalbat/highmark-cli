@@ -3,10 +3,10 @@
 import watchOperation from "../operation/watch";
 import copyFontsOperation from "../operation/copyFonts";
 import indexOptionsOperation from "../operation/indexOptions";
-import markdownHTMLOperation from "../operation/markdownHTML";
 import copyClientFilesOperation from "../operation/copyClientFiles";
-import createClientHTMLOperation from "../operation/createClientHTML";
-import markdownStylesCSSOperation from "../operation/markdownStylesCSS";
+import createIndexHTMLOperation from "../operation/createIndexHTML";
+import createHighmarkCSSOperation from "../operation/createHighmarkCSS";
+import createHighmarkHTMLOperation from "../operation/createHighmarkHTML";
 
 import { executeOperations } from "../utilities/operation";
 import { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } from "../messages";
@@ -14,9 +14,9 @@ import { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } from "../messages"
 export default function publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName) {
   const operations = [
           indexOptionsOperation,
-          markdownHTMLOperation,
-          markdownStylesCSSOperation,
-          createClientHTMLOperation,
+          createHighmarkHTMLOperation,
+          createHighmarkCSSOperation,
+          createIndexHTMLOperation,
           copyClientFilesOperation,
           copyFontsOperation,
           watchOperation

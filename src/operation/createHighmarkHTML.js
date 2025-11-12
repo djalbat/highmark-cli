@@ -12,7 +12,7 @@ import { UNABLE_TO_CONVERT_MARKDOWN_TO_HTML_MESSAGE } from "../messages";
 const { concatenatePaths } = pathUtilities,
       { htmlFromMarkdownOptionsAndImporter } = grammarUtilities;
 
-export default function markdownHTMLOperation(proceed, abort, context) {
+export default function createHighmarkHTMLOperation(proceed, abort, context) {
   const { indexOptions, inputFileName, projectDirectoryName } = context,
         inputFilePath = concatenatePaths(projectDirectoryName, inputFileName),
         filePath = inputFilePath, ///
@@ -37,10 +37,10 @@ export default function markdownHTMLOperation(proceed, abort, context) {
     return;
   }
 
-  const markdownHTML = html;  ///
+  const highmarkHTML = html;  ///
 
   Object.assign(context, {
-    markdownHTML
+    highmarkHTML
   });
 
   proceed();
