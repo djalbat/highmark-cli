@@ -80,8 +80,6 @@ Options:
 
   --client|-c                                Copy the bundled client and supporting files next to the output file
 
-  --server|-s                                Run a server to view the output file
-
   --quietly|-q                               Run with almost no console logging
 
   --input-file-name|-i                       The input file name, the default being 'default.md'

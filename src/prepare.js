@@ -2,9 +2,8 @@
 
 import changeDirectory from "./changeDirectory";
 
-import { DEFAULT_HELP, DEFAULT_VERSION, DEFAULT_SERVER } from "./defaults";
+import { DEFAULT_HELP, DEFAULT_VERSION } from "./defaults";
 import { HELP_COMMAND,
-         SERVER_COMMAND,
          VERSION_COMMAND,
          PUBLISH_COMMAND,
          INITIALISE_COMMAND,
@@ -28,12 +27,6 @@ export default function prepare(command, argument, options, main) {
     main(command, argument, options);
 
     return;
-  }
-
-  const { server = DEFAULT_SERVER } = options;
-
-  if (server) {
-    command = SERVER_COMMAND;
   }
 
   const directoryName = changeDirectory();
