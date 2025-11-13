@@ -1,6 +1,7 @@
 "use strict";
 
 import { fontStyle } from "highmark-markdown";
+import { liveReloadSnippet } from "lively-cli";
 import { pathUtilities, templateUtilities } from "necessary";
 import { indexHTML, clientHTML, loadingHTML, loadingCSS } from "highmark-client"
 
@@ -12,11 +13,13 @@ const { parseContent } = templateUtilities,
 
 export default function createIndexHTMLOperation(proceed, abort, context) {
   const { client, highmarkCSS, highmarkHTML, projectDirectoryName } = context,
+        liveReloadHTML = liveReloadSnippet, ///
         fontCSS = fontStyle,  ///
         args = {
           fontCSS,
           highmarkCSS,
-          highmarkHTML
+          highmarkHTML,
+          liveReloadHTML,
         };
 
   if (client) {

@@ -16,9 +16,9 @@ export default function createHighmarkHTMLOperation(proceed, abort, context) {
   const { indexOptions, inputFileName, projectDirectoryName } = context,
         inputFilePath = concatenatePaths(projectDirectoryName, inputFileName),
         filePath = inputFilePath, ///
+        options = retrieveOptions(),
         content = readFile(filePath),
-        markdown = content,
-        options = retrieveOptions(); ///
+        markdown = content; ///
 
   Object.assign(options, {
     ...indexOptions,
