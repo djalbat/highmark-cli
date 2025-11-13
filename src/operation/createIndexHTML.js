@@ -19,7 +19,7 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
           fontCSS,
           highmarkCSS,
           highmarkHTML,
-          liveReloadHTML,
+          liveReloadHTML
         };
 
   if (client) {
