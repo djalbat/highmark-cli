@@ -15,7 +15,7 @@ export default function copyClientFilesOperation(proceed, abort, context) {
     const { projectDirectoryName } = context,
           projectDirectoryPath = projectDirectoryName,  ///
           fileNames = getFileNames(),
-          sourceDirectoryPath = getSourceDirectoryPath(),
+          sourceDirectoryPath = "/Users/djalbat/Development/highmark-client", ///getSourceDirectoryPath(),
           targetDirectoryPath = projectDirectoryPath; ///
 
     fileNames.forEach((fileName) => {

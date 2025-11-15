@@ -92,11 +92,10 @@ export function copyFiles(sourceDirectoryPath, targetDirectoryPath) {
   const recursive = false;
 
   readDirectory(directoryPath, (filePath) => {
-    const content = readFile(filePath);
+    const sourceFilePath = filePath,  ///
+          targetFilePath = targetFilePathFromFilePathSourceDirectoryPathAndTargetDirectoryPath(filePath, sourceDirectoryPath, targetDirectoryPath);
 
-    filePath = adjustFilePath(filePath, sourceDirectoryPath, targetDirectoryPath);
-
-    writeFile(filePath, content);
+    copyFile(sourceFilePath, targetFilePath);
   }, recursive);
 }
 
@@ -162,7 +161,7 @@ export function createDirectory(directoryPath) {
   }
 }
 
-function adjustFilePath(filePath, sourceDirectoryPath, targetDirectoryPath) {
+function targetFilePathFromFilePathSourceDirectoryPathAndTargetDirectoryPath(filePath, sourceDirectoryPath, targetDirectoryPath) {
   const sourceDirectoryPathLength = sourceDirectoryPath.length,
         start = sourceDirectoryPathLength + 1,
         fileName = filePath.substring(start);
