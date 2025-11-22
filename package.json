@@ -1,7 +1,7 @@
 {
   "name": "highmark-cli",
   "author": "James Smith",
-  "version": "1.3.226",
+  "version": "1.3.227",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/highmark-cli",
   "description": "Highmark's LIC tool.",
@@ -13,7 +13,7 @@
     "argumentative": "^2.0.36",
     "express": "^4.19.2",
     "highmark-client": "^1.0.131",
-    "highmark-markdown": "^1.2.21",
+    "highmark-markdown": "^1.2.24",
     "lively-cli": "^2.0.77",
     "necessary": "^15.0.8"
   },
