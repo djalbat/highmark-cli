@@ -1,12 +1,12 @@
 "use strict";
 
 import { pathUtilities } from "necessary";
-import { packageUtilities } from "highmark-client";
+import { clientUtilities } from "highmark-client";
 
 import { copyFile } from "../utilities/fileSystem";
 
 const { concatenatePaths } = pathUtilities,
-      { getClientFileName, getSourceDirectoryPath } = packageUtilities;
+      { getClientFileName, getSourceDirectoryPath } = clientUtilities;
 
 export default function copyClientFileOperation(proceed, abort, context) {
   const { client } = context;
