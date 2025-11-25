@@ -7,7 +7,7 @@ import { readFile } from "./utilities/fileSystem";
 import { classNameFromFilePath } from "./utilities/division";
 
 const { concatenatePaths } = pathUtilities,
-      { tokensFromMarkdown, markdownNodeFromTokens } = grammarUtilities;
+      { tokensFromMarkdown, documentMarkdownNodeFromTokens } = grammarUtilities;
 
 export default function importer(filePath, context) {
   const { projectDirectoryName } = context;
@@ -19,12 +19,12 @@ export default function importer(filePath, context) {
   if (content !== null) {
     const markdown = content, ///
           tokens = tokensFromMarkdown(markdown),
-          markdownNode = markdownNodeFromTokens(tokens);
+          documentMarkdownNode = documentMarkdownNodeFromTokens(tokens);
 
 
-    if (markdownNode !== null) {
+    if (documentMarkdownNode !== null) {
       const className = classNameFromFilePath(filePath),
-            importedNode = markdownNode,  ///
+            importedNode = documentMarkdownNode,  ///
             importedTokens = tokens,  ///
             importedClassName = className;  ///
 

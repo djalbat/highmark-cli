@@ -6,24 +6,23 @@ import { packageUtilities } from "highmark-client";
 import { copyFile } from "../utilities/fileSystem";
 
 const { concatenatePaths } = pathUtilities,
-      { getFileNames, getSourceDirectoryPath } = packageUtilities;
+      { getClientFileName, getSourceDirectoryPath } = packageUtilities;
 
-export default function copyClientFilesOperation(proceed, abort, context) {
+export default function copyClientFileOperation(proceed, abort, context) {
   const { client } = context;
 
   if (client) {
     const { projectDirectoryName } = context,
           projectDirectoryPath = projectDirectoryName,  ///
-          fileNames = getFileNames(),
+          clientFileName = getClientFileName(),
+          fileName = clientFileName,  ///
           sourceDirectoryPath = "/Users/djalbat/Development/highmark-client", ///getSourceDirectoryPath(),
           targetDirectoryPath = projectDirectoryPath; ///
 
-    fileNames.forEach((fileName) => {
-      const sourceFilePath = concatenatePaths(sourceDirectoryPath, fileName),
-            targetFilePath = concatenatePaths(targetDirectoryPath, fileName);
+    const sourceFilePath = concatenatePaths(sourceDirectoryPath, fileName),
+          targetFilePath = concatenatePaths(targetDirectoryPath, fileName);
 
-      copyFile(sourceFilePath, targetFilePath);
-    });
+    copyFile(sourceFilePath, targetFilePath);
   }
 
   proceed();

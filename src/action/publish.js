@@ -2,7 +2,7 @@
 
 import copyFontsOperation from "../operation/copyFonts";
 import indexOptionsOperation from "../operation/indexOptions";
-import copyClientFilesOperation from "../operation/copyClientFiles";
+import copyClientFileOperation from "../operation/copyClientFile";
 import createIndexHTMLOperation from "../operation/createIndexHTML";
 import createHighmarkCSSOperation from "../operation/createHighmarkCSS";
 import createHighmarkHTMLOperation from "../operation/createHighmarkHTML";
@@ -16,7 +16,7 @@ export default function publishAction(port, fonts, watch, client, quietly, input
           createHighmarkHTMLOperation,
           createHighmarkCSSOperation,
           createIndexHTMLOperation,
-          copyClientFilesOperation,
+          copyClientFileOperation,
           copyFontsOperation
         ],
         context = {
