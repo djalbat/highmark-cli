@@ -1,14 +1,15 @@
 "use strict";
 
-import { cssSelectorStrings } from "highmark-client";
+import { clientUtilities } from "highmark-client";
 import { grammarUtilities, defaultMarkdownStyle } from "highmark-markdown";
 
+import { CSS_SELECTORS_STRING } from "../constants";
 import { classNameFromFilePath } from "../utilities/division";
 import { readFile, readDirectory } from "../utilities/fileSystem";
 import { isFilePathMarkdownStyleFilePath, isFilePathDefaultMarkdownStyleFilePath } from "../utilities/filePath";
 
-const { cssFromMarkdownStyleAndCSSSelectorsString } = grammarUtilities,
-      { DIVS_CSS_SELECTORS_STRING, CLIENT_DIVS_CSS_SELECTOR_STRING } = cssSelectorStrings;
+const { getClientCSSSelectorsString } = clientUtilities,
+      { cssFromMarkdownStyleAndCSSSelectorsString } = grammarUtilities;
 
 export default function createHighmarkCSSOperation(proceed, abort, context) {
   const { client, projectDirectoryName } = context,
@@ -28,9 +29,7 @@ export default function createHighmarkCSSOperation(proceed, abort, context) {
     }
   });
 
-  const cssSelectorString = client ?
-                              CLIENT_DIVS_CSS_SELECTOR_STRING :
-                                DIVS_CSS_SELECTORS_STRING,
+  const cssSelectorString = getCSSSelectorsString(client),
         markdownStyle = defaultMarkdownStyle, ///
         css = cssFromMarkdownStyleAndCSSSelectorsString(markdownStyle, cssSelectorString);
 
@@ -51,6 +50,14 @@ export default function createHighmarkCSSOperation(proceed, abort, context) {
   proceed();
 }
 
+function getCSSSelectorsString(client) {
+  const cssSelectorString = client ?
+                              getClientCSSSelectorsString() :
+                                CSS_SELECTORS_STRING;
+
+  return cssSelectorString;
+}
+
 function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
   const filePath = markdownStyleFilePath, ///
         content = readFile(filePath),
@@ -60,9 +67,7 @@ function markdownStyleFromMarkdownStyleFilePath(markdownStyleFilePath) {
 }
 
 function cssSelectorStringFromMarkdownStyleFilePathAndClient(markdownStyleFilePath, client) {
-  let cssSelectorString = client ?
-                            CLIENT_DIVS_CSS_SELECTOR_STRING :
-                              DIVS_CSS_SELECTORS_STRING;
+  let cssSelectorString = getCSSSelectorsString(client);
 
   const filePath = markdownStyleFilePath,  ///
         className = classNameFromFilePath(filePath);
