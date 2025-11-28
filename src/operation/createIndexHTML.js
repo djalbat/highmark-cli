@@ -3,7 +3,7 @@
 import { fontStyle } from "highmark-markdown";
 import { liveReloadSnippet } from "lively-cli";
 import { pathUtilities, templateUtilities } from "necessary";
-import { indexHTML, clientHTML, loadingDivHTML, loadingDivCSS, documentDivCSS } from "highmark-client"
+import { indexHTML, clientHTML, loadingHTML, loadingCSS, documentCSS } from "highmark-client"
 
 import { writeFile } from "../utilities/fileSystem";
 import { INDEX_HTML_FILE_NAME } from "../constants";
@@ -25,9 +25,9 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
   if (client) {
     Object.assign(args, {
       clientHTML,
-      loadingDivCSS,
-      loadingDivHTML,
-      documentDivCSS
+      loadingCSS,
+      loadingHTML,
+      documentCSS
     });
   }
 
