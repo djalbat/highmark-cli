@@ -27,7 +27,8 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
       clientHTML,
       loadingCSS,
       loadingHTML,
-      documentCSS
+      documentCSS,
+      clientDocumentCSS
     });
   }
 
