@@ -27,8 +27,15 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
       clientHTML,
       loadingCSS,
       loadingHTML,
-      documentCSS,
-      clientDocumentCSS
+      documentCSS
+    });
+  } else {
+    const documentCSS = `body > div.document {
+  display: none;
+} `;
+
+    Object.assign(args, {
+      documentCSS
     });
   }
 
