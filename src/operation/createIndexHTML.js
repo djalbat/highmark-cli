@@ -3,7 +3,12 @@
 import { fontStyle } from "highmark-markdown";
 import { liveReloadSnippet } from "lively-cli";
 import { pathUtilities, templateUtilities } from "necessary";
-import { indexHTML, clientHTML, loadingHTML, loadingCSS, documentCSS } from "highmark-client"
+
+import createIndexHTML from "../html/index";
+import createClientHTML from "../html/client";
+import createLoadingCSS from "../css/loading";
+import createLoadingHTML from "../html/loading";
+import createDocumentCSS from "../css/document";
 
 import { writeFile } from "../utilities/fileSystem";
 import { INDEX_HTML_FILE_NAME } from "../constants";
@@ -13,43 +18,23 @@ const { parseContent } = templateUtilities,
 
 export default function createIndexHTMLOperation(proceed, abort, context) {
   const { client, highmarkCSS, highmarkHTML, projectDirectoryName } = context,
-        liveReloadHTML = liveReloadSnippet, ///
         fontCSS = fontStyle,  ///
+        indexHTML = createIndexHTML(client),
+        clientHTML = createClientHTML(client),
+        loadingHTML = createLoadingHTML(client),
+        loadingCSS = createLoadingCSS(client),
+        documentCSS = createDocumentCSS(client),
+        liveReloadHTML = liveReloadSnippet, ///
         args = {
           fontCSS,
+          clientHTML,
+          loadingCSS,
+          loadingHTML,
+          documentCSS,
           highmarkCSS,
           highmarkHTML,
           liveReloadHTML
         };
-
-  if (client) {
-    Object.assign(args, {
-      clientHTML,
-      loadingCSS,
-      loadingHTML,
-      documentCSS
-    });
-  } else {
-    const documentCSS = `body {
-  background-color: #d5d1d1;
-}
-    
-body > div.document {
-  width: 100%;
-  display: flex;
-  row-gap: 40px;
-  padding: 40px;
-  min-height: 100%;
-  align-items: center;
-  padding-bottom: 80px;
-  flex-direction: column;
-  justify-content: flex-start;
-} `;
-
-    Object.assign(args, {
-      documentCSS
-    });
-  }
 
   let content;
 

@@ -1,6 +1,12 @@
 "use strict";
 
-const loadingCSS = `body > div.loading {
+import { EMPTY_STRING } from "../constants";
+
+export default function createLoadingCSS(client) {
+  let loadingCSS = EMPTY_STRING;
+
+  if (client) {
+    loadingCSS = `body > div.loading {
   width: 100vw;
   height: 100vh;
   z-index: 1;
@@ -54,5 +60,7 @@ div.spinner div:nth-child(12) { transform: rotate(330deg); animation-delay: 0s; 
   0% { opacity: 1; }
   100% { opacity: 0; }
 }`;
+  }
 
-export default loadingCSS;
+  return loadingCSS;
+}

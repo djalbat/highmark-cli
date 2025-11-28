@@ -1,6 +1,12 @@
 "use strict";
 
-const loadingHTML = `<div class="loading">
+import { EMPTY_STRING } from "../constants";
+
+export default function createLoadingHTML(client) {
+  let loadingHTML = EMPTY_STRING;
+
+  if (client) {
+    loadingHTML = `<div class="loading">
     <div class="spinner">
         <div></div>
         <div></div>
@@ -16,5 +22,7 @@ const loadingHTML = `<div class="loading">
         <div></div>
     </div>
 </div>`;
+  }
 
-export default loadingHTML;
+  return loadingHTML;
+}
