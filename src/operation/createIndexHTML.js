@@ -30,8 +30,20 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
       documentCSS
     });
   } else {
-    const documentCSS = `body > div.document {
-  display: none;
+    const documentCSS = `body {
+  background-color: #d5d1d1;
+}
+    
+body > div.document {
+  width: 100%;
+  display: flex;
+  row-gap: 40px;
+  padding: 40px;
+  min-height: 100%;
+  align-items: center;
+  padding-bottom: 80px;
+  flex-direction: column;
+  justify-content: flex-start;
 } `;
 
     Object.assign(args, {
