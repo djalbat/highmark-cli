@@ -4,7 +4,11 @@ export default function createDocumentCSS(client) {
   let documentCSS;
 
   if (client) {
-    documentCSS = `body > div.document {
+    documentCSS = `body {
+  background-color: #d5d1d1;
+}
+    
+body > div.document {
   display: none;
 }`;
   } else {
