@@ -14,16 +14,21 @@ export default function createDocumentCSS(client) {
     
 body > div.document {
   width: fit-content;
+  margin: auto;
   display: flex;
-  row-gap: 40px;
-  padding: 80px;
   min-height: 100%;
-  overflow-x: none;
-  padding-top: 40px;
   align-items: center;
   flex-direction: column;
   justify-content: flex-start;
-} `;
+}
+ 
+body > div.document > div {
+  border-bottom: 1px solid #0c0d0f;
+}
+
+body > div.document > div:last-of-type {
+  border-bottom: none;
+}`;
   }
 
   return documentCSS;
