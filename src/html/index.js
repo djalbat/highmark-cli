@@ -6,7 +6,7 @@ export default function createIndexHTML(client) {
   <head>
     <title>Highmark</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <meta name="viewport" content="width=device-width">
 
     <link rel="preload" href="font/STIXTwoMath-Regular.woff2" as="font" type="font/woff2" crossorigin >
     <link rel="preload" href="font/STIXTwoText-Regular.woff2" as="font" type="font/woff2" crossorigin >
