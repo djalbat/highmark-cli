@@ -35,6 +35,8 @@ Options:
 
   --quietly|-q                               Run with almost no console logging
 
+  --view-mode|-m                             The view mode, either draft or presentation. The default is draft.
+
   --input-file-name|-i                       The input file name, the default being 'default.md'
 
 Further information:

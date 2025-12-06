@@ -14,6 +14,7 @@ import { DEFAULT_PORT,
          DEFAULT_WATCH,
          DEFAULT_CLIENT,
          DEFAULT_QUIETLY,
+         DEFAULT_VIEW_MODE,
          DEFAULT_INPUT_FILE_NAME } from "./defaults";
 
 export default function main(command, argument, options) {
@@ -22,6 +23,7 @@ export default function main(command, argument, options) {
           watch = DEFAULT_WATCH,
           client = DEFAULT_CLIENT,
           quietly = DEFAULT_QUIETLY,
+          viewMode = DEFAULT_VIEW_MODE,
           inputFileName = DEFAULT_INPUT_FILE_NAME } = options;
 
   switch (command) {
@@ -61,7 +63,7 @@ export default function main(command, argument, options) {
       } else {
         const projectDirectoryName = argument;  ///
 
-        publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName);
+        publishAction(port, fonts, watch, client, quietly, viewMode, inputFileName, projectDirectoryName);
       }
 
       break;

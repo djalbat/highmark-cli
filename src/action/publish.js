@@ -10,7 +10,7 @@ import createHighmarkHTMLOperation from "../operation/createHighmarkHTML";
 import { executeOperations } from "../utilities/operation";
 import { SUCCESSFUL_PUBLISH_MESSAGE, FAILED_PUBLISH_MESSAGE } from "../messages";
 
-export default function publishAction(port, fonts, watch, client, quietly, inputFileName, projectDirectoryName) {
+export default function publishAction(port, fonts, watch, client, quietly, viewMode, inputFileName, projectDirectoryName) {
   const operations = [
           indexOptionsOperation,
           createHighmarkHTMLOperation,
@@ -25,6 +25,7 @@ export default function publishAction(port, fonts, watch, client, quietly, input
           watch,
           client,
           quietly,
+          viewMode,
           inputFileName,
           projectDirectoryName
         };

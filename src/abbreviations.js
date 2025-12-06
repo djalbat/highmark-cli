@@ -7,6 +7,7 @@ import { HELP_OPTION,
          CLIENT_OPTION,
          VERSION_OPTION,
          QUIETLY_OPTION,
+         VIEW_MODE_OPTION,
          INPUT_FILE_NAME_OPTION, } from "./options";
 
 const h = HELP_OPTION,
@@ -16,6 +17,7 @@ const h = HELP_OPTION,
       c = CLIENT_OPTION,
       v = VERSION_OPTION,
       q = QUIETLY_OPTION,
+      m = VIEW_MODE_OPTION,
       i = INPUT_FILE_NAME_OPTION;
 
 const abbreviations = {
@@ -26,6 +28,7 @@ const abbreviations = {
   v,
   q,
   c,
+  m,
   i
 };
 

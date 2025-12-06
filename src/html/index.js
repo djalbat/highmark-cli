@@ -77,6 +77,8 @@ export default function createIndexHTML(client) {
 
   </div>
 
+{viewModeHTML}
+
 {clientHTML}
 
 {liveReloadHTML}

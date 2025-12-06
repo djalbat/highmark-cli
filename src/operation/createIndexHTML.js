@@ -9,6 +9,7 @@ import createClientHTML from "../html/client";
 import createLoadingCSS from "../css/loading";
 import createLoadingHTML from "../html/loading";
 import createDocumentCSS from "../css/document";
+import createViewModeHTML from "../html/viewMode";
 
 import { writeFile } from "../utilities/fileSystem";
 import { INDEX_HTML_FILE_NAME } from "../constants";
@@ -17,13 +18,14 @@ const { parseContent } = templateUtilities,
       { concatenatePaths } = pathUtilities;
 
 export default function createIndexHTMLOperation(proceed, abort, context) {
-  const { client, highmarkCSS, highmarkHTML, projectDirectoryName } = context,
+  const { client, viewMode, highmarkCSS, highmarkHTML, projectDirectoryName } = context,
         fontCSS = fontStyle,  ///
         indexHTML = createIndexHTML(client),
         clientHTML = createClientHTML(client),
         loadingHTML = createLoadingHTML(client),
         loadingCSS = createLoadingCSS(client),
         documentCSS = createDocumentCSS(client),
+        viewModeHTML = createViewModeHTML(client, viewMode),
         liveReloadHTML = liveReloadSnippet, ///
         args = {
           fontCSS,
@@ -33,6 +35,7 @@ export default function createIndexHTMLOperation(proceed, abort, context) {
           documentCSS,
           highmarkCSS,
           highmarkHTML,
+          viewModeHTML,
           liveReloadHTML
         };
 
