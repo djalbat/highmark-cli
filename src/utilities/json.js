@@ -1,8 +1,11 @@
 "use strict";
 
-import { typeOf } from "../utilities/type";
+const { jsonUtilities } = require("necessary");
+
 import { INFINITY } from "../constants";
 import { ARRAY_JSON_TYPE, OBJECT_JSON_TYPE, PRIMITIVE_JSON_TYPE } from "../jsonTypes";
+
+const { typeOf } = jsonUtilities;
 
 export function serialiseJSON(json) {
   const type = typeOf(json);
