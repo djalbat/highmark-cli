@@ -5,7 +5,7 @@ import { pathUtilities } from "necessary";
 import defaultIndexOptions from "../defaultIndexOptions";
 
 import { readFile, writeFile } from "../utilities/fileSystem";
-import { DOUBLE_SPACE, INDEX_JSON_FILE_NAME } from "../constants";
+import { INDEX_JSON_FILE_NAME } from "../constants";
 
 const { concatenatePaths } = pathUtilities;
 
@@ -50,7 +50,7 @@ export default function indexOptionsOperation(proceed, abort, context) {
       ignoredWords
     };
 
-    jsonString = JSON.stringify(json, null, DOUBLE_SPACE);
+    jsonString = JSON.stringify(json, null, 2);
 
     content = jsonString;  ///
 

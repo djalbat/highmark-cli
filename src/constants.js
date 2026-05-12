@@ -5,7 +5,6 @@ export const HIGHMARK = "highmark";
 export const INFINITY = "Infinity";
 export const DOUBLE_DOTS = "..";
 export const EMPTY_STRING = "";
-export const DOUBLE_SPACE = "  ";
 export const HIGHMARK_CLI = "Highmark-CLI";
 export const DRAFT_VIEW_MODE = "draft";
 export const LIVE_RELOAD_PATH = "/live-reload";
