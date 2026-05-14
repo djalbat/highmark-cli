@@ -25,7 +25,7 @@ Options:
   
   --version|-v                               Show the version
 
-  --port|-p                                  The server port, the default being 8888
+  --port|-p                                  The server port, the default being 80
 
   --fonts|-f                                 Copy CMU fonts to a font folder next to the output file
 

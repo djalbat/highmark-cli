@@ -2,8 +2,8 @@
 
 import { DRAFT_VIEW_MODE } from "./constants";
 
+export const DEFAULT_PORT = 80;
 export const DEFAULT_HELP = false;
-export const DEFAULT_PORT = 8888;
 export const DEFAULT_FONTS = false;
 export const DEFAULT_WATCH = false;
 export const DEFAULT_CLIENT = false;
